@@ -196,6 +196,15 @@ public final class Server {
         timeline.scheduleIn(RELAY_REFRESH_MS, this);
       }
     });
+    
+    // Get Server Information
+    this.commands.put(NetworkCode.SERVER_INFO_REQUEST, new Command() {
+    	@Override
+    	public void onMessage(InputStream in, OutputStream out) throws IOException {
+    		Serializers.INTEGER.write(out, NetworkCode.SERVER_INFO_RESPONSE);
+    		Time.SERIALIZER.write(out, info.startTime);
+    	}
+    });
   }
 
   public void handleConnection(final Connection connection) {
