@@ -197,7 +197,7 @@ public final class Chat {
     			System.out.format("ERROR: Server did not send a valid info object");
     		}
     		else {
-    			System.out.println(info.startTime);
+    			System.out.println("Start Time:" + info.startTime);
     		}
     	}
     });
