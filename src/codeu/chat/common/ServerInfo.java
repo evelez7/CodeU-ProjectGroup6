@@ -14,8 +14,9 @@ import codeu.chat.util.connections.Connection;
 import codeu.chat.util.connections.ConnectionSource;
 
 public final class ServerInfo {
-  private final static String SERVER_VERSION = "1.0.0";
   private final static Logger.Log LOG = Logger.newLog(ServerInfo.class);
+
+  private final static String SERVER_VERSION = "1.0.0";
 
   public Uuid version;
   public ServerInfo() {

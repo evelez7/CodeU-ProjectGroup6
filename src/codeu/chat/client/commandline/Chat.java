@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Stack;
 
+import codeu.chat.common.ServerInfo;
 import codeu.chat.client.core.Context;
 import codeu.chat.client.core.ConversationContext;
 import codeu.chat.client.core.MessageContext;
@@ -107,6 +108,8 @@ public final class Chat {
         System.out.println("    Add a new user with the given name.");
         System.out.println("  u-sign-in <name>");
         System.out.println("    Sign in as the user with the given name.");
+        System.out.println("  info");
+        System.out.println("    Get server information.");
         System.out.println("  exit");
         System.out.println("    Exit the program.");
       }
@@ -178,6 +181,23 @@ public final class Chat {
           }
         }
         return null;
+      }
+    });
+
+    // INFO (get server info)
+    //
+    // Add a command to get server info when the user enters "info"
+    // while on the root panel.
+    //
+    panel.register("info", new Panel.Command() {
+      @Override
+      public void invoke(Scanner args) {
+        final ServerInfo info = context.getInfo();
+        if (info == null) {
+          System.out.println("ERROR: The server did not send us a valid info object.");
+        } else {
+          System.out.println("Current server version: " + info.version);
+        }
       }
     });
 
