@@ -197,7 +197,7 @@ public final class Server {
       }
     });
     
-    // Get Server Information
+    // Server Info - A client wants to get the amount of time that the server has been up
     this.commands.put(NetworkCode.SERVER_INFO_REQUEST, new Command() {
     	@Override
     	public void onMessage(InputStream in, OutputStream out) throws IOException {
