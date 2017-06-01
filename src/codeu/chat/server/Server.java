@@ -53,7 +53,6 @@ public final class Server {
   
   private static final ServerInfo info = new ServerInfo();
 
-  private static final ServerInfo info = new ServerInfo();
   private final Timeline timeline = new Timeline();
 
   private final Map<Integer, Command> commands = new HashMap<>();
@@ -182,6 +181,7 @@ public final class Server {
       public void onMessage (InputStream in, OutputStream out) throws IOException {
         Serializers.INTEGER.write (out, NetworkCode.SERVER_INFO_RESPONSE);
         Uuid.SERIALIZER.write(out, info.version);
+        Time.SERIALIZER.write(out, info.startTime);
       }
     });
 
@@ -207,14 +207,6 @@ public final class Server {
       }
     });
     
-    // Server Info - A client wants to get the amount of time that the server has been up
-    this.commands.put(NetworkCode.SERVER_INFO_REQUEST, new Command() {
-    	@Override
-    	public void onMessage(InputStream in, OutputStream out) throws IOException {
-    		Serializers.INTEGER.write(out, NetworkCode.SERVER_INFO_RESPONSE);
-    		Time.SERIALIZER.write(out, info.startTime);
-    	}
-    });
   }
 
   public void handleConnection(final Connection connection) {
