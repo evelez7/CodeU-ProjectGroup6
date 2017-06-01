@@ -146,7 +146,7 @@ final class View implements BasicView {
         final Time startTime = Time.SERIALIZER.read(connection.in());
         return new ServerInfo(version, startTime);
       } else {
-			  LOG.error("Response from server failed.");
+	LOG.error("Response from server failed.");
       }
     } catch (Exception ex) {
       	System.out.println("ERROR: Exception during call on server. Check log for details.");
