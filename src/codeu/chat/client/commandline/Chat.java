@@ -186,8 +186,8 @@ public final class Chat {
 
     // INFO (get server info)
     //
-    // Add a command to get server info when the user enters "info"
-    // while on the root panel.
+    // Add a command to get server info when the user enters "info" while on
+    // the root panel.
     //
     panel.register("info", new Panel.Command() {
       @Override

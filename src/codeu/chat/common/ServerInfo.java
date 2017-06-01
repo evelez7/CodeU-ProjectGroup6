@@ -3,6 +3,7 @@ package codeu.chat.common;
 import codeu.chat.util.Logger;
 import codeu.chat.util.Uuid;
 
+// Holds information about server such as current version
 public final class ServerInfo {
   private final static Logger.Log LOG = Logger.newLog(ServerInfo.class);
 
