@@ -31,6 +31,6 @@ public final class ServerInfo {
     this.version = version;
   }
   public ServerInfo(Time startTime) {
-		this.startTime = startTime;
+  this.startTime = startTime;
 	}
 }
