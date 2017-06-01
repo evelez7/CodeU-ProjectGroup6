@@ -11,26 +11,17 @@ public final class ServerInfo {
   
   public final Time startTime;
   public Uuid version;
+  
   public ServerInfo() {
+    this.startTime = Time.now();
     try {
       this.version = Uuid.parse(SERVER_VERSION);
     } catch (Exception ex) {
       LOG.error(ex, "There was an error in retrieving the server version.");
     }
-    try {
-      this.startTime = Time.now();
-    } catch (Exception ex) {
-      LOG.error(ex, "There was an error in retrieving the current time.");
-    }
   }
-  public ServerInfo(UUid version, Time startTime) {
+  public ServerInfo(Uuid version, Time startTime) {
     this.version = version;
     this.startTime = startTime;
   }
-  public ServerInfo(Uuid version) {
-    this.version = version;
-  }
-  public ServerInfo(Time startTime) {
-  this.startTime = startTime;
-	}
 }
