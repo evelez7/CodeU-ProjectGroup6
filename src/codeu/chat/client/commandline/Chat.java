@@ -183,24 +183,6 @@ public final class Chat {
         return null;
       }
     });
-    
-    // INFO (get server up time)
-    //
-    // Add a command to get the amount of time that the server has been up when the user enters "info"
-    // while on the root panel.
-    //
-    panel.register("info", new Panel.Command() {
-    	@Override
-    	public void invoke(Scanner args) {
-    		final ServerInfo info = context.getInfo();
-    		if (info == null) {
-    			System.out.format("ERROR: Server did not send a valid info object");
-    		}
-    		else {
-    			System.out.println("Start Time:" + info.startTime);
-    		}
-    	}
-    });
 
     // INFO (get server info)
     //
@@ -215,6 +197,7 @@ public final class Chat {
           System.out.println("ERROR: The server did not send us a valid info object.");
         } else {
           System.out.println("Current server version: " + info.version);
+          System.out.println("Start Time:" + info.startTime);
         }
       }
     });
