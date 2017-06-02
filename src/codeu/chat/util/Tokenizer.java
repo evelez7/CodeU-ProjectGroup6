@@ -1,3 +1,4 @@
+package codeu.chat.util;
 import java.io.*;
 public final class Tokenizer {
 	private StringBuilder token;
