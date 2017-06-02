@@ -1,9 +1,11 @@
 package codeu.chat.util;
-import java.io.IOexception;
+import codeu.chat.util.Tokenizer;
+import org.junit.Test;
+import java.io.IOException;
 import static org.junit.Assert.*;
 public final class TokenizerTest {
 	@Test
-	public void testWithNoQuotes() throws IOexception {
+	public void testWithNoQuotes() throws IOException {
 		final Tokenizer tokenizer = new Tokenizer("hello world how are you");
 		assertEquals(tokenizer.next(), "hello");
 		assertEquals(tokenizer.next(), "world");
@@ -13,7 +15,7 @@ public final class TokenizerTest {
 		assertEquals(tokenizer.next(), null);
 	}
 	@Test
-	public void testWithQuotes() throws IOexception {
+	public void testWithQuotes() throws IOException {
 		final Tokenizer tokenizer = new Tokenizer("\"hello world\" \"how are you\"");
 		assertEquals(tokenizer.next(), "hello world");
 		assertEquals(tokenizer.next(), "how are you");
