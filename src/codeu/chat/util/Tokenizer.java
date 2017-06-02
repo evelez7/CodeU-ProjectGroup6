@@ -1,9 +1,10 @@
+import java.io.*;
 public final class Tokenizer {
 	private StringBuilder token;
 	private String source;
 	private int at;
 
-	public Tockenizer(String source) {
+	public Tokenizer(String source) {
 		this.source = source;
 	}
 
@@ -13,14 +14,12 @@ public final class Tokenizer {
 		}
 		if (remaining() <= 0) {
 			return null;
-		}
-		else if (peek() == '"') {
+		} else if (peek() == '"') {
 			//read a token that is surrounded by quotes
-			readWithQuotes();
-		}
-		else {
+			return readWithQuotes();
+		} else {
 			//read a token that is not surrounded by quotes
-			readWithNoQuotes();
+			return readWithNoQuotes();
 		}
 	}
 
@@ -31,8 +30,7 @@ public final class Tokenizer {
 	private char peek() throws IOException {
 		if (at < source.length()) {
 			return source.charAt(at);
-		}
-		else {
+		} else {
 			throw new IOException("too short");
 		}
 	}
