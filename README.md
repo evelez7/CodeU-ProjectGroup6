@@ -30,21 +30,15 @@ JAVA&nbsp;7 when working with this project.
 
   1. To test the project:
        ```
-<<<<<<< HEAD
-       $ sh test.sh
-=======
+
        $ python build.py run codeu.chat.TestRunner
->>>>>>> ff63944... Update typos in README (#110)
-       ```
+
 
   1. To run the project you will need to run both the client and the server. Run
      the following two commands in separate shells:
 
        ```
-<<<<<<< HEAD
-       $ sh run_server.sh <team_id> <team_secret> <port> <persistent-dir>
-       $ sh run_client.sh <host> <port>
-=======
+
        $ python build.py run codeu.chat.ServerMain <team_id> <team_secret> <port> <persistent-dir>
        $ python build.py run codeu.chat.ClientMain "<host>@<port>"
 >>>>>>> ff63944... Update typos in README (#110)
