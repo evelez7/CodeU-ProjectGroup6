@@ -1,7 +1,7 @@
 package codeu.chat.util;
 import java.io.*;
 public final class Tokenizer {
-	private StringBuilder token;
+	private StringBuilder token = new StringBuilder();
 	private String source;
 	private int at;
 
