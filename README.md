@@ -5,7 +5,7 @@
 ## DISCLAIMER
 
 CODEU is a program created by Google to develop the skills of future software
-engineers. This project is not an offical Google Product. This project is a
+engineers. This project is not an official Google Product. This project is a
 playground for those looking to develop their coding and software engineering
 skills.
 
@@ -30,7 +30,6 @@ JAVA&nbsp;7 when working with this project.
 
   1. To test the project:
        ```
-
        $ python build.py run codeu.chat.TestRunner
        ```
 
@@ -38,10 +37,8 @@ JAVA&nbsp;7 when working with this project.
      the following two commands in separate shells:
 
        ```
-
        $ python build.py run codeu.chat.ServerMain <team_id> <team_secret> <port> <persistent-dir>
        $ python build.py run codeu.chat.ClientMain "<host>@<port>"
-
        ```
 
      You must specify the following startup arguments for `run_server.sh:
