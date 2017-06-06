@@ -1,7 +1,7 @@
 package codeu.chat.util;
 import java.io.*;
 public final class Tokenizer {
-	private StringBuilder token;
+	private StringBuilder token = new StringBuilder();
 	private String source;
 	private int at;
 
@@ -50,6 +50,29 @@ public final class Tokenizer {
 		return token.toString();
 	}
 
+	private String emptyString() throws IOException {
+		if (token.equals("")){
+			return "Empty String. Please try again.";
+		}
+	}
+
+	private String oneQuotation() throws IOException {
+		if (token.get(0) == "\"" && token.get(token.length()) != "\""){
+			return "Missing closing quotation. Please try again.";
+		}
+	}
+
+	private String hasWhiteSpaces() throws IOException {
+		if (token.contains(" ")){
+			return "Has a space. Please try again with no spaces.";
+		}
+	}
+
+	private String noText() throws IOException {
+		if (token.length() == 0){
+			return "No Text. Please try again.";
+		}
+	}
 	private String readWithQuotes() throws IOException {
 		token.setLength(0);
 		if (read() != '"') {
