@@ -18,24 +18,40 @@ public final class TokenizerTest {
 		assertEquals(tokenizer.next(), "hello world");
 		assertEquals(tokenizer.next(), "how are you");
 		assertEquals(tokenizer.next(), null);
-		/*
-		while (tokenizer.hasNext()){
-			int first_quote = 0;
-			int first_quote_location = 0;
-			for (int i= 0; i < tokenizer.length(); i++){
-				if (tokenizer.substring(i, i+1).equals("\"")){
-					first_quote++;
-					first_quote_location = i;
-				}
-				if (i == tokenizer.length-1){
-					assertEquals(tokenizer.next(), tokenizer.substring(first_quote_location, i));
-				}	
-				else if (tokenizer.substring(i, i+1).equals(" ") && ((first_quote % 2) != 0)){
-					assertEquals(tokenizer.next(), tokenizer.substring(first_quote_location, i));
-				} 
+	}
+
+	private String emptyString() throws IOException {
+		if (token.equals("")){
+			return "Empty String. Please try again.";
+		}
+		else{
+			return token.toString();
+		}
+	}
+
+	private String oneQuotation() throws IOException {
+		if (token.substring(0, 1) == "\"" && token.substring(token.length()-1, token.length()) != "\""){
+			return "Missing closing quotation. Please try again.";
+		}
+		else return token.toString();
+	}
+
+	private String hasWhiteSpaces() throws IOException {
+		for(int i=0; i < token.length(); i++){
+			if (token.substring(i, i+1).equals(" ")){
+				return "Has a space. Please try again with no spaces.";
 			}
 		}
-		*/
+		return token.toString();
+	}
+
+	private String noText() throws IOException {
+		if (token.length() == 0){
+			return "No Text. Please try again.";
+		}
+		else{
+			return token.toString();
+		}
 	}
 
 }
