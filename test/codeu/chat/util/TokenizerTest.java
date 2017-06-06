@@ -5,21 +5,32 @@ import java.io.IOException;
 import static org.junit.Assert.*;
 public final class TokenizerTest {
 	@Test
+	Scanner input = new Scanner(System.in);
 	public void testWithNoQuotes() throws IOException {
-		final Tokenizer tokenizer = new Tokenizer("hello world how are you");
-		assertEquals(tokenizer.next(), "hello");
-		assertEquals(tokenizer.next(), "world");
-		assertEquals(tokenizer.next(), "how");
-		assertEquals(tokenizer.next(), "are");
-		assertEquals(tokenizer.next(), "you");
-		assertEquals(tokenizer.next(), null);
+		final Tokenizer tokenizer = new Tokenizer();
+		while (tokenizer.hasNext()){
+			assertEquals(tokenizer.next(), input.next());
+		}
 	}
 	@Test
 	public void testWithQuotes() throws IOException {
 		final Tokenizer tokenizer = new Tokenizer("\"hello world\" \"how are you\"");
-		assertEquals(tokenizer.next(), "hello world");
-		assertEquals(tokenizer.next(), "how are you");
-		assertEquals(tokenizer.next(), null);
+		while (tokenizer.hasNext){
+			int first_quote = 0;
+			int first_quote_location = 0;
+			for (int i= 0; i < tokenizer.length(); i++){
+				if (tokenizer.get(i).equals("\"")){
+					first_quote++;
+					first_quote_location = i;
+				}
+				if (tokenizer.get(i).equals(" ") && ((first_quote % 2) != 0){
+					assertEquals(tokenizer.next(), tokenizer.substring(first_quote_location, i));
+				}
+				else if (i = tokenizer.length-1){
+					assertEquals(tokenizer.next(), tokenizer.substring(first_quote_location, i));
+				}	
+			}
+		}
 	}
 
 }
