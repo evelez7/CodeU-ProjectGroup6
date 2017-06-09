@@ -24,6 +24,22 @@ public final class Tokenizer {
 		}
 	}
 
+	public int length() throws IOException{
+		return source.length();
+	}
+
+	public String getInput() throws IOException{
+		return this.source;
+	}
+
+	public String substring(int beginning, int end) throws IOException{
+		String output = "";
+		for (int i = beginning; i < end; i++){
+			output += source.charAt(i);
+		}
+		return output;
+	}
+
 	private int remaining() {
 		return source.length() - at;
 	}
