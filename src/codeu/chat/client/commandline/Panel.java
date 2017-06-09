@@ -27,7 +27,7 @@ import java.util.Scanner;
 final class Panel {
 
   public interface Command {
-    void invoke(List<String> args);
+    void invoke(Scanner line);
   }
 
   private final Map<String, Command> commands = new HashMap<>();
