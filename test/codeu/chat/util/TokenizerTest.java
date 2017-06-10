@@ -28,8 +28,8 @@ public final class TokenizerTest {
 		assertEquals(tokenizer.next(), "");
 		assertEquals(tokenizer.next(), null);
 	}
-	@Test
-	public void testWithOneQuotation() throws IOException {
+	@Test(expected=IOException.class)
+	public void testWithOneQuotation() throws IOException{
 		final Tokenizer tokenizer = new Tokenizer("\"hello world how are you");
 		assertEquals(tokenizer.next(), "\"hello");
 		assertEquals(tokenizer.next(), "world");
@@ -40,8 +40,11 @@ public final class TokenizerTest {
 	}
 	@Test
 	public void testWithWhiteSpaces() throws IOException {
-		final Tokenizer tokenizer = new Tokenizer("  ");
-		assertEquals(tokenizer.next(), "  ");
+		final Tokenizer tokenizer = new Tokenizer("\n \r \t");
+		assertEquals(tokenizer.next(), "\n");
+		assertEquals(tokenizer.next(), "\r");
+		assertEquals(tokenizer.next(), "\t");
+		assertEquals(tokenizer.next(), null);
 	}
 
 }
