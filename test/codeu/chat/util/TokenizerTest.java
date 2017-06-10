@@ -43,10 +43,5 @@ public final class TokenizerTest {
 		final Tokenizer tokenizer = new Tokenizer("  ");
 		assertEquals(tokenizer.next(), "  ");
 	}
-	@Test
-	public void testWithNoText() throws IOException {
-		final Tokenizer tokenizer = new Tokenizer(null);
-		assertEquals(tokenizer.next(), null);
-	}
 
 }
