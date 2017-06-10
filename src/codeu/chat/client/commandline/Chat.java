@@ -21,6 +21,7 @@ import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
 import codeu.chat.util.Tokenizer;
+import java.io.IOException;
 
 import codeu.chat.common.ServerInfo;
 import codeu.chat.client.core.Context;
@@ -53,9 +54,14 @@ public final class Chat {
 
     final List<String> args = new ArrayList<>();
     final Tokenizer tokenizer = new Tokenizer(line);
-    for (String token = tokenizer.next(); token != null; token = tokenizer.next()) {  
-         args.add(token);
-    }
+    try {
+          for (String token = tokenizer.next(); token != null; token = tokenizer.next()) {
+              args.add(token);
+          }
+      }
+      catch (IOException e) {
+          
+      }
     final String command = args.get(0);
     args.remove(0);
 
@@ -108,7 +114,7 @@ public final class Chat {
     //
     panel.register("help", new Panel.Command() {
       @Override
-      public void invoke(Scanner args) {
+      public void invoke(List<String> args) {
         System.out.println("ROOT MODE");
         System.out.println("  u-list");
         System.out.println("    List all users.");
@@ -149,7 +155,7 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
-          final String name = args.hasNext() ? args.nextLine().trim() : "";
+          final String name = token;
           if (name.length() > 0) {
             if (context.create(name) == null) {
               System.out.println("ERROR: Failed to create new user");
@@ -169,17 +175,19 @@ public final class Chat {
     panel.register("u-sign-in", new Panel.Command() {
       @Override
       public void invoke(List<String> args) {
-        final String name = args.hasNext() ? args.nextLine().trim() : "";
-        if (name.length() > 0) {
-          final UserContext user = findUser(name);
-          if (user == null) {
-            System.out.format("ERROR: Failed to sign in as '%s'\n", name);
+        for(String token : args){
+          final String name = token;
+          if (name.length() > 0) {
+            final UserContext user = findUser(name);
+            if (user == null) {
+              System.out.format("ERROR: Failed to sign in as '%s'\n", name);
+            } else {
+              panels.push(createUserPanel(user));
+            }
           } else {
-            panels.push(createUserPanel(user));
+            System.out.println("ERROR: Missing <username>");
           }
-        } else {
-          System.out.println("ERROR: Missing <username>");
-        }
+        } 
       }
 
       // Find the first user with the given name and return a user context
@@ -270,17 +278,19 @@ public final class Chat {
     panel.register("c-add", new Panel.Command() {
       @Override
       public void invoke(List<String> args) {
-        final String name = args.hasNext() ? args.nextLine().trim() : "";
-        if (name.length() > 0) {
-          final ConversationContext conversation = user.start(name);
-          if (conversation == null) {
-            System.out.println("ERROR: Failed to create new conversation");
+        for (String token : args){
+          final String name = token;
+          if (name.length() > 0) {
+            final ConversationContext conversation = user.start(name);
+            if (conversation == null) {
+              System.out.println("ERROR: Failed to create new conversation");
+            } else {
+              panels.push(createConversationPanel(conversation));
+            }
           } else {
-            panels.push(createConversationPanel(conversation));
+            System.out.println("ERROR: Missing <title>");
           }
-        } else {
-          System.out.println("ERROR: Missing <title>");
-        }
+        } 
       }
     });
 
@@ -292,17 +302,19 @@ public final class Chat {
     panel.register("c-join", new Panel.Command() {
       @Override
       public void invoke(List<String> args) {
-        final String name = args.hasNext() ? args.nextLine().trim() : "";
-        if (name.length() > 0) {
-          final ConversationContext conversation = find(name);
-          if (conversation == null) {
-            System.out.format("ERROR: No conversation with name '%s'\n", name);
+        for(String token : args){
+          final String name = token;
+          if (name.length() > 0) {
+            final ConversationContext conversation = find(name);
+            if (conversation == null) {
+              System.out.format("ERROR: No conversation with name '%s'\n", name);
+            } else {
+              panels.push(createConversationPanel(conversation));
+            }
           } else {
-            panels.push(createConversationPanel(conversation));
+            System.out.println("ERROR: Missing <title>");
           }
-        } else {
-          System.out.println("ERROR: Missing <title>");
-        }
+        } 
       }
 
       // Find the first conversation with the given name and return its context.
@@ -393,12 +405,14 @@ public final class Chat {
     panel.register("m-add", new Panel.Command() {
       @Override
       public void invoke(List<String> args) {
-        final String message = args.hasNext() ? args.nextLine().trim() : "";
-        if (message.length() > 0) {
-          conversation.add(message);
-        } else {
-          System.out.println("ERROR: Messages must contain text");
-        }
+        for(String token : args){
+          final String message = token;
+          if (message.length() > 0) {
+            conversation.add(message);
+          } else {
+            System.out.println("ERROR: Messages must contain text");
+          }
+        }  
       }
     });
 
