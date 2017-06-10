@@ -17,6 +17,7 @@ package codeu.chat.client.commandline;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.List;
 
 // PANEL
 //
