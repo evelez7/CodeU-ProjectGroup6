@@ -25,7 +25,6 @@ public final class TokenizerTest {
 	@Test
 	public void testWithEmptyString() throws IOException {
 		final Tokenizer tokenizer = new Tokenizer("");
-		assertEquals(tokenizer.next(), "");
 		assertEquals(tokenizer.next(), null);
 	}
 	@Test(expected=IOException.class)
@@ -41,9 +40,6 @@ public final class TokenizerTest {
 	@Test
 	public void testWithWhiteSpaces() throws IOException {
 		final Tokenizer tokenizer = new Tokenizer("\n \r \t");
-		assertEquals(tokenizer.next(), "\n");
-		assertEquals(tokenizer.next(), "\r");
-		assertEquals(tokenizer.next(), "\t");
 		assertEquals(tokenizer.next(), null);
 	}
 
