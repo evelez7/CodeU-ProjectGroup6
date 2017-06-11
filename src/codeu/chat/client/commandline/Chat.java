@@ -16,7 +16,6 @@ package codeu.chat.client.commandline;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
@@ -60,7 +59,7 @@ public final class Chat {
           }
       }
       catch (IOException e) {
-          
+
       }
     final String command = args.get(0);
     args.remove(0);
@@ -163,7 +162,7 @@ public final class Chat {
           } else {
             System.out.println("ERROR: Missing <username>");
           }
-        }  
+        }
       }
     });
 
@@ -187,7 +186,7 @@ public final class Chat {
           } else {
             System.out.println("ERROR: Missing <username>");
           }
-        } 
+        }
       }
 
       // Find the first user with the given name and return a user context
@@ -290,7 +289,7 @@ public final class Chat {
           } else {
             System.out.println("ERROR: Missing <title>");
           }
-        } 
+        }
       }
     });
 
@@ -314,7 +313,7 @@ public final class Chat {
           } else {
             System.out.println("ERROR: Missing <title>");
           }
-        } 
+        }
       }
 
       // Find the first conversation with the given name and return its context.
@@ -412,7 +411,7 @@ public final class Chat {
           } else {
             System.out.println("ERROR: Messages must contain text");
           }
-        }  
+        }
       }
     });
 
