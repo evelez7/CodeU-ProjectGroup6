@@ -180,10 +180,9 @@ public final class Server {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
 
-        final Collection<User> users = view.getUsers();
+        final String name = Serializers.STRING.read(in);
 
-        Serializers.INTEGER.write (out, NetworkCode.NEW_USER_INTEREST_RESPONSE);
-        Serializers.collection(User.SERIALIZER).write(out, users);
+        Serializers.INTEGER.write (out, NetworkCode.NEW_USER_INTEREST_RESPONSE);;
       }
     });
 
@@ -192,10 +191,9 @@ public final class Server {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
 
-        final Collection<ConversationHeader> conversations = view.getConversations();
+        final String title = Serializers.STRING.read(in);
 
         Serializers.INTEGER.write (out, NetworkCode.NEW_CONVERSATION_INTEREST_RESPONSE);
-        Serializers.collection(ConversationHeader.SERIALIZER).write(out, conversations);
       }
     });
 
