@@ -179,7 +179,11 @@ public final class Server {
     this.commands.put (NetworkCode.NEW_USER_INTEREST_REQUEST, new Command() {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final Collection<User> users = view.getUsers();
+
         Serializers.INTEGER.write (out, NetworkCode.NEW_USER_INTEREST_RESPONSE);
+        Serializers.collection(User.SERIALIZER).write(out, users);
       }
     });
 
@@ -187,7 +191,11 @@ public final class Server {
     this.commands.put (NetworkCode.NEW_CONVERSATION_INTEREST_REQUEST, new Command() {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final Collection<ConversationHeader> conversations = view.getConversations();
+
         Serializers.INTEGER.write (out, NetworkCode.NEW_CONVERSATION_INTEREST_RESPONSE);
+        Serializers.collection(ConversationHeader.SERIALIZER).write(out, conversations);
       }
     });
 
