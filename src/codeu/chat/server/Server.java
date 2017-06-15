@@ -50,7 +50,7 @@ public final class Server {
   private static final Logger.Log LOG = Logger.newLog(Server.class);
 
   private static final int RELAY_REFRESH_MS = 5000;  // 5 seconds
-  
+
   private static final ServerInfo info = new ServerInfo();
 
   private final Timeline timeline = new Timeline();
@@ -175,6 +175,30 @@ public final class Server {
       }
     });
 
+    // Add User Interest - A client wants to add a user to their interests
+    this.commands.put (NetworkCode.NEW_USER_INTEREST_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+        Serializers.INTEGER.write (out, NetworkCode.NEW_USER_INTEREST_RESPONSE);
+      }
+    });
+
+    // Add Conversation Interest - A client wants to add a conversation to their interests
+    this.commands.put (NetworkCode.NEW_CONVERSATION_INTEREST_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+        Serializers.INTEGER.write (out, NetworkCode.NEW_CONVERSATION_INTEREST_RESPONSE);
+      }
+    });
+
+    // Status Update - A client wants to get a status update on their interests
+    this.commands.put (NetworkCode.STATUS_UPDATE_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+        Serializers.INTEGER.write (out, NetworkCode.STATUS_UPDATE_RESPONSE);
+      }
+    });
+
     // Get Server Info - A client wants to get server info from the back end
     this.commands.put (NetworkCode.SERVER_INFO_REQUEST, new Command() {
       @Override
@@ -206,7 +230,7 @@ public final class Server {
         timeline.scheduleIn(RELAY_REFRESH_MS, this);
       }
     });
-    
+
   }
 
   public void handleConnection(final Connection connection) {
