@@ -421,8 +421,8 @@ public final class Chat {
         for(String token : args){
           final String name = token;
           if (name.length() > 0) {
-            final UserContext user = findUser(name);
-            if (user == null) {
+            final UserContext foundUser = findUser(name);
+            if (foundUser == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else {
               System.out.format("User '%s' added to interests. \n", name);
@@ -457,8 +457,8 @@ public final class Chat {
         for(String token : args){
           final String name = token;
           if (name.length() > 0) {
-            final UserContext user = findUser(name);
-            if (user == null) {
+            final UserContext foundUser = findUser(name);
+            if (foundUser == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else {
               System.out.format("User '%s' removed from interests. \n", name);
