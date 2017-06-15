@@ -53,4 +53,29 @@ public final class UserContext {
 
     return all;
   }
+
+  public void addUserInterest(String name) {
+    Controller ContextController = (Controller)controller;
+    ContextController.addUserInterest(name, user.id);
+  }
+
+  public void removeUserInterest(String name) {
+    Controller ContextController = (Controller)controller;
+    ContextController.removeUserInterest(name, user.id);
+  }
+
+  public void addConversationInterest(String title) {
+    Controller ContextController = (Controller)controller;
+    ContextController.addConversationInterest(title, user.id);
+  }
+
+  public void removeConversationInterest(String title) {
+    Controller ContextController = (Controller)controller;
+    ContextController.addUserInterest(title, user.id);
+  }
+
+  public void statusUpdate() {
+    // Still need to work on this.
+  }
+  
 }

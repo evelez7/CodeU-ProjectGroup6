@@ -353,9 +353,8 @@ public final class Chat {
             if (conversation == null) {
               System.out.format("ERROR: No conversation with name '%s'\n", name);
             } else {
-              System.out.println("Placeholder for conversation interest.");
               System.out.format("Conversation '%s' added to interests. \n", name);
-              user.user.ConvoSet.add(conversation.conversation.id);
+              user.addConversationInterest(name);
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -390,9 +389,8 @@ public final class Chat {
             if (conversation == null) {
               System.out.format("ERROR: No conversation with name '%s'\n", name);
             } else {
-              System.out.println("Placeholder for conversation interest.");
               System.out.format("Conversation '%s' removed from interests. \n", name);
-              user.user.ConvoSet.remove(conversation.conversation.id);
+              user.removeConversationInterest(name);
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -427,9 +425,8 @@ public final class Chat {
             if (user == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else {
-              System.out.println("Placeholder for user interest.");
               System.out.format("User '%s' added to interests. \n", name);
-              user.user.UserSet.add(user.user.id);
+              user.addUserInterest(name);
             }
           } else {
             System.out.println("ERROR: Missing <username>");
@@ -464,9 +461,8 @@ public final class Chat {
             if (user == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else {
-              System.out.println("Placeholder for user interest.");
               System.out.format("User '%s' removed from interests. \n", name);
-              user.user.UserSet.remove(user.user.id);
+              user.removeUserInterest(name);
             }
           } else {
             System.out.println("ERROR: Missing <username>");

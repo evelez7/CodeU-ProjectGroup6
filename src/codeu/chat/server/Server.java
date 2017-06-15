@@ -181,8 +181,21 @@ public final class Server {
       public void onMessage (InputStream in, OutputStream out) throws IOException {
 
         final String name = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
 
         Serializers.INTEGER.write (out, NetworkCode.NEW_USER_INTEREST_RESPONSE);;
+      }
+    });
+
+    // Remove User Interest - A client wants to remove a user to their interests
+    this.commands.put (NetworkCode.REMOVE_USER_INTEREST_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String name = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        Serializers.INTEGER.write (out, NetworkCode.REMOVE_USER_INTEREST_RESPONSE);;
       }
     });
 
@@ -192,8 +205,21 @@ public final class Server {
       public void onMessage (InputStream in, OutputStream out) throws IOException {
 
         final String title = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
 
         Serializers.INTEGER.write (out, NetworkCode.NEW_CONVERSATION_INTEREST_RESPONSE);
+      }
+    });
+
+    // Remove Conversation Interest - A client wants to remove a conversation to their interests
+    this.commands.put (NetworkCode.REMOVE_CONVERSATION_INTEREST_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String title = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        Serializers.INTEGER.write (out, NetworkCode.REMOVE_CONVERSATION_INTEREST_RESPONSE);
       }
     });
 

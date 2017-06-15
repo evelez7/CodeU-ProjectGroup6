@@ -138,50 +138,6 @@ final class View implements BasicView {
     return messages;
   }
 
-  public Collection<User> addUserInterest() {
-
-    final Collection<User> users = new ArrayList<>();
-
-    try (final Connection connection = source.connect()) {
-
-      Serializers.INTEGER.write(connection.out(), NetworkCode.NEW_USER_INTEREST_REQUEST);
-
-      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.NEW_USER_INTEREST_RESPONSE) {
-        users.addAll(Serializers.collection(User.SERIALIZER).read(connection.in()));
-      } else {
-        LOG.error("Response from server failed.");
-      }
-
-    } catch (Exception ex) {
-      System.out.println("ERROR: Exception during call on server. Check log for details.");
-      LOG.error(ex, "Exception during call on server.");
-    }
-
-    return users;
-  }
-
-  public Collection<ConversationHeader> addConversationInterest() {
-
-    final Collection<ConversationHeader> summaries = new ArrayList<>();
-
-    try (final Connection connection = source.connect()) {
-
-      Serializers.INTEGER.write(connection.out(), NetworkCode.NEW_CONVERSATION_INTEREST_REQUEST);
-
-      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.NEW_CONVERSATION_INTEREST_RESPONSE) {
-        summaries.addAll(Serializers.collection(ConversationHeader.SERIALIZER).read(connection.in()));
-      } else {
-        LOG.error("Response from server failed.");
-      }
-
-    } catch (Exception ex) {
-      System.out.println("ERROR: Exception during call on server. Check log for details.");
-      LOG.error(ex, "Exception during call on server.");
-    }
-
-    return summaries;
-  }
-
   public ServerInfo getInfo() {
     try (final Connection connection = this.source.connect()) {
       Serializers.INTEGER.write(connection.out(), NetworkCode.SERVER_INFO_REQUEST);
