@@ -175,7 +175,7 @@ public final class Server {
       }
     });
 
-    // Add User Interest - A client wants to add a user to their interests
+    // Add User Interest - A client wants to add a user to their interests.
     this.commands.put (NetworkCode.NEW_USER_INTEREST_REQUEST, new Command() {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
@@ -183,11 +183,13 @@ public final class Server {
         final String name = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
 
+        controller.addUserInterest(name, owner);
+
         Serializers.INTEGER.write (out, NetworkCode.NEW_USER_INTEREST_RESPONSE);;
       }
     });
 
-    // Remove User Interest - A client wants to remove a user to their interests
+    // Remove User Interest - A client wants to remove a user from their interests.
     this.commands.put (NetworkCode.REMOVE_USER_INTEREST_REQUEST, new Command() {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
@@ -195,11 +197,13 @@ public final class Server {
         final String name = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
 
+        controller.removeUserInterest(name, owner);
+
         Serializers.INTEGER.write (out, NetworkCode.REMOVE_USER_INTEREST_RESPONSE);;
       }
     });
 
-    // Add Conversation Interest - A client wants to add a conversation to their interests
+    // Add Conversation Interest - A client wants to add a conversation to their interests.
     this.commands.put (NetworkCode.NEW_CONVERSATION_INTEREST_REQUEST, new Command() {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
@@ -207,17 +211,21 @@ public final class Server {
         final String title = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
 
+        controller.addConversationInterest(title, owner);
+
         Serializers.INTEGER.write (out, NetworkCode.NEW_CONVERSATION_INTEREST_RESPONSE);
       }
     });
 
-    // Remove Conversation Interest - A client wants to remove a conversation to their interests
+    // Remove Conversation Interest - A client wants to remove a conversation from their interests.
     this.commands.put (NetworkCode.REMOVE_CONVERSATION_INTEREST_REQUEST, new Command() {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
 
         final String title = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        controller.removeConversationInterest(title, owner);
 
         Serializers.INTEGER.write (out, NetworkCode.REMOVE_CONVERSATION_INTEREST_RESPONSE);
       }

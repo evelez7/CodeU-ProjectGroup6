@@ -143,6 +143,46 @@ public final class Controller implements RawController, BasicController {
     return conversation;
   }
 
+  public void addUserInterest(String name, Uuid owner) {
+
+    final User foundOwner = model.userById().first(owner);
+    final User foundUser = model.userByText().first(name);
+
+    foundOwner.UserSet.add(foundUser.id);
+    LOG.info("User " + foundUser.name + " added to " + foundOwner.name + "'s interests.");
+    
+  }
+
+  public void removeUserInterest(String name, Uuid owner) {
+
+    final User foundOwner = model.userById().first(owner);
+    final User foundUser = model.userByText().first(name);
+
+    foundOwner.UserSet.remove(foundUser.id);
+    LOG.info("User " + foundUser.name + " removed from " + foundOwner.name + "'s interests.");
+    
+  }
+
+  public void addConversationInterest(String title, Uuid owner) {
+
+    final User foundOwner = model.userById().first(owner);
+    final ConversationHeader foundConversation = model.conversationByText().first(title);
+
+    foundOwner.ConvoSet.add(foundConversation.id);
+    LOG.info("Conversation " + foundConversation.title + " added to " + foundOwner.name + "'s interests.");
+    
+  }
+
+  public void removeConversationInterest(String title, Uuid owner) {
+
+    final User foundOwner = model.userById().first(owner);
+    final ConversationHeader foundConversation = model.conversationByText().first(title);
+
+    foundOwner.ConvoSet.remove(foundConversation.id);
+    LOG.info("Conversation " + foundConversation.title + " removed from " + foundOwner.name + "'s interests.");
+    
+  }
+
   private Uuid createId() {
 
     Uuid candidate;

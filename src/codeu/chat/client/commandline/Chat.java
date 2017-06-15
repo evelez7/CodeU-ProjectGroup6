@@ -347,14 +347,14 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
-          final String name = token;
-          if (name.length() > 0) {
-            final ConversationContext conversation = find(name);
+          final String title = token;
+          if (title.length() > 0) {
+            final ConversationContext conversation = find(title);
             if (conversation == null) {
-              System.out.format("ERROR: No conversation with name '%s'\n", name);
+              System.out.format("ERROR: No conversation with name '%s'\n", title);
             } else {
-              System.out.format("Conversation '%s' added to interests. \n", name);
-              user.addConversationInterest(name);
+              System.out.format("Conversation '%s' added to interests. \n", title);
+              user.addConversationInterest(title);
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -383,14 +383,14 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
-          final String name = token;
-          if (name.length() > 0) {
-            final ConversationContext conversation = find(name);
+          final String title = token;
+          if (title.length() > 0) {
+            final ConversationContext conversation = find(title);
             if (conversation == null) {
-              System.out.format("ERROR: No conversation with name '%s'\n", name);
+              System.out.format("ERROR: No conversation with name '%s'\n", title);
             } else {
-              System.out.format("Conversation '%s' removed from interests. \n", name);
-              user.removeConversationInterest(name);
+              System.out.format("Conversation '%s' removed from interests. \n", title);
+              user.removeConversationInterest(title);
             }
           } else {
             System.out.println("ERROR: Missing <title>");
