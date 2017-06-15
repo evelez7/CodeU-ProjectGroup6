@@ -36,12 +36,6 @@ public final class User {
       Uuid.SERIALIZER.write(out, value.id);
       Serializers.STRING.write(out, value.name);
       Time.SERIALIZER.write(out, value.creation);
-      for (Uuid user : value.UserSet) {
-        Uuid.SERIALIZER.write(out, user);
-      }
-      for (Uuid conversation : value.ConvoSet) {
-        Uuid.SERIALIZER.write(out, conversation);
-      }
 
     }
 
