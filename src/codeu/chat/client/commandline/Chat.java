@@ -181,7 +181,7 @@ public final class Chat {
             if (user == null) {
               System.out.format("ERROR: Failed to sign in as '%s'\n", name);
             } else {
-              panels.push(createUserPanel(user));
+              panels.push(createUserPanel(context, user));
             }
           } else {
             System.out.println("ERROR: Missing <username>");
@@ -224,7 +224,7 @@ public final class Chat {
     return panel;
   }
 
-  private Panel createUserPanel(final UserContext user) {
+  private Panel createUserPanel(final Context context, final UserContext user) {
 
     final Panel panel = new Panel();
 
@@ -243,6 +243,12 @@ public final class Chat {
         System.out.println("    Add a new conversation with the given title and join it as the current user.");
         System.out.println("  c-join <title>");
         System.out.println("    Join the conversation as the current user.");
+        System.out.println("  i-u-add <name>");
+        System.out.println("    Add a user to the current user's interests.");
+        System.out.println("  i-c-add <title>");
+        System.out.println("    Add a conversation to the current user's interests.");
+        System.out.println("  status-update");
+        System.out.println("    Call a status update on the current user's interests.");
         System.out.println("  info");
         System.out.println("    Display all info for the current user");
         System.out.println("  back");
@@ -322,6 +328,76 @@ public final class Chat {
         for (final ConversationContext conversation : user.conversations()) {
           if (title.equals(conversation.conversation.title)) {
             return conversation;
+          }
+        }
+        return null;
+      }
+    });
+
+    // I-C-ADD (add conversation interest)
+    //
+    // Add a command that will add a conversation to the current user's
+    // interests when the user enters "i-c-add" while on the user panel
+    // 
+    panel.register("i-c-add", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          final String name = token;
+          if (name.length() > 0) {
+            final ConversationContext conversation = find(name);
+            if (conversation == null) {
+              System.out.format("ERROR: No conversation with name '%s'\n", name);
+            } else {
+              System.out.println("Placeholder for conversation interest.");
+            }
+          } else {
+            System.out.println("ERROR: Missing <title>");
+          }
+        }
+      }
+
+      // Find the first conversation with the given name and return its context.
+      // If no conversation has the given name, this will return null.
+      private ConversationContext find(String title) {
+        for (final ConversationContext conversation : user.conversations()) {
+          if (title.equals(conversation.conversation.title)) {
+            return conversation;
+          }
+        }
+        return null;
+      }
+    });
+
+    // I-U-ADD (add user interest)
+    //
+    // Add a command that will add a user to the current user's
+    // interests when the user enters "i-u-add" while on the user panel
+    //
+    panel.register("i-u-add", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          final String name = token;
+          if (name.length() > 0) {
+            final UserContext user = findUser(name);
+            if (user == null) {
+              System.out.format("ERROR: No user with name '%s'\n", name);
+            } else {
+              System.out.println("Placeholder for user interest.");
+            }
+          } else {
+            System.out.println("ERROR: Missing <username>");
+          }
+        }
+      }
+
+      // Find the first user with the given name and return a user context
+      // for that user. If no user is found, the function will return null.
+      private UserContext findUser(String name) {
+        for (final UserContext user : context.allUsers()) {
+          if (user.user.name.equals(name)) {
+            return user;
           }
         }
         return null;
