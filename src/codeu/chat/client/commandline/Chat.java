@@ -245,8 +245,12 @@ public final class Chat {
         System.out.println("    Join the conversation as the current user.");
         System.out.println("  i-u-add <name>");
         System.out.println("    Add a user to the current user's interests.");
+        System.out.println("  i-u-remove <name>");
+        System.out.println("    Remove a user from the current user's interests.");
         System.out.println("  i-c-add <title>");
         System.out.println("    Add a conversation to the current user's interests.");
+        System.out.println("  i-c-remove <title>");
+        System.out.println("    Remove a conversation from the current user's interests.");
         System.out.println("  status-update");
         System.out.println("    Call a status update on the current user's interests.");
         System.out.println("  info");
@@ -350,6 +354,45 @@ public final class Chat {
               System.out.format("ERROR: No conversation with name '%s'\n", name);
             } else {
               System.out.println("Placeholder for conversation interest.");
+              System.out.format("Conversation '%s' added to interests. \n", name);
+              user.user.ConvoSet.add(conversation.conversation.id);
+            }
+          } else {
+            System.out.println("ERROR: Missing <title>");
+          }
+        }
+      }
+
+      // Find the first conversation with the given name and return its context.
+      // If no conversation has the given name, this will return null.
+      private ConversationContext find(String title) {
+        for (final ConversationContext conversation : user.conversations()) {
+          if (title.equals(conversation.conversation.title)) {
+            return conversation;
+          }
+        }
+        return null;
+      }
+    });
+
+    // I-C-REMOVE (remove conversation interest)
+    //
+    // Add a command that will remove a conversation to the current user's
+    // interests when the user enters "i-c-remove" while on the user panel
+    // 
+    panel.register("i-c-remove", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          final String name = token;
+          if (name.length() > 0) {
+            final ConversationContext conversation = find(name);
+            if (conversation == null) {
+              System.out.format("ERROR: No conversation with name '%s'\n", name);
+            } else {
+              System.out.println("Placeholder for conversation interest.");
+              System.out.format("Conversation '%s' removed from interests. \n", name);
+              user.user.ConvoSet.remove(conversation.conversation.id);
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -385,6 +428,8 @@ public final class Chat {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else {
               System.out.println("Placeholder for user interest.");
+              System.out.format("User '%s' added to interests. \n", name);
+              user.user.UserSet.add(user.user.id);
             }
           } else {
             System.out.println("ERROR: Missing <username>");
@@ -401,6 +446,55 @@ public final class Chat {
           }
         }
         return null;
+      }
+    });
+
+    // I-U-REMOVE (Remove user interest)
+    //
+    // Add a command that will remove a user to the current user's
+    // interests when the user enters "i-u-remove" while on the user panel
+    //
+    panel.register("i-u-remove", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          final String name = token;
+          if (name.length() > 0) {
+            final UserContext user = findUser(name);
+            if (user == null) {
+              System.out.format("ERROR: No user with name '%s'\n", name);
+            } else {
+              System.out.println("Placeholder for user interest.");
+              System.out.format("User '%s' removed from interests. \n", name);
+              user.user.UserSet.remove(user.user.id);
+            }
+          } else {
+            System.out.println("ERROR: Missing <username>");
+          }
+        }
+      }
+
+      // Find the first user with the given name and return a user context
+      // for that user. If no user is found, the function will return null.
+      private UserContext findUser(String name) {
+        for (final UserContext user : context.allUsers()) {
+          if (user.user.name.equals(name)) {
+            return user;
+          }
+        }
+        return null;
+      }
+    });
+
+    // STATUS-UPDATE
+    //
+    // Add a command that will print info about the current user's interests
+    // when the user enders "status-update" while on the user panel
+    // 
+    panel.register("status-update", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        System.out.println("Placeholder for status update.");
       }
     });
 
