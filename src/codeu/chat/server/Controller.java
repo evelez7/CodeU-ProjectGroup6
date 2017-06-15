@@ -147,9 +147,13 @@ public final class Controller implements RawController, BasicController {
 
     final User foundOwner = model.userById().first(owner);
     final User foundUser = model.userByText().first(name);
+    
+    LOG.info("User: " + foundOwner.name);
+    LOG.info("User ID: " + foundOwner.id);
+    LOG.info("Interest (User): " + foundUser.name);
+    LOG.info("Interest ID: " + foundUser.id);
 
     foundOwner.UserSet.add(foundUser.id);
-    LOG.info("User " + foundUser.name + " added to " + foundOwner.name + "'s interests.");
     
   }
 
@@ -157,9 +161,13 @@ public final class Controller implements RawController, BasicController {
 
     final User foundOwner = model.userById().first(owner);
     final User foundUser = model.userByText().first(name);
-
+    
+    LOG.info("User: " + foundOwner.name);
+    LOG.info("User ID: " + foundOwner.id);
+    LOG.info("Interest (User): " + foundUser.name);
+    LOG.info("Interest ID: " + foundUser.id);
+    
     foundOwner.UserSet.remove(foundUser.id);
-    LOG.info("User " + foundUser.name + " removed from " + foundOwner.name + "'s interests.");
     
   }
 
@@ -167,10 +175,14 @@ public final class Controller implements RawController, BasicController {
 
     final User foundOwner = model.userById().first(owner);
     final ConversationHeader foundConversation = model.conversationByText().first(title);
+    
+    LOG.info("User: " + foundOwner.name);
+    LOG.info("User ID: " + foundOwner.id);
+    LOG.info("Interest (Conversation): " + foundConversation.title);
+    LOG.info("Interest ID: " + foundConversation.id);
 
     foundOwner.ConvoSet.add(foundConversation.id);
-    LOG.info("Conversation " + foundConversation.title + " added to " + foundOwner.name + "'s interests.");
-    
+  
   }
 
   public void removeConversationInterest(String title, Uuid owner) {
@@ -178,8 +190,12 @@ public final class Controller implements RawController, BasicController {
     final User foundOwner = model.userById().first(owner);
     final ConversationHeader foundConversation = model.conversationByText().first(title);
 
+    LOG.info("User: " + foundOwner.name);
+    LOG.info("User ID: " + foundOwner.id);
+    LOG.info("Interest (Conversation): " + foundConversation.title);
+    LOG.info("Interest ID: " + foundConversation.id);
+
     foundOwner.ConvoSet.remove(foundConversation.id);
-    LOG.info("Conversation " + foundConversation.title + " removed from " + foundOwner.name + "'s interests.");
     
   }
 
