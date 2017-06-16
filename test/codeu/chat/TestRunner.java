@@ -31,10 +31,22 @@ public final class TestRunner {
              codeu.chat.util.store.StoreTest.class,
              codeu.chat.util.TokenizerTest.class
          );
-      for (final Failure failure : result.getFailures()) {
-         System.out.println(failure.toString());
+
+      System.out.println("\n===================== Test Status ====================");
+      System.out.println(String.format("%d tests run.", result.getRunCount()));
+
+      if (result.wasSuccessful()) {
+        System.out.println("All tests passed.");
+      } else {
+        System.out.println(String.format("%d tests failed.", result.getFailureCount()));
+        System.out.println("\nFailures:");
+        for (final Failure failure : result.getFailures()) {
+           System.out.println(failure.toString());
+        }
       }
-      System.out.println(result.wasSuccessful());
+
+      System.out.println("======================================================\n");
+      System.exit(result.wasSuccessful() ? 0 : -1);
    }
 }
 
