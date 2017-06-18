@@ -52,15 +52,39 @@ public interface BasicController {
   ConversationHeader newConversation(String title, Uuid owner);
 
   // ADD USER INTEREST
+  // 
+  // Adds a user to the interests of the user that is currently signed
+  // in. All parameters must be provided or else the server won't apply
+  // the change. A boolean will be returned representing whether or not
+  // the change took place, with "true" meaning that the change occured
+  // and "false" meaning that the change did not occur.
   boolean addUserInterest(String name, Uuid owner);
 
   // REMOVE USER INTEREST
+  // 
+  // Removes a user from the interests of the user that is currently signed
+  // in. All parameters must be provided or else the server won't apply
+  // the change. A boolean will be returned representing whether or not
+  // the change took place, with "true" meaning that the change occured
+  // and "false" meaning that the change did not occur.
   boolean removeUserInterest(String name, Uuid owner);
 
   // ADD CONVERSATION INTEREST
+  // 
+  // Adds a conversation to the interests of the user that is currently signed
+  // in. All parameters must be provided or else the server won't apply
+  // the change. A boolean will be returned representing whether or not
+  // the change took place, with "true" meaning that the change occured
+  // and "false" meaning that the change did not occur.
   boolean addConversationInterest(String title, Uuid owner);
 
   // REMOVE CONVERSATION INTEREST
+  // 
+  // Removes a conversation from the interests of the user that is currently signed
+  // in. All parameters must be provided or else the server won't apply
+  // the change. A boolean will be returned representing whether or not
+  // the change took place, with "true" meaning that the change occured
+  // and "false" meaning that the change did not occur.
   boolean removeConversationInterest(String title, Uuid owner);
 
 }
