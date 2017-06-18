@@ -486,7 +486,7 @@ public final class Chat {
     panel.register("status-update", new Panel.Command() {
       @Override
       public void invoke(List<String> args) {
-        System.out.println("Placeholder for status update.");
+        user.statusUpdate();
       }
     });
 

@@ -143,6 +143,7 @@ public final class Controller implements RawController, BasicController {
     return conversation;
   }
 
+  @Override
   public void addUserInterest(String name, Uuid owner) {
 
     final User foundOwner = model.userById().first(owner);
@@ -163,6 +164,7 @@ public final class Controller implements RawController, BasicController {
     
   }
 
+  @Override
   public void removeUserInterest(String name, Uuid owner) {
 
     final User foundOwner = model.userById().first(owner);
@@ -183,6 +185,7 @@ public final class Controller implements RawController, BasicController {
     
   }
 
+  @Override
   public void addConversationInterest(String title, Uuid owner) {
 
     final User foundOwner = model.userById().first(owner);
@@ -203,6 +206,7 @@ public final class Controller implements RawController, BasicController {
   
   }
 
+  @Override
   public void removeConversationInterest(String title, Uuid owner) {
 
     final User foundOwner = model.userById().first(owner);

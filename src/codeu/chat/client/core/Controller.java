@@ -113,6 +113,7 @@ final class Controller implements BasicController {
     return response;
   }
 
+  @Override
   public void addUserInterest(String name, Uuid owner) {
 
         try (final Connection connection = source.connect()) {
@@ -133,6 +134,7 @@ final class Controller implements BasicController {
         }
   }
 
+  @Override
   public void removeUserInterest(String name, Uuid owner) {
 
         try (final Connection connection = source.connect()) {
@@ -153,6 +155,7 @@ final class Controller implements BasicController {
         }
   }
 
+  @Override
   public void addConversationInterest(String title, Uuid owner) {
     
     try (final Connection connection = source.connect()) {
@@ -173,6 +176,7 @@ final class Controller implements BasicController {
     }
   }
 
+  @Override
   public void removeConversationInterest(String title, Uuid owner) {
 
     try (final Connection connection = source.connect()) {
