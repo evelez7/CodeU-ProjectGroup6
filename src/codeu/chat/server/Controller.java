@@ -144,85 +144,73 @@ public final class Controller implements RawController, BasicController {
   }
 
   @Override
-  public void addUserInterest(String name, Uuid owner) {
+  public boolean addUserInterest(String name, Uuid owner) {
 
     final User foundOwner = model.userById().first(owner);
     final User foundUser = model.userByText().first(name);
-    
-    LOG.info("User: " + foundOwner.name);
-    LOG.info("User ID: " + foundOwner.id);
-    LOG.info("Interest (User): " + foundUser.name);
-    LOG.info("Interest ID: " + foundUser.id);
 
     if(foundOwner.UserSet.contains(foundUser.id)) {
       LOG.info("ERROR: User already in interests.");
+      return false;
     }
     else {
       foundOwner.UserSet.add(foundUser.id);
-      LOG.info(foundUser.name + " added to interests!");
+      LOG.info("User Interest added: " + foundUser.id);
+      return true;
     }
     
   }
 
   @Override
-  public void removeUserInterest(String name, Uuid owner) {
+  public boolean removeUserInterest(String name, Uuid owner) {
 
     final User foundOwner = model.userById().first(owner);
     final User foundUser = model.userByText().first(name);
-    
-    LOG.info("User: " + foundOwner.name);
-    LOG.info("User ID: " + foundOwner.id);
-    LOG.info("Interest (User): " + foundUser.name);
-    LOG.info("Interest ID: " + foundUser.id);
 
     if(foundOwner.UserSet.contains(foundUser.id)) {
       foundOwner.UserSet.remove(foundUser.id);
-      LOG.info(foundUser.name + " removed from interests!");
+      LOG.info("User Interest removed: " + foundUser.id);
+      return true;
     }
     else {
       LOG.info("ERROR: User not found in interests.");
+      return false;
     }
     
   }
 
   @Override
-  public void addConversationInterest(String title, Uuid owner) {
+  public boolean addConversationInterest(String title, Uuid owner) {
 
     final User foundOwner = model.userById().first(owner);
     final ConversationHeader foundConversation = model.conversationByText().first(title);
-    
-    LOG.info("User: " + foundOwner.name);
-    LOG.info("User ID: " + foundOwner.id);
-    LOG.info("Interest (Conversation): " + foundConversation.title);
-    LOG.info("Interest ID: " + foundConversation.id);
 
     if(foundOwner.ConvoSet.contains(foundConversation.id)) {
       LOG.info("ERROR: Conversation already in interests.");
+      return false;
     }
     else {
       foundOwner.ConvoSet.add(foundConversation.id);
-      LOG.info(foundConversation.title + " added to interests!");
+      LOG.info("Conversation Interest added: " + foundConversation.id);
+      return true;
     }
   
   }
 
   @Override
-  public void removeConversationInterest(String title, Uuid owner) {
+  public boolean removeConversationInterest(String title, Uuid owner) {
 
     final User foundOwner = model.userById().first(owner);
     final ConversationHeader foundConversation = model.conversationByText().first(title);
 
-    LOG.info("User: " + foundOwner.name);
-    LOG.info("User ID: " + foundOwner.id);
-    LOG.info("Interest (Conversation): " + foundConversation.title);
-    LOG.info("Interest ID: " + foundConversation.id);
-
     if(foundOwner.ConvoSet.contains(foundConversation.id)) {
       foundOwner.ConvoSet.remove(foundConversation.id);
-      LOG.info(foundConversation.title + " removed from interests!");
+      LOG.info("Conversation Interest removed: " + foundConversation.id);
+      return true;
     }
     else {
       LOG.info("ERROR: Conversation not found in interests.");
+      return false;
     }
     
   }

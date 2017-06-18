@@ -114,7 +114,9 @@ final class Controller implements BasicController {
   }
 
   @Override
-  public void addUserInterest(String name, Uuid owner) {
+  public boolean addUserInterest(String name, Uuid owner) {
+
+        boolean response = false;
 
         try (final Connection connection = source.connect()) {
 
@@ -123,7 +125,7 @@ final class Controller implements BasicController {
           Uuid.SERIALIZER.write(connection.out(), owner);
 
           if (Serializers.INTEGER.read(connection.in()) == NetworkCode.NEW_USER_INTEREST_RESPONSE) {
-            System.out.println("Add user interest request successfully received by server!");
+            response = Serializers.BOOLEAN.read(connection.in());
           } else {
             LOG.error("Response from server failed.");
           }
@@ -132,10 +134,14 @@ final class Controller implements BasicController {
           System.out.println("ERROR: Exception during call on server. Check log for details.");
           LOG.error(ex, "Exception during call on server.");
         }
+
+        return response;
   }
 
   @Override
-  public void removeUserInterest(String name, Uuid owner) {
+  public boolean removeUserInterest(String name, Uuid owner) {
+
+        boolean response = false;
 
         try (final Connection connection = source.connect()) {
 
@@ -144,7 +150,7 @@ final class Controller implements BasicController {
           Uuid.SERIALIZER.write(connection.out(), owner);
 
           if (Serializers.INTEGER.read(connection.in()) == NetworkCode.REMOVE_USER_INTEREST_RESPONSE) {
-            System.out.println("Remove user interest request successfully received by server!");
+            response = Serializers.BOOLEAN.read(connection.in());
           } else {
             LOG.error("Response from server failed.");
           }
@@ -153,10 +159,14 @@ final class Controller implements BasicController {
           System.out.println("ERROR: Exception during call on server. Check log for details.");
           LOG.error(ex, "Exception during call on server.");
         }
+
+        return response;
   }
 
   @Override
-  public void addConversationInterest(String title, Uuid owner) {
+  public boolean addConversationInterest(String title, Uuid owner) {
+
+    boolean response = false;
     
     try (final Connection connection = source.connect()) {
 
@@ -165,7 +175,7 @@ final class Controller implements BasicController {
       Uuid.SERIALIZER.write(connection.out(), owner);
 
       if (Serializers.INTEGER.read(connection.in()) == NetworkCode.NEW_CONVERSATION_INTEREST_RESPONSE) {
-            System.out.println("Add conversation interest request successfully received by server!");
+            response = Serializers.BOOLEAN.read(connection.in());
       } else {
         LOG.error("Response from server failed.");
       }
@@ -174,10 +184,14 @@ final class Controller implements BasicController {
       System.out.println("ERROR: Exception during call on server. Check log for details.");
       LOG.error(ex, "Exception during call on server.");
     }
+
+    return response;
   }
 
   @Override
-  public void removeConversationInterest(String title, Uuid owner) {
+  public boolean removeConversationInterest(String title, Uuid owner) {
+
+    boolean response = false;
 
     try (final Connection connection = source.connect()) {
 
@@ -186,7 +200,7 @@ final class Controller implements BasicController {
       Uuid.SERIALIZER.write(connection.out(), owner);
 
       if (Serializers.INTEGER.read(connection.in()) == NetworkCode.REMOVE_CONVERSATION_INTEREST_RESPONSE) {
-            System.out.println("Remove conversation interest request successfully received by server!");
+            response = Serializers.BOOLEAN.read(connection.in());
       } else {
         LOG.error("Response from server failed.");
       }
@@ -195,6 +209,8 @@ final class Controller implements BasicController {
       System.out.println("ERROR: Exception during call on server. Check log for details.");
       LOG.error(ex, "Exception during call on server.");
     }
+
+    return response;
   }
     
 }
