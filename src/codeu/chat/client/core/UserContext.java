@@ -71,7 +71,7 @@ public final class UserContext {
 
   public void removeConversationInterest(String title) {
     Controller ContextController = (Controller)controller;
-    ContextController.addUserInterest(title, user.id);
+    ContextController.removeConversationInterest(title, user.id);
   }
 
   public void statusUpdate() {

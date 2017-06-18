@@ -153,7 +153,13 @@ public final class Controller implements RawController, BasicController {
     LOG.info("Interest (User): " + foundUser.name);
     LOG.info("Interest ID: " + foundUser.id);
 
-    foundOwner.UserSet.add(foundUser.id);
+    if(foundOwner.UserSet.contains(foundUser.id)) {
+      LOG.info("ERROR: User already in interests.");
+    }
+    else {
+      foundOwner.UserSet.add(foundUser.id);
+      LOG.info(foundUser.name + " added to interests!");
+    }
     
   }
 
@@ -166,8 +172,14 @@ public final class Controller implements RawController, BasicController {
     LOG.info("User ID: " + foundOwner.id);
     LOG.info("Interest (User): " + foundUser.name);
     LOG.info("Interest ID: " + foundUser.id);
-    
-    foundOwner.UserSet.remove(foundUser.id);
+
+    if(foundOwner.UserSet.contains(foundUser.id)) {
+      foundOwner.UserSet.remove(foundUser.id);
+      LOG.info(foundUser.name + " removed from interests!");
+    }
+    else {
+      LOG.info("ERROR: User not found in interests.");
+    }
     
   }
 
@@ -181,7 +193,13 @@ public final class Controller implements RawController, BasicController {
     LOG.info("Interest (Conversation): " + foundConversation.title);
     LOG.info("Interest ID: " + foundConversation.id);
 
-    foundOwner.ConvoSet.add(foundConversation.id);
+    if(foundOwner.ConvoSet.contains(foundConversation.id)) {
+      LOG.info("ERROR: Conversation already in interests.");
+    }
+    else {
+      foundOwner.ConvoSet.add(foundConversation.id);
+      LOG.info(foundConversation.title + " added to interests!");
+    }
   
   }
 
@@ -195,7 +213,13 @@ public final class Controller implements RawController, BasicController {
     LOG.info("Interest (Conversation): " + foundConversation.title);
     LOG.info("Interest ID: " + foundConversation.id);
 
-    foundOwner.ConvoSet.remove(foundConversation.id);
+    if(foundOwner.ConvoSet.contains(foundConversation.id)) {
+      foundOwner.ConvoSet.remove(foundConversation.id);
+      LOG.info(foundConversation.title + " removed from interests!");
+    }
+    else {
+      LOG.info("ERROR: Conversation not found in interests.");
+    }
     
   }
 

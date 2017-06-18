@@ -353,7 +353,6 @@ public final class Chat {
             if (conversation == null) {
               System.out.format("ERROR: No conversation with name '%s'\n", title);
             } else {
-              System.out.format("Conversation '%s' added to interests. \n", title);
               user.addConversationInterest(title);
             }
           } else {
@@ -389,7 +388,6 @@ public final class Chat {
             if (conversation == null) {
               System.out.format("ERROR: No conversation with name '%s'\n", title);
             } else {
-              System.out.format("Conversation '%s' removed from interests. \n", title);
               user.removeConversationInterest(title);
             }
           } else {
@@ -425,7 +423,6 @@ public final class Chat {
             if (foundUser == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else {
-              System.out.format("User '%s' added to interests. \n", name);
               user.addUserInterest(name);
             }
           } else {
@@ -461,7 +458,6 @@ public final class Chat {
             if (foundUser == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else {
-              System.out.format("User '%s' removed from interests. \n", name);
               user.removeUserInterest(name);
             }
           } else {
