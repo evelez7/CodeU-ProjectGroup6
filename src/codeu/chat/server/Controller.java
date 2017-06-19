@@ -152,13 +152,11 @@ public final class Controller implements RawController, BasicController {
     if(foundOwner.UserSet.contains(foundUser.id)) {
       LOG.info("ERROR: User already in interests.");
       return false;
-    }
-    else {
+    } else {
       foundOwner.UserSet.add(foundUser.id);
       LOG.info("User Interest added: " + foundUser.id);
       return true;
     }
-    
   }
 
   @Override
@@ -171,12 +169,10 @@ public final class Controller implements RawController, BasicController {
       foundOwner.UserSet.remove(foundUser.id);
       LOG.info("User Interest removed: " + foundUser.id);
       return true;
-    }
-    else {
+    } else {
       LOG.info("ERROR: User not found in interests.");
       return false;
     }
-    
   }
 
   @Override
@@ -188,13 +184,11 @@ public final class Controller implements RawController, BasicController {
     if(foundOwner.ConvoSet.contains(foundConversation.id)) {
       LOG.info("ERROR: Conversation already in interests.");
       return false;
-    }
-    else {
+    } else {
       foundOwner.ConvoSet.add(foundConversation.id);
       LOG.info("Conversation Interest added: " + foundConversation.id);
       return true;
     }
-  
   }
 
   @Override
@@ -207,12 +201,10 @@ public final class Controller implements RawController, BasicController {
       foundOwner.ConvoSet.remove(foundConversation.id);
       LOG.info("Conversation Interest removed: " + foundConversation.id);
       return true;
-    }
-    else {
+    } else {
       LOG.info("ERROR: Conversation not found in interests.");
       return false;
     }
-    
   }
 
   private Uuid createId() {

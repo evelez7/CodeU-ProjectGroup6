@@ -354,13 +354,10 @@ public final class Chat {
             final ConversationContext conversation = find(title);
             if (conversation == null) {
               System.out.format("ERROR: No conversation with name '%s'\n", title);
-            } else {
-              if (user.addConversationInterest(title) == true) {
+            } else if (user.addConversationInterest(title) == true) {
                 System.out.println("Conversation \"" + title + "\" added to interests.");
-              }
-              else {
+            } else {
                 System.out.println("ERROR: Conversation \"" + title + "\" already in interests.");
-              }
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -394,13 +391,10 @@ public final class Chat {
             final ConversationContext conversation = find(title);
             if (conversation == null) {
               System.out.format("ERROR: No conversation with name '%s'\n", title);
-            } else {
-              if (user.removeConversationInterest(title) == true) {
+            } else if (user.removeConversationInterest(title) == true) {
                 System.out.println("Conversation \"" + title + "\" removed from interests.");
-              }
-              else {
+            } else {
                 System.out.println("ERROR: Conversation \"" + title + "\" not in interests.");
-              }
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -434,13 +428,10 @@ public final class Chat {
             final UserContext foundUser = findUser(name);
             if (foundUser == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
-            } else {
-              if (user.addUserInterest(name) == true) {
+            } else if (user.addUserInterest(name) == true) {
                 System.out.println("User \"" + name + "\" added to interests.");
-              }
-              else {
+            } else {
                 System.out.println("ERROR: User \"" + name + "\" already in interests.");
-              }
             }
           } else {
             System.out.println("ERROR: Missing <username>");
@@ -474,13 +465,10 @@ public final class Chat {
             final UserContext foundUser = findUser(name);
             if (foundUser == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
-            } else {
-              if (user.removeUserInterest(name) == true) {
+            } else if (user.removeUserInterest(name) == true) {
                 System.out.println("User \"" + name + "\" removed from interests.");
-              }
-              else {
+            } else {
                 System.out.println("ERROR: User \"" + name + "\" not in interests.");
-              }
             }
           } else {
             System.out.println("ERROR: Missing <username>");
