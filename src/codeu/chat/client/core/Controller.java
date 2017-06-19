@@ -116,51 +116,51 @@ final class Controller implements BasicController {
   @Override
   public boolean addUserInterest(String name, Uuid owner) {
 
-        boolean response = false;
+    boolean response = false;
 
-        try (final Connection connection = source.connect()) {
+    try (final Connection connection = source.connect()) {
 
-          Serializers.INTEGER.write(connection.out(), NetworkCode.NEW_USER_INTEREST_REQUEST);
-          Serializers.STRING.write(connection.out(), name);
-          Uuid.SERIALIZER.write(connection.out(), owner);
+      Serializers.INTEGER.write(connection.out(), NetworkCode.NEW_USER_INTEREST_REQUEST);
+      Serializers.STRING.write(connection.out(), name);
+      Uuid.SERIALIZER.write(connection.out(), owner);
 
-          if (Serializers.INTEGER.read(connection.in()) == NetworkCode.NEW_USER_INTEREST_RESPONSE) {
-            response = Serializers.BOOLEAN.read(connection.in());
-          } else {
-            LOG.error("Response from server failed.");
-          }
-        }
-          catch (Exception ex) {
-          System.out.println("ERROR: Exception during call on server. Check log for details.");
-          LOG.error(ex, "Exception during call on server.");
-        }
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.NEW_USER_INTEREST_RESPONSE) {
+        response = Serializers.BOOLEAN.read(connection.in());
+      } else {
+        LOG.error("Response from server failed.");
+      }
+    }
+      catch (Exception ex) {
+      System.out.println("ERROR: Exception during call on server. Check log for details.");
+      LOG.error(ex, "Exception during call on server.");
+    }
 
-        return response;
+    return response;
   }
 
   @Override
   public boolean removeUserInterest(String name, Uuid owner) {
 
-        boolean response = false;
+    boolean response = false;
 
-        try (final Connection connection = source.connect()) {
+    try (final Connection connection = source.connect()) {
 
-          Serializers.INTEGER.write(connection.out(), NetworkCode.REMOVE_USER_INTEREST_REQUEST);
-          Serializers.STRING.write(connection.out(), name);
-          Uuid.SERIALIZER.write(connection.out(), owner);
+      Serializers.INTEGER.write(connection.out(), NetworkCode.REMOVE_USER_INTEREST_REQUEST);
+      Serializers.STRING.write(connection.out(), name);
+      Uuid.SERIALIZER.write(connection.out(), owner);
 
-          if (Serializers.INTEGER.read(connection.in()) == NetworkCode.REMOVE_USER_INTEREST_RESPONSE) {
-            response = Serializers.BOOLEAN.read(connection.in());
-          } else {
-            LOG.error("Response from server failed.");
-          }
-        }
-          catch (Exception ex) {
-          System.out.println("ERROR: Exception during call on server. Check log for details.");
-          LOG.error(ex, "Exception during call on server.");
-        }
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.REMOVE_USER_INTEREST_RESPONSE) {
+        response = Serializers.BOOLEAN.read(connection.in());
+      } else {
+        LOG.error("Response from server failed.");
+      }
+    }
+      catch (Exception ex) {
+      System.out.println("ERROR: Exception during call on server. Check log for details.");
+      LOG.error(ex, "Exception during call on server.");
+    }
 
-        return response;
+    return response;
   }
 
   @Override
