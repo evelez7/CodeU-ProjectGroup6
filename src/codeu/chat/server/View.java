@@ -82,7 +82,7 @@ public final class View implements BasicView, SinglesView {
   public void userStatusUpdate(String name, Uuid owner) {}
 
   @Override
-  public int conversationStatusUpdate(String title, Uuid owner) {}
+  public void conversationStatusUpdate(String title, Uuid owner) {}
 
   private static <S,T> Collection<T> all(StoreAccessor<S,T> store) {
 
