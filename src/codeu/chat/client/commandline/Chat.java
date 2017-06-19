@@ -251,8 +251,10 @@ public final class Chat {
         System.out.println("    Add a conversation to the current user's interests.");
         System.out.println("  i-c-remove <title>");
         System.out.println("    Remove a conversation from the current user's interests.");
-        System.out.println("  status-update");
-        System.out.println("    Call a status update on the current user's interests.");
+        System.out.println("  status-update-u <name>");
+        System.out.println("    Call a status update on the specified user interest. W.I.P.");
+        System.out.println("  status-update-c <title>");
+        System.out.println("    Call a status update on the specified conversation interest. W.I.P.");
         System.out.println("  info");
         System.out.println("    Display all info for the current user");
         System.out.println("  back");
@@ -495,18 +497,6 @@ public final class Chat {
           }
         }
         return null;
-      }
-    });
-
-    // STATUS-UPDATE
-    //
-    // Add a command that will print info about the current user's interests
-    // when the user enders "status-update" while on the user panel
-    // 
-    panel.register("status-update", new Panel.Command() {
-      @Override
-      public void invoke(List<String> args) {
-        user.statusUpdate();
       }
     });
 

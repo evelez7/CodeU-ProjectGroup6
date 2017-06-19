@@ -235,11 +235,19 @@ public final class Server {
       }
     });
 
-    // Status Update - A client wants to get a status update on their interests
-    this.commands.put (NetworkCode.STATUS_UPDATE_REQUEST, new Command() {
+    // User Status Update - A client wants to get a status update on their user interest.
+    this.commands.put (NetworkCode.USER_STATUS_UPDATE_REQUEST, new Command() {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
-        Serializers.INTEGER.write (out, NetworkCode.STATUS_UPDATE_RESPONSE);
+        Serializers.INTEGER.write (out, NetworkCode.USER_STATUS_UPDATE_RESPONSE);
+      }
+    });
+
+    // Conversation Status Update - A client wants to get a status update on their conversation interest.
+    this.commands.put (NetworkCode.CONVERSATION_STATUS_UPDATE_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+        Serializers.INTEGER.write (out, NetworkCode.CONVERSATION_STATUS_UPDATE_RESPONSE);
       }
     });
 

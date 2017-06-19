@@ -70,9 +70,12 @@ public final class UserContext {
     return controller.removeConversationInterest(title, user.id);
   }
 
-  public void statusUpdate() {
-    View ContextView = (View)view;
-    ContextView.statusUpdate();
+  public void userStatusUpdate(String name) {
+    
+  }
+
+  public void conversationStatusUpdate(String title) {
+    
   }
   
 }

@@ -138,13 +138,32 @@ final class View implements BasicView {
     return messages;
   }
 
-  public void statusUpdate() {
+  public void userStatusUpdate() {
 
     try (final Connection connection = source.connect()) {
 
-      Serializers.INTEGER.write(connection.out(), NetworkCode.STATUS_UPDATE_REQUEST);
+      Serializers.INTEGER.write(connection.out(), NetworkCode.USER_STATUS_UPDATE_REQUEST);
 
-      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.STATUS_UPDATE_RESPONSE) {
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.USER_STATUS_UPDATE_RESPONSE) {
+
+      } else {
+        LOG.error("Response from server failed.");
+      }
+
+    } catch (Exception ex) {
+      System.out.println("ERROR: Exception during call on server. Check log for details.");
+      LOG.error(ex, "Exception during call on server.");
+    }
+
+  }
+
+  public void conversationStatusUpdate() {
+
+    try (final Connection connection = source.connect()) {
+
+      Serializers.INTEGER.write(connection.out(), NetworkCode.CONVERSATION_STATUS_UPDATE_REQUEST);
+
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.CONVERSATION_STATUS_UPDATE_RESPONSE) {
 
       } else {
         LOG.error("Response from server failed.");
