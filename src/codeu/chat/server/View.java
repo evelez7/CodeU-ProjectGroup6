@@ -78,6 +78,12 @@ public final class View implements BasicView, SinglesView {
   @Override
   public Message findMessage(Uuid id) { return model.messageById().first(id); }
 
+  @Override
+  public void userStatusUpdate(String name, Uuid owner) {}
+
+  @Override
+  public int conversationStatusUpdate(String title, Uuid owner) {}
+
   private static <S,T> Collection<T> all(StoreAccessor<S,T> store) {
 
     final Collection<T> all = new ArrayList<>();

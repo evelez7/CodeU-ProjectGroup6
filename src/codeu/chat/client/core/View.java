@@ -138,7 +138,8 @@ final class View implements BasicView {
     return messages;
   }
 
-  public void userStatusUpdate() {
+  @Override
+  public void userStatusUpdate(String name, Uuid owner) {
 
     try (final Connection connection = source.connect()) {
 
@@ -157,7 +158,8 @@ final class View implements BasicView {
 
   }
 
-  public void conversationStatusUpdate() {
+  @Override
+  public int conversationStatusUpdate(String title, Uuid owner) {
 
     try (final Connection connection = source.connect()) {
 

@@ -52,4 +52,14 @@ public interface BasicView {
   //   Return all messages whose id is found in the given collection.
   Collection<Message> getMessages(Collection<Uuid> ids);
 
+  // USER STATUS UPDATE
+  //
+  //   Return the conversations created by and contributed to by the specified user.
+  void userStatusUpdate(String name, Uuid owner);
+
+  // CONVERSATION STATUS UPDATE
+  //
+  //   Return how many messages have been added to the specified conversation since the last update.
+  int conversationStatusUpdate(String title, Uuid owner);
+
 }
