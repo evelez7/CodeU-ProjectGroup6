@@ -55,7 +55,7 @@ public interface BasicView {
   // USER STATUS UPDATE
   //
   //   Return the conversations created by and contributed to by the specified user.
-  void userStatusUpdate(String name, Uuid owner);
+  Collection<ConversationHeader> userStatusUpdate(String name, Uuid owner);
 
   // CONVERSATION STATUS UPDATE
   //

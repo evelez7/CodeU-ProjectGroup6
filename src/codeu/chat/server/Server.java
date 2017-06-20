@@ -239,7 +239,14 @@ public final class Server {
     this.commands.put (NetworkCode.USER_STATUS_UPDATE_REQUEST, new Command() {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String name = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        final Collection<ConversationHeader> conversations = view.userStatusUpdate(name, owner);
+
         Serializers.INTEGER.write (out, NetworkCode.USER_STATUS_UPDATE_RESPONSE);
+        Serializers.collection(ConversationHeader.SERIALIZER).write(out, conversations);
       }
     });
 
@@ -252,7 +259,7 @@ public final class Server {
         final Uuid owner = Uuid.SERIALIZER.read(in);
 
         final int updateResponse = view.conversationStatusUpdate(title, owner);
-        
+
         Serializers.INTEGER.write (out, NetworkCode.CONVERSATION_STATUS_UPDATE_RESPONSE);
         Serializers.INTEGER.write (out, updateResponse);
       }

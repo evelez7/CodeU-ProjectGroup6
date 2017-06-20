@@ -139,14 +139,18 @@ final class View implements BasicView {
   }
 
   @Override
-  public void userStatusUpdate(String name, Uuid owner) {
+  public Collection<ConversationHeader> userStatusUpdate(String name, Uuid owner) {
+
+    final Collection<ConversationHeader> conversations = new ArrayList<>();
 
     try (final Connection connection = source.connect()) {
 
       Serializers.INTEGER.write(connection.out(), NetworkCode.USER_STATUS_UPDATE_REQUEST);
+      Serializers.STRING.write(connection.out(), name);
+      Uuid.SERIALIZER.write(connection.out(), owner);
 
       if (Serializers.INTEGER.read(connection.in()) == NetworkCode.USER_STATUS_UPDATE_RESPONSE) {
-
+        conversations.addAll(Serializers.collection(ConversationHeader.SERIALIZER).read(connection.in()));
       } else {
         LOG.error("Response from server failed.");
       }
@@ -156,6 +160,7 @@ final class View implements BasicView {
       LOG.error(ex, "Exception during call on server.");
     }
 
+    return conversations;
   }
 
   @Override

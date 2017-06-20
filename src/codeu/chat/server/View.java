@@ -79,7 +79,10 @@ public final class View implements BasicView, SinglesView {
   public Message findMessage(Uuid id) { return model.messageById().first(id); }
 
   @Override
-  public void userStatusUpdate(String name, Uuid owner) {}
+  public Collection<ConversationHeader> userStatusUpdate(String name, Uuid owner) {
+    // this is currently a placeholder
+    return null;
+  }
 
   @Override
   public int conversationStatusUpdate(String title, Uuid owner) {
