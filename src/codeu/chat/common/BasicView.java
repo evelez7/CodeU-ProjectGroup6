@@ -60,6 +60,6 @@ public interface BasicView {
   // CONVERSATION STATUS UPDATE
   //
   //   Return how many messages have been added to the specified conversation since the last update.
-  void conversationStatusUpdate(String title, Uuid owner);
+  int conversationStatusUpdate(String title, Uuid owner);
 
 }

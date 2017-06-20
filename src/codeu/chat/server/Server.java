@@ -247,7 +247,14 @@ public final class Server {
     this.commands.put (NetworkCode.CONVERSATION_STATUS_UPDATE_REQUEST, new Command() {
       @Override
       public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String title = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        final int updateResponse = view.conversationStatusUpdate(title, owner);
+        
         Serializers.INTEGER.write (out, NetworkCode.CONVERSATION_STATUS_UPDATE_RESPONSE);
+        Serializers.INTEGER.write (out, updateResponse);
       }
     });
 
