@@ -79,16 +79,34 @@ public final class View implements BasicView, SinglesView {
   public Message findMessage(Uuid id) { return model.messageById().first(id); }
 
   @Override
-  public Collection<ConversationHeader> userStatusUpdate(String name, Uuid owner) {
+  public Collection<String> userStatusUpdate(String name, Uuid owner) {
 
     //placeholder
 
-    Collection<ConversationHeader> contributions;
+    Collection<ConversationPayload> allConversations = all(model.conversationPayloadById());
+    Collection<String> contributions = new ArrayList<String>();
 
     final User foundOwner = model.userById().first(owner);
     final User foundUser = model.userByText().first(name);
+    final Time lastUpdate = foundOwner.UserUpdateMap.get(foundUser.id);
 
-    return null;
+    for(ConversationPayload conversationPayload : allConversations) {
+      Message currentMessage = model.messageById().first(conversationPayload.firstMessage);
+      boolean foundMessage = false;
+      while(currentMessage != null && foundMessage == false) {
+        if(lastUpdate.compareTo(currentMessage.creation) < 0 && currentMessage.author.equals(foundUser.id)) {
+          contributions.add(model.conversationById().first(conversationPayload.id).title);
+          foundMessage = true;
+        }
+        currentMessage = model.messageById().first(currentMessage.next);
+      }
+      foundOwner.UserUpdateMap.put(foundUser.id, Time.now());
+    }
+
+    if(contributions.isEmpty()) {
+      contributions.add("(No recent conversations)");
+    }
+    return contributions;
 
   }
 

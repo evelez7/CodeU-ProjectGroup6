@@ -168,7 +168,7 @@ public final class Controller implements RawController, BasicController {
 
     if(foundOwner.UserSet.contains(foundUser.id)) {
       foundOwner.UserSet.remove(foundUser.id);
-      foundOwner.UserUpdateMap.remove(foundUser.id, Time.now());
+      foundOwner.UserUpdateMap.remove(foundUser.id);
       LOG.info("User Interest removed: " + foundUser.id);
       return true;
     } else {
@@ -202,7 +202,7 @@ public final class Controller implements RawController, BasicController {
 
     if(foundOwner.ConvoSet.contains(foundConversation.id)) {
       foundOwner.ConvoSet.remove(foundConversation.id);
-      foundOwner.ConvoUpdateMap.remove(foundConversation.id, Time.now());
+      foundOwner.ConvoUpdateMap.remove(foundConversation.id);
       LOG.info("Conversation Interest removed: " + foundConversation.id);
       return true;
     } else {

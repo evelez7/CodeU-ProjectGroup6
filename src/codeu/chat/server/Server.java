@@ -243,10 +243,10 @@ public final class Server {
         final String name = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
 
-        final Collection<ConversationHeader> conversations = view.userStatusUpdate(name, owner);
+        final Collection<String> conversations = view.userStatusUpdate(name, owner);
 
         Serializers.INTEGER.write (out, NetworkCode.USER_STATUS_UPDATE_RESPONSE);
-        Serializers.collection(ConversationHeader.SERIALIZER).write(out, conversations);
+        Serializers.collection(Serializers.STRING).write(out, conversations);
       }
     });
 

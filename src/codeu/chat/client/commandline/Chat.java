@@ -548,7 +548,10 @@ public final class Chat {
             if (foundUser == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else {
-
+              System.out.println("User \"" + name + "\" has contributed to:");
+              for(final String contribution : user.userStatusUpdate(name)) {
+                System.out.println(contribution);
+              }
             }
           } else {
             System.out.println("ERROR: Missing <username>");
