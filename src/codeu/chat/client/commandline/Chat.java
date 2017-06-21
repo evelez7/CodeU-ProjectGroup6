@@ -254,7 +254,7 @@ public final class Chat {
         System.out.println("  status-update-u <name>");
         System.out.println("    Call a status update on the specified user interest. W.I.P.");
         System.out.println("  status-update-c <title>");
-        System.out.println("    Call a status update on the specified conversation interest. W.I.P.");
+        System.out.println("    Call a status update on the specified conversation interest.");
         System.out.println("  info");
         System.out.println("    Display all info for the current user");
         System.out.println("  back");
@@ -355,9 +355,9 @@ public final class Chat {
             if (conversation == null) {
               System.out.format("ERROR: No conversation with name '%s'\n", title);
             } else if (user.addConversationInterest(title) == true) {
-                System.out.println("Conversation \"" + title + "\" added to interests.");
+                System.out.println("Conversation \"" + title + "\" added to interests");
             } else {
-                System.out.println("ERROR: Conversation \"" + title + "\" already in interests.");
+                System.out.println("ERROR: Conversation \"" + title + "\" already in interests");
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -392,9 +392,9 @@ public final class Chat {
             if (conversation == null) {
               System.out.format("ERROR: No conversation with name '%s'\n", title);
             } else if (user.removeConversationInterest(title) == true) {
-                System.out.println("Conversation \"" + title + "\" removed from interests.");
+                System.out.println("Conversation \"" + title + "\" removed from interests");
             } else {
-                System.out.println("ERROR: Conversation \"" + title + "\" not in interests.");
+                System.out.println("ERROR: Conversation \"" + title + "\" not in interests");
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -416,8 +416,8 @@ public final class Chat {
 
     // STATUS-UPDATE-C (conversation status update)
     //
-    // Add a command that will add a conversation to the current user's
-    // interests when the user enters "i-c-add" while on the user panel
+    // Add a command that will check for new messages in one of the user's conversation
+    // interests when the user enters "status-update-c" while on the user panel
     //
     panel.register("status-update-c", new Panel.Command() {
       @Override
@@ -431,7 +431,7 @@ public final class Chat {
             } else {
               final int newMessages = user.conversationStatusUpdate(title);
               if (newMessages == -1) {
-                System.out.println("ERROR: Conversation \"" + title + "\" not in interests.");
+                System.out.println("ERROR: Conversation \"" + title + "\" not in interests");
               }
               else if (newMessages == 0) {
                 System.out.println("No new messages in conversation \"" + title +"\"");
@@ -473,9 +473,9 @@ public final class Chat {
             if (foundUser == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else if (user.addUserInterest(name) == true) {
-                System.out.println("User \"" + name + "\" added to interests.");
+                System.out.println("User \"" + name + "\" added to interests");
             } else {
-                System.out.println("ERROR: User \"" + name + "\" already in interests.");
+                System.out.println("ERROR: User \"" + name + "\" already in interests");
             }
           } else {
             System.out.println("ERROR: Missing <username>");
@@ -510,9 +510,45 @@ public final class Chat {
             if (foundUser == null) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else if (user.removeUserInterest(name) == true) {
-                System.out.println("User \"" + name + "\" removed from interests.");
+                System.out.println("User \"" + name + "\" removed from interests");
             } else {
-                System.out.println("ERROR: User \"" + name + "\" not in interests.");
+                System.out.println("ERROR: User \"" + name + "\" not in interests");
+            }
+          } else {
+            System.out.println("ERROR: Missing <username>");
+          }
+        }
+      }
+
+      // Find the first user with the given name and return a user context
+      // for that user. If no user is found, the function will return null.
+      private UserContext findUser(String name) {
+        for (final UserContext user : context.allUsers()) {
+          if (user.user.name.equals(name)) {
+            return user;
+          }
+        }
+        return null;
+      }
+    });
+
+    // STATUS-UPDATE-U (user status update)
+    //
+    // Add a command that will add check new conversations created by and
+    //  contributed to by one of the current user's user interests when the
+    //  user enters "status-update-u" while on the user panel
+    //
+    panel.register("status-update-u", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          final String name = token;
+          if (name.length() > 0) {
+            final UserContext foundUser = findUser(name);
+            if (foundUser == null) {
+              System.out.format("ERROR: No user with name '%s'\n", name);
+            } else {
+
             }
           } else {
             System.out.println("ERROR: Missing <username>");

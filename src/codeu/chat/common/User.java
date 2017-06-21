@@ -20,6 +20,7 @@ import java.io.OutputStream;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.HashMap;
 
 import codeu.chat.util.Serializer;
 import codeu.chat.util.Serializers;
@@ -53,20 +54,18 @@ public final class User {
 
   public Collection<Uuid> UserSet = new HashSet<Uuid>(64);
   public Collection<Uuid> ConvoSet = new HashSet<Uuid>(64);
+  public HashMap<Uuid, Time> UserUpdateMap = new HashMap<Uuid, Time>();
+  public HashMap<Uuid, Time> ConvoUpdateMap = new HashMap<Uuid, Time>();
 
   public final Uuid id;
   public final String name;
   public final Time creation;
-  public Time lastUserUpdate;
-  public Time lastConvoUpdate;
 
   public User(Uuid id, String name, Time creation) {
 
     this.id = id;
     this.name = name;
     this.creation = creation;
-    this.lastUserUpdate = creation;
-    this.lastConvoUpdate = creation;
 
   }
 }

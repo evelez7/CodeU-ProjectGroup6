@@ -154,6 +154,7 @@ public final class Controller implements RawController, BasicController {
       return false;
     } else {
       foundOwner.UserSet.add(foundUser.id);
+      foundOwner.UserUpdateMap.put(foundUser.id, Time.now());
       LOG.info("User Interest added: " + foundUser.id);
       return true;
     }
@@ -167,6 +168,7 @@ public final class Controller implements RawController, BasicController {
 
     if(foundOwner.UserSet.contains(foundUser.id)) {
       foundOwner.UserSet.remove(foundUser.id);
+      foundOwner.UserUpdateMap.remove(foundUser.id, Time.now());
       LOG.info("User Interest removed: " + foundUser.id);
       return true;
     } else {
@@ -186,6 +188,7 @@ public final class Controller implements RawController, BasicController {
       return false;
     } else {
       foundOwner.ConvoSet.add(foundConversation.id);
+      foundOwner.ConvoUpdateMap.put(foundConversation.id, Time.now());
       LOG.info("Conversation Interest added: " + foundConversation.id);
       return true;
     }
@@ -199,6 +202,7 @@ public final class Controller implements RawController, BasicController {
 
     if(foundOwner.ConvoSet.contains(foundConversation.id)) {
       foundOwner.ConvoSet.remove(foundConversation.id);
+      foundOwner.ConvoUpdateMap.remove(foundConversation.id, Time.now());
       LOG.info("Conversation Interest removed: " + foundConversation.id);
       return true;
     } else {

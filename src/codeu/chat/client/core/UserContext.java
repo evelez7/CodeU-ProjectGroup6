@@ -70,8 +70,8 @@ public final class UserContext {
     return controller.removeConversationInterest(title, user.id);
   }
 
-  public void userStatusUpdate(String name) {
-
+  public Collection<ConversationHeader> userStatusUpdate(String name) {
+    return view.userStatusUpdate(name, user.id);
   }
 
   public int conversationStatusUpdate(String title) {

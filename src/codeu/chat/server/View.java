@@ -80,8 +80,16 @@ public final class View implements BasicView, SinglesView {
 
   @Override
   public Collection<ConversationHeader> userStatusUpdate(String name, Uuid owner) {
-    // this is currently a placeholder
+
+    //placeholder
+
+    Collection<ConversationHeader> contributions;
+
+    final User foundOwner = model.userById().first(owner);
+    final User foundUser = model.userByText().first(name);
+
     return null;
+
   }
 
   @Override
@@ -90,9 +98,9 @@ public final class View implements BasicView, SinglesView {
     int newMessages = 0;
 
     final User foundOwner = model.userById().first(owner);
-    final Time lastUpdate = foundOwner.lastConvoUpdate;
     final ConversationHeader foundConversation = model.conversationByText().first(title);
     final ConversationPayload foundConversationPayload = model.conversationPayloadById().first(foundConversation.id);
+    final Time lastUpdate = foundOwner.ConvoUpdateMap.get(foundConversation.id);
 
     if(foundOwner.ConvoSet.contains(foundConversation.id)) {
         Message currentMessage = model.messageById().first(foundConversationPayload.firstMessage);
@@ -102,7 +110,7 @@ public final class View implements BasicView, SinglesView {
           }
           currentMessage = model.messageById().first(currentMessage.next);
         }
-      foundOwner.lastConvoUpdate = Time.now();
+      foundOwner.ConvoUpdateMap.put(foundConversation.id, Time.now());
     } else {
       newMessages = -1;
     }
