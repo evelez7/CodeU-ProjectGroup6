@@ -86,8 +86,28 @@ public final class View implements BasicView, SinglesView {
 
   @Override
   public int conversationStatusUpdate(String title, Uuid owner) {
-    // this is currently a placeholder
-    return 0;
+
+    int newMessages = 0;
+
+    final User foundOwner = model.userById().first(owner);
+    final Time lastUpdate = foundOwner.lastConvoUpdate;
+    final ConversationHeader foundConversation = model.conversationByText().first(title);
+    final ConversationPayload foundConversationPayload = model.conversationPayloadById().first(foundConversation.id);
+
+    if(foundOwner.ConvoSet.contains(foundConversation.id)) {
+        Message currentMessage = model.messageById().first(foundConversationPayload.firstMessage);
+        while(currentMessage != null) {
+          if(lastUpdate.compareTo(currentMessage.creation) < 0) {
+            newMessages++;
+          }
+          currentMessage = model.messageById().first(currentMessage.next);
+        }
+      foundOwner.lastConvoUpdate = Time.now();
+    } else {
+      newMessages = -1;
+    }
+
+    return newMessages;
   }
 
   private static <S,T> Collection<T> all(StoreAccessor<S,T> store) {

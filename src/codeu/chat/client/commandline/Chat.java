@@ -344,7 +344,7 @@ public final class Chat {
     //
     // Add a command that will add a conversation to the current user's
     // interests when the user enters "i-c-add" while on the user panel
-    // 
+    //
     panel.register("i-c-add", new Panel.Command() {
       @Override
       public void invoke(List<String> args) {
@@ -381,7 +381,7 @@ public final class Chat {
     //
     // Add a command that will remove a conversation to the current user's
     // interests when the user enters "i-c-remove" while on the user panel
-    // 
+    //
     panel.register("i-c-remove", new Panel.Command() {
       @Override
       public void invoke(List<String> args) {
@@ -395,6 +395,50 @@ public final class Chat {
                 System.out.println("Conversation \"" + title + "\" removed from interests.");
             } else {
                 System.out.println("ERROR: Conversation \"" + title + "\" not in interests.");
+            }
+          } else {
+            System.out.println("ERROR: Missing <title>");
+          }
+        }
+      }
+
+      // Find the first conversation with the given name and return its context.
+      // If no conversation has the given name, this will return null.
+      private ConversationContext find(String title) {
+        for (final ConversationContext conversation : user.conversations()) {
+          if (title.equals(conversation.conversation.title)) {
+            return conversation;
+          }
+        }
+        return null;
+      }
+    });
+
+    // STATUS-UPDATE-C (conversation status update)
+    //
+    // Add a command that will add a conversation to the current user's
+    // interests when the user enters "i-c-add" while on the user panel
+    //
+    panel.register("status-update-c", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          final String title = token;
+          if (title.length() > 0) {
+            final ConversationContext conversation = find(title);
+            if (conversation == null) {
+              System.out.format("ERROR: No conversation with name '%s'\n", title);
+            } else {
+              final int newMessages = user.conversationStatusUpdate(title);
+              if (newMessages == -1) {
+                System.out.println("ERROR: Conversation \"" + title + "\" not in interests.");
+              }
+              else if (newMessages == 0) {
+                System.out.println("No new messages in conversation \"" + title +"\"");
+              }
+              else {
+                System.out.println(newMessages + " new messages in conversation \"" + title + "\"");
+              }
             }
           } else {
             System.out.println("ERROR: Missing <title>");

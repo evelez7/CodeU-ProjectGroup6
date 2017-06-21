@@ -57,8 +57,8 @@ public final class User {
   public final Uuid id;
   public final String name;
   public final Time creation;
-  public final Time lastUserUpdate;
-  public final Time lastConvoUpdate;
+  public Time lastUserUpdate;
+  public Time lastConvoUpdate;
 
   public User(Uuid id, String name, Time creation) {
 

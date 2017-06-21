@@ -71,11 +71,11 @@ public final class UserContext {
   }
 
   public void userStatusUpdate(String name) {
-    
+
   }
 
-  public void conversationStatusUpdate(String title) {
-    
+  public int conversationStatusUpdate(String title) {
+    return view.conversationStatusUpdate(title, user.id);
   }
-  
+
 }

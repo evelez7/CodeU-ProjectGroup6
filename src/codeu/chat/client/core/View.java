@@ -166,7 +166,7 @@ final class View implements BasicView {
   @Override
   public int conversationStatusUpdate(String title, Uuid owner) {
 
-    int newMessages = -1;
+    int newMessages = 0;
 
     try (final Connection connection = source.connect()) {
 
