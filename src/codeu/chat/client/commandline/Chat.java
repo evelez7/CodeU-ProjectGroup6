@@ -252,7 +252,7 @@ public final class Chat {
         System.out.println("  i-c-remove <title>");
         System.out.println("    Remove a conversation from the current user's interests.");
         System.out.println("  status-update-u <name>");
-        System.out.println("    Call a status update on the specified user interest. W.I.P.");
+        System.out.println("    Call a status update on the specified user interest.");
         System.out.println("  status-update-c <title>");
         System.out.println("    Call a status update on the specified conversation interest.");
         System.out.println("  info");

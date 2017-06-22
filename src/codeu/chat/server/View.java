@@ -81,8 +81,6 @@ public final class View implements BasicView, SinglesView {
   @Override
   public Collection<String> userStatusUpdate(String name, Uuid owner) {
 
-    //placeholder
-
     Collection<ConversationPayload> allConversations = all(model.conversationPayloadById());
     Collection<String> contributions = new ArrayList<String>();
 
@@ -99,6 +97,13 @@ public final class View implements BasicView, SinglesView {
           foundMessage = true;
         }
         currentMessage = model.messageById().first(currentMessage.next);
+      }
+      if(!contributions.contains(model.conversationById().first(conversationPayload.id).title)) {
+        if(model.conversationById().first(conversationPayload.id).owner.equals(foundUser.id)) {
+          if(lastUpdate.compareTo(model.conversationById().first(conversationPayload.id).creation) < 0) {
+            contributions.add(model.conversationById().first(conversationPayload.id).title + " (Creator)");
+          }
+        }
       }
       foundOwner.UserUpdateMap.put(foundUser.id, Time.now());
     }
