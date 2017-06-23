@@ -15,6 +15,9 @@
 
 package codeu.chat.server;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,6 +27,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.ArrayList;
 
 import codeu.chat.common.ConversationHeader;
 import codeu.chat.common.ConversationPayload;
@@ -41,6 +47,8 @@ import codeu.chat.util.Timeline;
 import codeu.chat.util.Uuid;
 import codeu.chat.util.connections.Connection;
 
+import com.google.gson.Gson;
+
 public final class Server {
 
   private interface Command {
@@ -50,10 +58,23 @@ public final class Server {
   private static final Logger.Log LOG = Logger.newLog(Server.class);
 
   private static final int RELAY_REFRESH_MS = 5000;  // 5 seconds
-  
+
   private static final ServerInfo info = new ServerInfo();
 
   private final Timeline timeline = new Timeline();
+
+  private final Gson gson = new Gson();
+
+  private final File dataStorage = new File("src\\codeu\\chat\\server\\JsonData.txt");
+
+  private FileWriter fileWriter = null;
+  private BufferedWriter bufferedWriter = null;
+
+  private ArrayList<Message> messageStorage = new ArrayList<>();
+  private ArrayList<ConversationHeader> conversationHeaderStorage = new ArrayList<>();
+  private ArrayList<User> userStorage = new ArrayList<>();
+
+  private Queue<String> dataQueue = new LinkedList<>();
 
   private final Map<Integer, Command> commands = new HashMap<>();
 
@@ -85,6 +106,10 @@ public final class Server {
 
         final Message message = controller.newMessage(author, conversation, content);
 
+        final Message tempMessage = message;
+        final String stringMessage = gson.toJson(tempMessage);
+        dataQueue.add(stringMessage);
+
         Serializers.INTEGER.write(out, NetworkCode.NEW_MESSAGE_RESPONSE);
         Serializers.nullable(Message.SERIALIZER).write(out, message);
 
@@ -103,6 +128,10 @@ public final class Server {
         final String name = Serializers.STRING.read(in);
         final User user = controller.newUser(name);
 
+        final User tempUser = user;
+        final String stringUser = gson.toJson(tempUser);
+        dataQueue.add(stringUser);
+
         Serializers.INTEGER.write(out, NetworkCode.NEW_USER_RESPONSE);
         Serializers.nullable(User.SERIALIZER).write(out, user);
       }
@@ -116,6 +145,10 @@ public final class Server {
         final String title = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
         final ConversationHeader conversation = controller.newConversation(title, owner);
+
+        final ConversationHeader tempConvo = conversation;
+        final String stringConvo = gson.toJson(tempConvo);
+        dataQueue.add(stringConvo);
 
         Serializers.INTEGER.write(out, NetworkCode.NEW_CONVERSATION_RESPONSE);
         Serializers.nullable(ConversationHeader.SERIALIZER).write(out, conversation);
@@ -206,7 +239,7 @@ public final class Server {
         timeline.scheduleIn(RELAY_REFRESH_MS, this);
       }
     });
-    
+
   }
 
   public void handleConnection(final Connection connection) {
