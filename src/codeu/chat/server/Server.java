@@ -58,7 +58,7 @@ public final class Server {
   private static final Logger.Log LOG = Logger.newLog(Server.class);
 
   private static final int RELAY_REFRESH_MS = 5000;  // 5 seconds
-
+  private static final int SAVE_SERVER_MS = 30000;
   private static final ServerInfo info = new ServerInfo();
 
   private final Timeline timeline = new Timeline();
@@ -74,7 +74,7 @@ public final class Server {
   private ArrayList<ConversationHeader> conversationHeaderStorage = new ArrayList<>();
   private ArrayList<User> userStorage = new ArrayList<>();
 
-  private Queue<String> dataQueue = new LinkedList<>();
+  private LinkedList<String> dataQueue = new LinkedList<>();
 
   private final Map<Integer, Command> commands = new HashMap<>();
 
@@ -240,6 +240,19 @@ public final class Server {
       }
     });
 
+    public void saveServer() {
+      try {
+        fileWriter = new FileWriter(dataStorage);
+        bufferedWriter = new BufferedWriter(fileWriter);
+
+        for (int i = 0; i < dataQueue.size(); i++) {
+          bufferedWriter.write(dataQueue.get(i));
+          bufferedWriter.newLine();
+        }
+      } catch (IOException ex) {
+        LOG.error(ex, "There was an exception while writing the server to disk.");
+      }
+    }
   }
 
   public void handleConnection(final Connection connection) {
