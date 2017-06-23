@@ -239,20 +239,27 @@ public final class Server {
         timeline.scheduleIn(RELAY_REFRESH_MS, this);
       }
     });
+  }
 
-    public void saveServer() {
-      try {
-        fileWriter = new FileWriter(dataStorage);
-        bufferedWriter = new BufferedWriter(fileWriter);
+  public void saveServer() {
+    timeline.scheduleNow(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          fileWriter = new FileWriter(dataStorage);
+          bufferedWriter = new BufferedWriter(fileWriter);
 
-        for (int i = 0; i < dataQueue.size(); i++) {
-          bufferedWriter.write(dataQueue.get(i));
-          bufferedWriter.newLine();
+          for (int i = 0; i < dataQueue.size(); i++) {
+            bufferedWriter.write(dataQueue.get(i));
+            bufferedWriter.newLine();
+          }
+        } catch (IOException ex) {
+          LOG.error(ex, "There was an exception while writing the server contents.");
         }
-      } catch (IOException ex) {
-        LOG.error(ex, "There was an exception while writing the server to disk.");
+
+        timeline.scheduleIn(SAVE_SERVER_MS, this);
       }
-    }
+    });
   }
 
   public void handleConnection(final Connection connection) {
