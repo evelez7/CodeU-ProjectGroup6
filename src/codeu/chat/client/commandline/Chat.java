@@ -351,29 +351,18 @@ public final class Chat {
         for(String token : args){
           final String title = token;
           if (title.length() > 0) {
-            final ConversationContext conversation = find(title);
-            if (conversation == null) {
-              System.out.format("ERROR: No conversation with name '%s'\n", title);
-            } else if (user.addConversationInterest(title) == true) {
-                System.out.println("Conversation \"" + title + "\" added to interests");
+            int response = user.addConversationInterest(title);
+            if (response == 1) {
+              System.out.println("Conversation \"" + title + "\" added to interests");
+            } else if (response == 0) {
+              System.out.println("ERROR: Conversation \"" + title + "\" already in interests");
             } else {
-                System.out.println("ERROR: Conversation \"" + title + "\" already in interests");
+              System.out.format("ERROR: No conversation with name '%s'\n", title);
             }
           } else {
             System.out.println("ERROR: Missing <title>");
           }
         }
-      }
-
-      // Find the first conversation with the given name and return its context.
-      // If no conversation has the given name, this will return null.
-      private ConversationContext find(String title) {
-        for (final ConversationContext conversation : user.conversations()) {
-          if (title.equals(conversation.conversation.title)) {
-            return conversation;
-          }
-        }
-        return null;
       }
     });
 
@@ -388,29 +377,18 @@ public final class Chat {
         for(String token : args){
           final String title = token;
           if (title.length() > 0) {
-            final ConversationContext conversation = find(title);
-            if (conversation == null) {
-              System.out.format("ERROR: No conversation with name '%s'\n", title);
-            } else if (user.removeConversationInterest(title) == true) {
-                System.out.println("Conversation \"" + title + "\" removed from interests");
+            int response = user.removeConversationInterest(title);
+            if (response == 1) {
+              System.out.println("Conversation \"" + title + "\" removed from interests");
+            } else if (response == 0) {
+              System.out.println("ERROR: Conversation \"" + title + "\" not in interests");
             } else {
-                System.out.println("ERROR: Conversation \"" + title + "\" not in interests");
+              System.out.format("ERROR: No conversation with name '%s'\n", title);
             }
           } else {
             System.out.println("ERROR: Missing <title>");
           }
         }
-      }
-
-      // Find the first conversation with the given name and return its context.
-      // If no conversation has the given name, this will return null.
-      private ConversationContext find(String title) {
-        for (final ConversationContext conversation : user.conversations()) {
-          if (title.equals(conversation.conversation.title)) {
-            return conversation;
-          }
-        }
-        return null;
       }
     });
 
@@ -469,29 +447,18 @@ public final class Chat {
         for(String token : args){
           final String name = token;
           if (name.length() > 0) {
-            final UserContext foundUser = findUser(name);
-            if (foundUser == null) {
-              System.out.format("ERROR: No user with name '%s'\n", name);
-            } else if (user.addUserInterest(name) == true) {
-                System.out.println("User \"" + name + "\" added to interests");
+            int response = user.addUserInterest(name);
+            if (response == 1) {
+              System.out.println("User \"" + name + "\" added to interests");
+            } else if (response == 0) {
+              System.out.println("ERROR: User \"" + name + "\" already in interests");
             } else {
-                System.out.println("ERROR: User \"" + name + "\" already in interests");
+              System.out.format("ERROR: No user with name '%s'\n", name);
             }
           } else {
             System.out.println("ERROR: Missing <username>");
           }
         }
-      }
-
-      // Find the first user with the given name and return a user context
-      // for that user. If no user is found, the function will return null.
-      private UserContext findUser(String name) {
-        for (final UserContext user : context.allUsers()) {
-          if (user.user.name.equals(name)) {
-            return user;
-          }
-        }
-        return null;
       }
     });
 
@@ -506,29 +473,18 @@ public final class Chat {
         for(String token : args){
           final String name = token;
           if (name.length() > 0) {
-            final UserContext foundUser = findUser(name);
-            if (foundUser == null) {
-              System.out.format("ERROR: No user with name '%s'\n", name);
-            } else if (user.removeUserInterest(name) == true) {
-                System.out.println("User \"" + name + "\" removed from interests");
+            int response = user.removeUserInterest(name);
+            if (response == 1) {
+              System.out.println("User \"" + name + "\" removed from interests");
+            } else if (response == 0) {
+              System.out.println("ERROR: User \"" + name + "\" not in interests");
             } else {
-                System.out.println("ERROR: User \"" + name + "\" not in interests");
+              System.out.format("ERROR: No user with name '%s'\n", name);
             }
           } else {
             System.out.println("ERROR: Missing <username>");
           }
         }
-      }
-
-      // Find the first user with the given name and return a user context
-      // for that user. If no user is found, the function will return null.
-      private UserContext findUser(String name) {
-        for (final UserContext user : context.allUsers()) {
-          if (user.user.name.equals(name)) {
-            return user;
-          }
-        }
-        return null;
       }
     });
 

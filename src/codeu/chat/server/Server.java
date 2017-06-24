@@ -183,10 +183,10 @@ public final class Server {
         final String name = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
 
-        final boolean interestResponse = controller.addUserInterest(name, owner);
+        final int interestResponse = controller.addUserInterest(name, owner);
 
         Serializers.INTEGER.write(out, NetworkCode.NEW_USER_INTEREST_RESPONSE);
-        Serializers.BOOLEAN.write(out, interestResponse);
+        Serializers.INTEGER.write(out, interestResponse);
       }
     });
 
@@ -198,10 +198,10 @@ public final class Server {
         final String name = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
 
-        final boolean interestResponse = controller.removeUserInterest(name, owner);
+        final int interestResponse = controller.removeUserInterest(name, owner);
 
         Serializers.INTEGER.write (out, NetworkCode.REMOVE_USER_INTEREST_RESPONSE);
-        Serializers.BOOLEAN.write(out, interestResponse);
+        Serializers.INTEGER.write(out, interestResponse);
       }
     });
 
@@ -213,10 +213,10 @@ public final class Server {
         final String title = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
 
-        final boolean interestResponse = controller.addConversationInterest(title, owner);
+        final int interestResponse = controller.addConversationInterest(title, owner);
 
         Serializers.INTEGER.write (out, NetworkCode.NEW_CONVERSATION_INTEREST_RESPONSE);
-        Serializers.BOOLEAN.write(out, interestResponse);
+        Serializers.INTEGER.write(out, interestResponse);
       }
     });
 
@@ -228,10 +228,10 @@ public final class Server {
         final String title = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
 
-        final boolean interestResponse = controller.removeConversationInterest(title, owner);
+        final int interestResponse = controller.removeConversationInterest(title, owner);
 
         Serializers.INTEGER.write (out, NetworkCode.REMOVE_CONVERSATION_INTEREST_RESPONSE);
-        Serializers.BOOLEAN.write(out, interestResponse);
+        Serializers.INTEGER.write(out, interestResponse);
       }
     });
 

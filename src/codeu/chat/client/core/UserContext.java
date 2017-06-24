@@ -54,19 +54,19 @@ public final class UserContext {
     return all;
   }
 
-  public boolean addUserInterest(String name) {
+  public int addUserInterest(String name) {
     return controller.addUserInterest(name, user.id);
   }
 
-  public boolean removeUserInterest(String name) {
+  public int removeUserInterest(String name) {
     return controller.removeUserInterest(name, user.id);
   }
 
-  public boolean addConversationInterest(String title) {
+  public int addConversationInterest(String title) {
     return controller.addConversationInterest(title, user.id);
   }
 
-  public boolean removeConversationInterest(String title) {
+  public int removeConversationInterest(String title) {
     return controller.removeConversationInterest(title, user.id);
   }
 
