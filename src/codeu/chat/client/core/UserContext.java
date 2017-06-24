@@ -70,8 +70,12 @@ public final class UserContext {
     return controller.removeConversationInterest(title, user.id);
   }
 
-  public Iterable<String> userStatusUpdate(String name) {
-    return view.userStatusUpdate(name, user.id);
+  public ArrayList<String> userStatusUpdate(String name) {
+    final ArrayList<String> contributions = new ArrayList<>();
+    for(final String contribution : view.userStatusUpdate(name, user.id)) {
+      contributions.add(contribution);
+    }
+    return contributions;
   }
 
   public int conversationStatusUpdate(String title) {

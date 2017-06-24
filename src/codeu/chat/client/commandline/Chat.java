@@ -181,7 +181,7 @@ public final class Chat {
             if (user == null) {
               System.out.format("ERROR: Failed to sign in as '%s'\n", name);
             } else {
-              panels.push(createUserPanel(context, user));
+              panels.push(createUserPanel(user));
             }
           } else {
             System.out.println("ERROR: Missing <username>");
@@ -224,7 +224,7 @@ public final class Chat {
     return panel;
   }
 
-  private Panel createUserPanel(final Context context, final UserContext user) {
+  private Panel createUserPanel(final UserContext user) {
 
     final Panel panel = new Panel();
 
@@ -484,8 +484,8 @@ public final class Chat {
         for(String token : args){
           final String name = token;
           if (name.length() > 0) {
-            final UserContext foundUser = findUser(name);
-            if (foundUser == null) {
+            final ArrayList<String> contributions = user.userStatusUpdate(name);
+            if (contributions.isEmpty()) {
               System.out.format("ERROR: No user with name '%s'\n", name);
             } else {
               System.out.println("User \"" + name + "\" has contributed to:");
@@ -497,17 +497,6 @@ public final class Chat {
             System.out.println("ERROR: Missing <username>");
           }
         }
-      }
-
-      // Find the first user with the given name and return a user context
-      // for that user. If no user is found, the function will return null.
-      private UserContext findUser(String name) {
-        for (final UserContext user : context.allUsers()) {
-          if (user.user.name.equals(name)) {
-            return user;
-          }
-        }
-        return null;
       }
     });
 

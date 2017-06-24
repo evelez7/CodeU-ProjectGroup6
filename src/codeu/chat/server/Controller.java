@@ -220,10 +220,10 @@ public final class Controller implements RawController, BasicController {
         foundOwner.ConvoSet.remove(foundConversation.id);
         foundOwner.ConvoUpdateMap.remove(foundConversation.id);
         LOG.info("Conversation Interest removed: " + foundConversation.id);
-        return 0;
+        return 1;
       } else {
         LOG.info("ERROR: Conversation not found in interests.");
-        return 1;
+        return 0;
       }
     } else {
       LOG.info("ERROR: Conversation not found.");
