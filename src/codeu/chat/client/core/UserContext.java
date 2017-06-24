@@ -54,20 +54,52 @@ public final class UserContext {
     return all;
   }
 
-  public int addUserInterest(String name) {
-    return controller.addUserInterest(name, user.id);
+  public enum response {
+    NO_ERROR, ERROR_ALREADY_CURRENT_SETTING, ERROR_NOT_FOUND
   }
 
-  public int removeUserInterest(String name) {
-    return controller.removeUserInterest(name, user.id);
+  public response addUserInterest(String name) {
+    switch(controller.addUserInterest(name, user.id)) {
+      default:
+        return response.ERROR_NOT_FOUND;
+      case 1:
+        return response.NO_ERROR;
+      case 0:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+    }
   }
 
-  public int addConversationInterest(String title) {
-    return controller.addConversationInterest(title, user.id);
+  public response removeUserInterest(String name) {
+    switch(controller.removeUserInterest(name, user.id)) {
+      default:
+        return response.ERROR_NOT_FOUND;
+      case 1:
+        return response.NO_ERROR;
+      case 0:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+    }
   }
 
-  public int removeConversationInterest(String title) {
-    return controller.removeConversationInterest(title, user.id);
+  public response addConversationInterest(String title) {
+    switch(controller.addConversationInterest(title, user.id)) {
+      default:
+        return response.ERROR_NOT_FOUND;
+      case 1:
+        return response.NO_ERROR;
+      case 0:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+    }
+  }
+
+  public response removeConversationInterest(String title) {
+    switch(controller.removeConversationInterest(title, user.id)) {
+      default:
+        return response.ERROR_NOT_FOUND;
+      case 1:
+        return response.NO_ERROR;
+      case 0:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+    }
   }
 
   public ArrayList<String> userStatusUpdate(String name) {

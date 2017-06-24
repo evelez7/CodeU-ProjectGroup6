@@ -252,9 +252,9 @@ public final class Chat {
         System.out.println("  i-c-remove <title>");
         System.out.println("    Remove a conversation from the current user's interests.");
         System.out.println("  status-update-u <name>");
-        System.out.println("    Call a status update on the specified user interest.");
+        System.out.println("    Request status update on the specified user interest.");
         System.out.println("  status-update-c <title>");
-        System.out.println("    Call a status update on the specified conversation interest.");
+        System.out.println("    Request status update on the specified conversation interest.");
         System.out.println("  info");
         System.out.println("    Display all info for the current user");
         System.out.println("  back");
@@ -349,15 +349,17 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
-          final String title = token;
-          if (title.length() > 0) {
-            int response = user.addConversationInterest(title);
-            if (response == 1) {
-              System.out.println("Conversation \"" + title + "\" added to interests");
-            } else if (response == 0) {
-              System.out.println("ERROR: Conversation \"" + title + "\" already in interests");
-            } else {
-              System.out.format("ERROR: No conversation with name '%s'\n", title);
+          if (token.length() > 0) {
+            switch(user.addConversationInterest(token)) {
+              case NO_ERROR:
+                System.out.println("Conversation \"" + token + "\" added to interests");
+                break;
+              case ERROR_ALREADY_CURRENT_SETTING:
+                System.out.println("ERROR: Conversation \"" + token + "\" already in interests");
+                break;
+              case ERROR_NOT_FOUND:
+                System.out.format("ERROR: No conversation with name '%s'\n", token);
+                break;
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -375,15 +377,17 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
-          final String title = token;
-          if (title.length() > 0) {
-            int response = user.removeConversationInterest(title);
-            if (response == 1) {
-              System.out.println("Conversation \"" + title + "\" removed from interests");
-            } else if (response == 0) {
-              System.out.println("ERROR: Conversation \"" + title + "\" not in interests");
-            } else {
-              System.out.format("ERROR: No conversation with name '%s'\n", title);
+          if (token.length() > 0) {
+            switch(user.removeConversationInterest(token)) {
+              case NO_ERROR:
+                System.out.println("Conversation \"" + token + "\" removed from interests");
+                break;
+              case ERROR_ALREADY_CURRENT_SETTING:
+                System.out.println("ERROR: Conversation \"" + token + "\" not in interests");
+                break;
+              case ERROR_NOT_FOUND:
+                System.out.format("ERROR: No conversation with name '%s'\n", token);
+                break;
             }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -401,17 +405,21 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
-          final String title = token;
-          if (title.length() > 0) {
-            final int newMessages = user.conversationStatusUpdate(title);
-              if (newMessages == -1) {
-                System.out.println("ERROR: Conversation \"" + title + "\" not in interests");
-              } else if (newMessages == -2) {
-                System.out.format("ERROR: No conversation with name '%s'\n", title);
-              } else if (newMessages == 0) {
-                System.out.println("No new messages in conversation \"" + title +"\"");
-              } else {
-                System.out.println(newMessages + " new messages in conversation \"" + title + "\"");
+          if (token.length() > 0) {
+            final int newMessages = user.conversationStatusUpdate(token);
+            switch (newMessages) {
+              default:
+                System.out.println(newMessages + " new messages in conversation \"" + token + "\"");
+                break;
+              case 0:
+                System.out.println("No new messages in conversation \"" + token +"\"");
+                break;
+              case -1:
+                System.out.println("ERROR: Conversation \"" + token + "\" not in interests");
+                break;
+              case -2:
+                System.out.format("ERROR: No conversation with name '%s'\n", token);
+                break;
               }
           } else {
             System.out.println("ERROR: Missing <title>");
@@ -429,16 +437,18 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
-          final String name = token;
-          if (name.length() > 0) {
-            int response = user.addUserInterest(name);
-            if (response == 1) {
-              System.out.println("User \"" + name + "\" added to interests");
-            } else if (response == 0) {
-              System.out.println("ERROR: User \"" + name + "\" already in interests");
-            } else {
-              System.out.format("ERROR: No user with name '%s'\n", name);
-            }
+          if (token.length() > 0) {
+            switch(user.addUserInterest(token)) {
+              case NO_ERROR:
+                System.out.println("User \"" + token + "\" added to interests");
+                break;
+              case ERROR_ALREADY_CURRENT_SETTING:
+                System.out.println("ERROR: User \"" + token + "\" already in interests");
+                break;
+              case ERROR_NOT_FOUND:
+                System.out.format("ERROR: No user with name '%s'\n", token);
+                break;
+              }
           } else {
             System.out.println("ERROR: Missing <username>");
           }
@@ -455,15 +465,17 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
-          final String name = token;
-          if (name.length() > 0) {
-            int response = user.removeUserInterest(name);
-            if (response == 1) {
-              System.out.println("User \"" + name + "\" removed from interests");
-            } else if (response == 0) {
-              System.out.println("ERROR: User \"" + name + "\" not in interests");
-            } else {
-              System.out.format("ERROR: No user with name '%s'\n", name);
+          if (token.length() > 0) {
+            switch(user.removeUserInterest(token)) {
+              case NO_ERROR:
+                System.out.println("User \"" + token + "\" removed from interests");
+                break;
+              case ERROR_ALREADY_CURRENT_SETTING:
+                System.out.println("ERROR: User \"" + token + "\" not in interests");
+                break;
+              case ERROR_NOT_FOUND:
+                System.out.format("ERROR: No user with name '%s'\n", token);
+                break;
             }
           } else {
             System.out.println("ERROR: Missing <username>");
@@ -482,14 +494,13 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
-          final String name = token;
-          if (name.length() > 0) {
-            final ArrayList<String> contributions = user.userStatusUpdate(name);
+          if (token.length() > 0) {
+            final ArrayList<String> contributions = user.userStatusUpdate(token);
             if (contributions.isEmpty()) {
-              System.out.format("ERROR: No user with name '%s'\n", name);
+              System.out.format("ERROR: No user with name '%s'\n", token);
             } else {
-              System.out.println("User \"" + name + "\" has contributed to:");
-              for(final String contribution : user.userStatusUpdate(name)) {
+              System.out.println("User \"" + token + "\" has contributed to:");
+              for(final String contribution : user.userStatusUpdate(token)) {
                 System.out.println(contribution);
               }
             }
