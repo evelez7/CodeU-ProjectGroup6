@@ -17,6 +17,8 @@ package codeu.chat.server;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +29,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 import java.util.LinkedList;
 import java.util.ArrayList;
 
@@ -59,6 +60,7 @@ public final class Server {
 
   private static final int RELAY_REFRESH_MS = 5000;  // 5 seconds
   private static final int SAVE_SERVER_MS = 30000;
+
   private static final ServerInfo info = new ServerInfo();
 
   private final Timeline timeline = new Timeline();
@@ -69,6 +71,8 @@ public final class Server {
 
   private FileWriter fileWriter = null;
   private BufferedWriter bufferedWriter = null;
+  private FileReader fileReader = null;
+  private BufferedReader bufferedReader = null;
 
   private ArrayList<Message> messageStorage = new ArrayList<>();
   private ArrayList<ConversationHeader> conversationHeaderStorage = new ArrayList<>();
@@ -106,8 +110,9 @@ public final class Server {
 
         final Message message = controller.newMessage(author, conversation, content);
 
-        final Message tempMessage = message;
-        final String stringMessage = gson.toJson(tempMessage);
+        // Append an "identifier" before the object itself so that the reader can
+        // split, identify, and create the proper object later
+        final String stringMessage = "Message;" + gson.toJson(message);
         dataQueue.add(stringMessage);
 
         Serializers.INTEGER.write(out, NetworkCode.NEW_MESSAGE_RESPONSE);
@@ -128,8 +133,9 @@ public final class Server {
         final String name = Serializers.STRING.read(in);
         final User user = controller.newUser(name);
 
-        final User tempUser = user;
-        final String stringUser = gson.toJson(tempUser);
+        // Append an "identifier" before the object itself so that the reader can
+        // split, identify, and create the proper object later
+        final String stringUser = "User;" + gson.toJson(user);
         dataQueue.add(stringUser);
 
         Serializers.INTEGER.write(out, NetworkCode.NEW_USER_RESPONSE);
@@ -146,8 +152,9 @@ public final class Server {
         final Uuid owner = Uuid.SERIALIZER.read(in);
         final ConversationHeader conversation = controller.newConversation(title, owner);
 
-        final ConversationHeader tempConvo = conversation;
-        final String stringConvo = gson.toJson(tempConvo);
+        // Append an "identifier" before the object itself so that the reader can
+        // split, identify, and create the proper object later
+        final String stringConvo = "Convo;" + gson.toJson(conversation);
         dataQueue.add(stringConvo);
 
         Serializers.INTEGER.write(out, NetworkCode.NEW_CONVERSATION_RESPONSE);
@@ -241,6 +248,7 @@ public final class Server {
     });
   }
 
+  // Planning to call in ServerMain after Server is created
   public void saveServer() {
     timeline.scheduleNow(new Runnable() {
       @Override
@@ -249,15 +257,81 @@ public final class Server {
           fileWriter = new FileWriter(dataStorage);
           bufferedWriter = new BufferedWriter(fileWriter);
 
+          LOG.info("Writing sever content.");
+
           for (int i = 0; i < dataQueue.size(); i++) {
+            // Ends up looking like: <Identifier>;<JSON Object> on every line
             bufferedWriter.write(dataQueue.get(i));
             bufferedWriter.newLine();
           }
         } catch (IOException ex) {
-          LOG.error(ex, "There was an exception while writing the server contents.");
+          LOG.error(ex, "There was an exception while writing server content.");
+        } finally {
+          try {
+            if (bufferedWriter != null) {
+              bufferedWriter.close();
+            }
+
+            if (fileWriter != null) {
+              fileWriter.close();
+            }
+          } catch (IOException ex) {
+            LOG.error(ex, "There was an exception while closing writers.");
+          }
         }
 
         timeline.scheduleIn(SAVE_SERVER_MS, this);
+      }
+    });
+  }
+
+  // Planning to call upon server creation
+  public void restoreServer() {
+    timeline.scheduleNow(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          fileReader = new FileReader(dataStorage);
+          bufferedReader = new BufferedReader(fileReader);
+
+          String currentLine;
+
+          while ((currentLine = bufferedReader.readLine()) != null) {
+            // Split identifier from JSON and put both elements into an array
+            String[] lineElements = currentLine.split(";");
+
+            // lineElements[0] will contain the proper identifier (Convo, Message, User)
+            // Then, according to the identifier, the proper object will be created
+            // and restored
+            switch (lineElements[0]) {
+              case "User":
+                User loadUser = gson.fromJson(lineElements[1], User.class);
+                break;
+              case "Convo":
+                ConversationHeader loadConvo = gson.fromJson(lineElements[1], ConversationHeader.class);
+                break;
+              case "Message":
+                Message loadMessage = gson.fromJson(lineElements[1], Message.class);
+                break;
+              default:
+                break;
+            }
+          }
+        } catch (IOException ex) {
+          LOG.error(ex, "There was an exception while restoring server content.");
+        } finally {
+          try {
+              if (bufferedReader != null) {
+                bufferedReader.close();
+              }
+
+              if (fileReader != null) {
+                fileReader.close();
+              }
+            } catch (IOException ex) {
+              LOG.error(ex, "There was an exception while closing readers.");
+          }
+        }
       }
     });
   }
