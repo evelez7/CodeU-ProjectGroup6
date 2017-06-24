@@ -122,22 +122,25 @@ public final class View implements BasicView, SinglesView {
 
     final User foundOwner = model.userById().first(owner);
     final ConversationHeader foundConversation = model.conversationByText().first(title);
-    final ConversationPayload foundConversationPayload = model.conversationPayloadById().first(foundConversation.id);
-    final Time lastUpdate = foundOwner.ConvoUpdateMap.get(foundConversation.id);
 
-    if(foundOwner.ConvoSet.contains(foundConversation.id)) {
-        Message currentMessage = model.messageById().first(foundConversationPayload.firstMessage);
-        while(currentMessage != null) {
-          if(lastUpdate.compareTo(currentMessage.creation) < 0) {
-            newMessages++;
+    if(foundConversation != null) {
+      final ConversationPayload foundConversationPayload = model.conversationPayloadById().first(foundConversation.id);
+      final Time lastUpdate = foundOwner.ConvoUpdateMap.get(foundConversation.id);
+      if(foundOwner.ConvoSet.contains(foundConversation.id)) {
+          Message currentMessage = model.messageById().first(foundConversationPayload.firstMessage);
+          while(currentMessage != null) {
+            if(lastUpdate.compareTo(currentMessage.creation) < 0) {
+              newMessages++;
+            }
+            currentMessage = model.messageById().first(currentMessage.next);
           }
-          currentMessage = model.messageById().first(currentMessage.next);
-        }
-      foundOwner.ConvoUpdateMap.put(foundConversation.id, Time.now());
+        foundOwner.ConvoUpdateMap.put(foundConversation.id, Time.now());
+      } else {
+        newMessages = -1;
+      }
     } else {
-      newMessages = -1;
+      newMessages = -2;
     }
-
     return newMessages;
   }
 

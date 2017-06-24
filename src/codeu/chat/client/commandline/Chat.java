@@ -403,36 +403,20 @@ public final class Chat {
         for(String token : args){
           final String title = token;
           if (title.length() > 0) {
-            final ConversationContext conversation = find(title);
-            if (conversation == null) {
-              System.out.format("ERROR: No conversation with name '%s'\n", title);
-            } else {
-              final int newMessages = user.conversationStatusUpdate(title);
+            final int newMessages = user.conversationStatusUpdate(title);
               if (newMessages == -1) {
                 System.out.println("ERROR: Conversation \"" + title + "\" not in interests");
-              }
-              else if (newMessages == 0) {
+              } else if (newMessages == -2) {
+                System.out.format("ERROR: No conversation with name '%s'\n", title);
+              } else if (newMessages == 0) {
                 System.out.println("No new messages in conversation \"" + title +"\"");
-              }
-              else {
+              } else {
                 System.out.println(newMessages + " new messages in conversation \"" + title + "\"");
               }
-            }
           } else {
             System.out.println("ERROR: Missing <title>");
           }
         }
-      }
-
-      // Find the first conversation with the given name and return its context.
-      // If no conversation has the given name, this will return null.
-      private ConversationContext find(String title) {
-        for (final ConversationContext conversation : user.conversations()) {
-          if (title.equals(conversation.conversation.title)) {
-            return conversation;
-          }
-        }
-        return null;
       }
     });
 
