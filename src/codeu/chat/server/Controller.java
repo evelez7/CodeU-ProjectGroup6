@@ -152,16 +152,16 @@ public final class Controller implements RawController, BasicController {
     if(foundUser != null) {
       if(foundOwner.UserSet.contains(foundUser.id)) {
         LOG.info("ERROR: User already in interests.");
-        return 0;
+        return -1;
       } else {
         foundOwner.UserSet.add(foundUser.id);
         foundOwner.UserUpdateMap.put(foundUser.id, Time.now());
         LOG.info("User Interest added: " + foundUser.id);
-        return 1;
+        return 0;
       }
     } else {
       LOG.info("ERROR: User not found.");
-      return -1;
+      return -2;
     }
   }
 
@@ -176,14 +176,14 @@ public final class Controller implements RawController, BasicController {
         foundOwner.UserSet.remove(foundUser.id);
         foundOwner.UserUpdateMap.remove(foundUser.id);
         LOG.info("User Interest removed: " + foundUser.id);
-        return 1;
+        return 0;
       } else {
         LOG.info("ERROR: User not found in interests.");
-        return 0;
+        return -1;
       }
     } else {
       LOG.info("ERROR: User not found.");
-      return -1;
+      return -2;
     }
   }
 
@@ -196,16 +196,16 @@ public final class Controller implements RawController, BasicController {
     if(foundConversation != null) {
       if(foundOwner.ConvoSet.contains(foundConversation.id)) {
         LOG.info("ERROR: Conversation already in interests.");
-        return 0;
+        return -1;
       } else {
         foundOwner.ConvoSet.add(foundConversation.id);
         foundOwner.ConvoUpdateMap.put(foundConversation.id, Time.now());
         LOG.info("Conversation Interest added: " + foundConversation.id);
-        return 1;
+        return 0;
       }
     } else {
       LOG.info("ERROR: Conversation not found.");
-      return -1;
+      return -2;
     }
   }
 
@@ -220,14 +220,14 @@ public final class Controller implements RawController, BasicController {
         foundOwner.ConvoSet.remove(foundConversation.id);
         foundOwner.ConvoUpdateMap.remove(foundConversation.id);
         LOG.info("Conversation Interest removed: " + foundConversation.id);
-        return 1;
+        return 0;
       } else {
         LOG.info("ERROR: Conversation not found in interests.");
-        return 0;
+        return -1;
       }
     } else {
       LOG.info("ERROR: Conversation not found.");
-      return -1;
+      return -2;
     }
   }
 

@@ -62,9 +62,9 @@ public final class UserContext {
     switch(controller.addUserInterest(name, user.id)) {
       default:
         return response.ERROR_NOT_FOUND;
-      case 1:
-        return response.NO_ERROR;
       case 0:
+        return response.NO_ERROR;
+      case -1:
         return response.ERROR_ALREADY_CURRENT_SETTING;
     }
   }
@@ -73,9 +73,9 @@ public final class UserContext {
     switch(controller.removeUserInterest(name, user.id)) {
       default:
         return response.ERROR_NOT_FOUND;
-      case 1:
-        return response.NO_ERROR;
       case 0:
+        return response.NO_ERROR;
+      case -1:
         return response.ERROR_ALREADY_CURRENT_SETTING;
     }
   }
@@ -84,9 +84,9 @@ public final class UserContext {
     switch(controller.addConversationInterest(title, user.id)) {
       default:
         return response.ERROR_NOT_FOUND;
-      case 1:
-        return response.NO_ERROR;
       case 0:
+        return response.NO_ERROR;
+      case -1:
         return response.ERROR_ALREADY_CURRENT_SETTING;
     }
   }
@@ -95,9 +95,9 @@ public final class UserContext {
     switch(controller.removeConversationInterest(title, user.id)) {
       default:
         return response.ERROR_NOT_FOUND;
-      case 1:
-        return response.NO_ERROR;
       case 0:
+        return response.NO_ERROR;
+      case -1:
         return response.ERROR_ALREADY_CURRENT_SETTING;
     }
   }
