@@ -14,6 +14,7 @@
 
 package codeu.chat.client.commandline;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -487,15 +488,15 @@ public final class Chat {
     // STATUS-UPDATE-U (user status update)
     //
     // Add a command that will add check new conversations created by and
-    //  contributed to by one of the current user's user interests when the
-    //  user enters "status-update-u" while on the user panel
+    // contributed to by one of the current user's user interests when the
+    // user enters "status-update-u" while on the user panel
     //
     panel.register("status-update-u", new Panel.Command() {
       @Override
       public void invoke(List<String> args) {
         for(String token : args){
           if (token.length() > 0) {
-            final ArrayList<String> contributions = user.userStatusUpdate(token);
+            final Collection<String> contributions = user.userStatusUpdate(token);
             if (contributions.isEmpty()) {
               System.out.format("ERROR: No user with name '%s'\n", token);
             } else {

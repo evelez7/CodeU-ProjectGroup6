@@ -102,12 +102,8 @@ public final class UserContext {
     }
   }
 
-  public ArrayList<String> userStatusUpdate(String name) {
-    final ArrayList<String> contributions = new ArrayList<>();
-    for(final String contribution : view.userStatusUpdate(name, user.id)) {
-      contributions.add(contribution);
-    }
-    return contributions;
+  public Collection<String> userStatusUpdate(String name) {
+    return view.userStatusUpdate(name, user.id);
   }
 
   public int conversationStatusUpdate(String title) {
