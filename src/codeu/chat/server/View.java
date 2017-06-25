@@ -87,24 +87,37 @@ public final class View implements BasicView, SinglesView {
     final User foundOwner = model.userById().first(owner);
     final User foundUser = model.userByText().first(name);
 
+    // check if the specified user can be found in Model
     if(foundUser != null) {
+      // check if the specified user is in the current user's user interests
       if(foundOwner.UserSet.contains(foundUser.id)) {
+        // the last time that the current user requested a status update for the specified user
         final Time lastUpdate = foundOwner.UserUpdateMap.get(foundUser.id);
+        // go through all of the conversations stored in Model
         for(ConversationPayload conversationPayload : allConversations) {
+          // get the first message of the current conversation
           Message currentMessage = model.messageById().first(conversationPayload.firstMessage);
+          // boolean used to break the loop if a recent message from the specified user is found
           boolean foundMessage = false;
           while(currentMessage != null && foundMessage == false) {
+            // if the current message's creation time is after the last status update and was created by the specified user
             if(lastUpdate.compareTo(currentMessage.creation) < 0 && currentMessage.author.equals(foundUser.id)) {
+              // get the conversation's title (via the ConversationHeader with the same UUID) and add it to the collection
               ConversationHeader conversationContribution = model.conversationById().first(conversationPayload.id);
               contributions.add(conversationContribution.title);
               LOG.info("Conversation added to list.");
+              // break the loop as soon as one recent message is found
               foundMessage = true;
             }
             currentMessage = model.messageById().first(currentMessage.next);
           }
+          // if the current conversation's title is not in the collection after the above for loop
           if(!contributions.contains(model.conversationById().first(conversationPayload.id).title)) {
+            // if the current conversation's creator is the specified user
             if(model.conversationById().first(conversationPayload.id).owner.equals(foundUser.id)) {
+              // if the current conversation was created after the last status update
               if(lastUpdate.compareTo(model.conversationById().first(conversationPayload.id).creation) < 0) {
+                // get the conversation's title and add it to the collection, marking it as recently created
                 ConversationHeader conversationContribution = model.conversationById().first(conversationPayload.id);
                 contributions.add(conversationContribution.title + " (Creator)");
                 LOG.info("Created conversation added to list.");
@@ -112,15 +125,19 @@ public final class View implements BasicView, SinglesView {
             }
           }
         }
+        // if after going through everything and no contributions are found, add the note to the collection
         if(contributions.isEmpty()) {
           contributions.add("(No recent conversations)");
         }
+        // finally, update the time that status update was last requested for the specified user to now
         foundOwner.UserUpdateMap.put(foundUser.id, Time.now());
       } else {
+        // if foundUser is not in the current user's interests, add the note to the collection
         contributions.add("ERROR: User not found in interests");
         LOG.info("ERROR: User not found in interests.");
       }
     }
+    // if foundUser is null, return completely empty collection
     return contributions;
   }
 
@@ -132,22 +149,33 @@ public final class View implements BasicView, SinglesView {
     final User foundOwner = model.userById().first(owner);
     final ConversationHeader foundConversation = model.conversationByText().first(title);
 
+    // check if the specified conversation can be found in Model
     if(foundConversation != null) {
+      // check if the specified conversation is in the current user's conversation interests
       if(foundOwner.ConvoSet.contains(foundConversation.id)) {
+        // the ConversationPayload with the same UUID as the found ConversationHeader
         final ConversationPayload foundConversationPayload = model.conversationPayloadById().first(foundConversation.id);
+        // the last time that the current user requested a status update for the specified user
         final Time lastUpdate = foundOwner.ConvoUpdateMap.get(foundConversation.id);
+        // get the first message of the current conversation
         Message currentMessage = model.messageById().first(foundConversationPayload.firstMessage);
+        // go through the entire current conversation
         while(currentMessage != null) {
+          // if a found message was created after the last time a status update was called for the specified conversation
           if(lastUpdate.compareTo(currentMessage.creation) < 0) {
+            // add to the message counter
             newMessages++;
           }
           currentMessage = model.messageById().first(currentMessage.next);
         }
+      // finally, update the time that status update was last requested for the specified converation to now
       foundOwner.ConvoUpdateMap.put(foundConversation.id, Time.now());
       } else {
+        // return some negative value to specify that conversation is not in interests
         newMessages = -1;
       }
     } else {
+      // return some negative value to specify that conversation doesn't exist
       newMessages = -2;
     }
     return newMessages;
