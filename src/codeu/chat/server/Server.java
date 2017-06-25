@@ -298,26 +298,23 @@ public final class Server {
           String currentLine;
 
           while ((currentLine = bufferedReader.readLine()) != null) {
-            LOG.info("it is actually reading");
             // Split identifier from JSON and put both elements into an array
             String[] lineElements = currentLine.split(";");
+            LOG.info(lineElements[0]);
 
             // lineElements[0] will contain the proper identifier (Convo, Message, User)
             // Then, according to the identifier, the proper object will be created
             // and restored
             switch (lineElements[0]) {
               case "User":
-                LOG.info("It is restoring a user.");
                 User loadUser = gson.fromJson(lineElements[1], User.class);
                 model.add(loadUser);
                 break;
               case "Convo":
-                LOG.info("It is restoring a convo.");
                 ConversationHeader loadConvo = gson.fromJson(lineElements[1], ConversationHeader.class);
                 model.add(loadConvo);
                 break;
               case "Message":
-                LOG.info("It is restoring a message");
                 Message loadMessage = gson.fromJson(lineElements[1], Message.class);
                 model.add(loadMessage);
                 break;
