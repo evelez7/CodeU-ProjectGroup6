@@ -312,7 +312,7 @@ public final class Server {
                 model.add(loadUser);
                 break;
               case "Convo":
-                LOG.info("It is restoring a convo.")
+                LOG.info("It is restoring a convo.");
                 ConversationHeader loadConvo = gson.fromJson(lineElements[1], ConversationHeader.class);
                 model.add(loadConvo);
                 break;
