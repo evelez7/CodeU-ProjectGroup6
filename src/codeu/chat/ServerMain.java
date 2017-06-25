@@ -98,6 +98,8 @@ final class ServerMain {
     final Server server = new Server(id, secret, relay);
 
     LOG.info("Created server.");
+    server.saveServer();
+    server.restoreServer();
 
     while (true) {
 

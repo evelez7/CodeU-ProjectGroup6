@@ -250,7 +250,7 @@ public final class Server {
 
   // Planning to call in ServerMain after Server is created
   public void saveServer() {
-    timeline.scheduleNow(new Runnable() {
+    timeline.scheduleIn(SAVE_SERVER_MS, new Runnable() {
       @Override
       public void run() {
         try {
@@ -291,12 +291,14 @@ public final class Server {
       @Override
       public void run() {
         try {
+          LOG.info("Restoring server content");
           fileReader = new FileReader(dataStorage);
           bufferedReader = new BufferedReader(fileReader);
 
           String currentLine;
 
           while ((currentLine = bufferedReader.readLine()) != null) {
+            LOG.info("it is actually reading");
             // Split identifier from JSON and put both elements into an array
             String[] lineElements = currentLine.split(";");
 
@@ -305,13 +307,19 @@ public final class Server {
             // and restored
             switch (lineElements[0]) {
               case "User":
+                LOG.info("It is restoring a user.");
                 User loadUser = gson.fromJson(lineElements[1], User.class);
+                model.add(loadUser);
                 break;
               case "Convo":
+                LOG.info("It is restoring a convo.")
                 ConversationHeader loadConvo = gson.fromJson(lineElements[1], ConversationHeader.class);
+                model.add(loadConvo);
                 break;
               case "Message":
+                LOG.info("It is restoring a message");
                 Message loadMessage = gson.fromJson(lineElements[1], Message.class);
+                model.add(loadMessage);
                 break;
               default:
                 break;
@@ -332,6 +340,7 @@ public final class Server {
               LOG.error(ex, "There was an exception while closing readers.");
           }
         }
+        LOG.info("End restoring server.");
       }
     });
   }
