@@ -98,8 +98,8 @@ final class ServerMain {
     final Server server = new Server(id, secret, relay);
 
     LOG.info("Created server.");
-    server.saveServer();
-    server.restoreServer();
+    server.restoreServer(); // Immediately added to timeline
+    server.saveServer(); // Set to execute every 30 seconds from being called
 
     while (true) {
 
