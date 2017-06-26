@@ -87,7 +87,6 @@ public final class View implements BasicView, SinglesView {
     // to or created since the last time the user requesting a status update has
     // requested a status update on the specified user.
 
-    Collection<ConversationPayload> allConversations = all(model.conversationPayloadById());
     Collection<String> contributions = new ArrayList<String>();
 
     final User foundOwner = model.userById().first(owner);
