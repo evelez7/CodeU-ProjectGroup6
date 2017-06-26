@@ -49,7 +49,6 @@ import codeu.chat.util.Uuid;
 import codeu.chat.util.connections.Connection;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 
 public final class Server {
 
@@ -60,7 +59,7 @@ public final class Server {
   private static final Logger.Log LOG = Logger.newLog(Server.class);
 
   private static final int RELAY_REFRESH_MS = 5000;  // 5 seconds
-  private static final int SAVE_SERVER_MS = 30000;
+  private static final int SAVE_SERVER_MS = 30000;  // 30 seconds
 
   private static final ServerInfo info = new ServerInfo();
 
@@ -74,10 +73,6 @@ public final class Server {
   private BufferedWriter bufferedWriter = null;
   private FileReader fileReader = null;
   private BufferedReader bufferedReader = null;
-
-  private ArrayList<Message> messageStorage = new ArrayList<>();
-  private ArrayList<ConversationHeader> conversationHeaderStorage = new ArrayList<>();
-  private ArrayList<User> userStorage = new ArrayList<>();
 
   private LinkedList<String> dataList = new LinkedList<>();
 
