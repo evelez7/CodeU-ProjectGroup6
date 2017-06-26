@@ -108,8 +108,6 @@ public final class View implements BasicView, SinglesView {
         foundOwner.UserUpdateMap.put(foundUser.id, Time.now());
       } else {
         // if foundUser is not in the current user's interests, add the note to the collection
-        contributions.add("ERROR: User not found in interests");
-        LOG.info("ERROR: User not found in interests.");
       }
     }
     // if foundUser is null, return completely empty collection

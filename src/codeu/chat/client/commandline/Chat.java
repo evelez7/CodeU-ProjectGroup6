@@ -501,7 +501,7 @@ public final class Chat {
               System.out.format("ERROR: No user with name '%s'\n", token);
             } else {
               System.out.println("User \"" + token + "\" has contributed to:");
-              for(final String contribution : user.userStatusUpdate(token)) {
+              for(final String contribution : contributions) {
                 System.out.println(contribution);
               }
             }
