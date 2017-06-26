@@ -163,27 +163,26 @@ public final class View implements BasicView, SinglesView {
     for(ConversationPayload conversationPayload : allConversations) {
       Message currentMessage = model.messageById().first(conversationPayload.firstMessage);
       boolean foundMessage = false;
+      ConversationHeader convoPayloadId = model.conversationById().first(conversationPayload.id);
       // go through every message
       while(currentMessage != null && foundMessage == false) {
         // check for a matching user UUID and a creation time after the last status update
         if(lastUpdate.compareTo(currentMessage.creation) < 0 && currentMessage.author.equals(searchUser)) {
           // add the conversation's title to the collection and break the loop for this conversation
-          contributions.add(model.conversationById().first(conversationPayload.id).title);
+          contributions.add(convoPayloadId.title);
           foundMessage = true;
         }
         currentMessage = model.messageById().first(currentMessage.next);
       }
-      // check if the current conversation wasn't added  to the collection after the above loop
-      if(!contributions.contains(model.conversationById().first(conversationPayload.id).title)) {
-        // check if the current conversation's creator matches the specified user
-        if(model.conversationById().first(conversationPayload.id).owner.equals(searchUser)) {
+      // check if the current conversation wasn't added to the collection after the above loop
+      // and if it matches the specified user
+      if(!contributions.contains(convoPayloadId.title) && convoPayloadId.owner.equals(searchUser)) {
           // check to see if the conversation was created after the last status update
-          if(lastUpdate.compareTo(model.conversationById().first(conversationPayload.id).creation) < 0) {
+          if(lastUpdate.compareTo(convoPayloadId.creation) < 0) {
             // add the conversation to the collection and mark it as recently created
-            contributions.add(model.conversationById().first(conversationPayload.id).title + " (Creator)");
+            contributions.add(convoPayloadId.title + " (Creator)");
           }
         }
-      }
     }
     return contributions;
   }
