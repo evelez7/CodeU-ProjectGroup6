@@ -98,9 +98,9 @@ public final class View implements BasicView, SinglesView {
       // check if the specified user is in the current user's user interests
       if(foundOwner.UserSet.contains(foundUser.id)) {
         // the last time that the current user requested a status update for the specified user
-        final Time lastUpdate = foundOwner.UserUpdateMap.get(foundUser.id);
+        final Time lastUserUpdate = foundOwner.UserUpdateMap.get(foundUser.id);
         // go through all of the conversations stored in Model
-        contributions = searchContributions(lastUpdate, foundUser.id);
+        contributions = searchContributions(lastUserUpdate, foundUser.id);
         // if after going through everything and no contributions are found, add the note to the collection
         if(contributions.isEmpty()) {
           contributions.add("(No recent conversations)");
@@ -136,9 +136,9 @@ public final class View implements BasicView, SinglesView {
       // check if the specified conversation is in the current user's conversation interests
       if(foundOwner.ConvoSet.contains(foundConversation.id)) {
         // the last time that the current user requested a status update for the specified user
-        final Time lastUpdate = foundOwner.ConvoUpdateMap.get(foundConversation.id);
+        final Time lastConvoUpdate = foundOwner.ConvoUpdateMap.get(foundConversation.id);
         // go through the entire current conversation and count recent messages.
-        newMessages = countRecentMessages(lastUpdate, foundConversation.id);
+        newMessages = countRecentMessages(lastConvoUpdate, foundConversation.id);
       // finally, update the time that status update was last requested for the specified converation to now
       foundOwner.ConvoUpdateMap.put(foundConversation.id, Time.now());
       } else {
