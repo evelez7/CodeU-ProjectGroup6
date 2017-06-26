@@ -44,6 +44,11 @@ public final class View implements BasicView, SinglesView {
 
   private final Model model;
 
+  private Collection<String> contributions;
+  private Message currentMessage;
+  private boolean foundMessage;
+  private ConversationHeader convoPayloadId;
+
   public View(Model model) {
     this.model = model;
   }
@@ -156,24 +161,17 @@ public final class View implements BasicView, SinglesView {
     // return a collection of the titles of conversations that the user has created
     // or added messages to after the specified time.
 
-    Collection<String> contributions = new ArrayList<String>();
+    contributions = new ArrayList<String>();
     Collection<ConversationPayload> allConversations = all(model.conversationPayloadById());
 
     // go through every conversation
     for(ConversationPayload conversationPayload : allConversations) {
-      Message currentMessage = model.messageById().first(conversationPayload.firstMessage);
-      boolean foundMessage = false;
-      ConversationHeader convoPayloadId = model.conversationById().first(conversationPayload.id);
-      // go through every message
-      while(currentMessage != null && foundMessage == false) {
-        // check for a matching user UUID and a creation time after the last status update
-        if(lastUpdate.compareTo(currentMessage.creation) < 0 && currentMessage.author.equals(searchUser)) {
-          // add the conversation's title to the collection and break the loop for this conversation
-          contributions.add(convoPayloadId.title);
-          foundMessage = true;
-        }
-        currentMessage = model.messageById().first(currentMessage.next);
-      }
+      currentMessage = model.messageById().first(conversationPayload.firstMessage);
+      foundMessage = false;
+      convoPayloadId = model.conversationById().first(conversationPayload.id);
+
+      addToContributions(currentMessage, foundMessage, lastUpdate, searchUser);
+      
       // check if the current conversation wasn't added to the collection after the above loop
       // and if it matches the specified user
       if(!contributions.contains(convoPayloadId.title) && convoPayloadId.owner.equals(searchUser)) {
@@ -185,6 +183,19 @@ public final class View implements BasicView, SinglesView {
         }
     }
     return contributions;
+  }
+
+  private void addToContributions(Message newCurrentMessage, boolean newFoundMessage, Time lastUpdate, Uuid searchUser) {
+    // go through every message
+    while(currentMessage != null && foundMessage == false) {
+      // check for a matching user UUID and a creation time after the last status update
+      if(lastUpdate.compareTo(currentMessage.creation) < 0 && currentMessage.author.equals(searchUser)) {
+        // add the conversation's title to the collection and break the loop for this conversation
+        contributions.add(convoPayloadId.title);
+        foundMessage = true;
+      }
+      currentMessage = model.messageById().first(currentMessage.next);
+    }
   }
 
   private int countRecentMessages(Time lastUpdate, Uuid searchConversation) {
