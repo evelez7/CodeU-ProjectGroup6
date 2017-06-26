@@ -105,7 +105,7 @@ public final class View implements BasicView, SinglesView {
           contributions.add("(No recent conversations)");
         }
         // finally, update the time that status update was last requested for the specified user to now
-        foundOwner.UserUpdateMap.replace(foundUser.id, lastUserUpdate, Time.now());
+        foundOwner.UserUpdateMap.replace(foundUser.id, Time.now());
       } else {
         // if foundUser is not in the current user's interests, add the note to the collection
         contributions.add("ERROR: User not found in interests");
@@ -139,7 +139,7 @@ public final class View implements BasicView, SinglesView {
         // go through the entire current conversation and count recent messages.
         newMessages = countRecentMessages(lastConvoUpdate, foundConversation.id);
       // finally, update the time that status update was last requested for the specified converation to now
-      foundOwner.ConvoUpdateMap.replace(foundConversation.id, lastConvoUpdate, Time.now());
+      foundOwner.ConvoUpdateMap.replace(foundConversation.id, Time.now());
       } else {
         // return some negative value to specify that conversation is not in interests
         newMessages = -1;
