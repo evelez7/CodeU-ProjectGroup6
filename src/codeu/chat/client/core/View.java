@@ -138,6 +138,56 @@ final class View implements BasicView {
     return messages;
   }
 
+  @Override
+  public Collection<String> userStatusUpdate(String name, Uuid owner) {
+
+    final Collection<String> conversations = new ArrayList<>();
+
+    try (final Connection connection = source.connect()) {
+
+      Serializers.INTEGER.write(connection.out(), NetworkCode.USER_STATUS_UPDATE_REQUEST);
+      Serializers.STRING.write(connection.out(), name);
+      Uuid.SERIALIZER.write(connection.out(), owner);
+
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.USER_STATUS_UPDATE_RESPONSE) {
+        conversations.addAll(Serializers.collection(Serializers.STRING).read(connection.in()));
+      } else {
+        LOG.error("Response from server failed.");
+      }
+
+    } catch (Exception ex) {
+      System.out.println("ERROR: Exception during call on server. Check log for details.");
+      LOG.error(ex, "Exception during call on server.");
+    }
+
+    return conversations;
+  }
+
+  @Override
+  public int conversationStatusUpdate(String title, Uuid owner) {
+
+    int newMessages = 0;
+
+    try (final Connection connection = source.connect()) {
+
+      Serializers.INTEGER.write(connection.out(), NetworkCode.CONVERSATION_STATUS_UPDATE_REQUEST);
+      Serializers.STRING.write(connection.out(), title);
+      Uuid.SERIALIZER.write(connection.out(), owner);
+
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.CONVERSATION_STATUS_UPDATE_RESPONSE) {
+        newMessages = Serializers.INTEGER.read(connection.in());
+      } else {
+        LOG.error("Response from server failed.");
+      }
+
+    } catch (Exception ex) {
+      System.out.println("ERROR: Exception during call on server. Check log for details.");
+      LOG.error(ex, "Exception during call on server.");
+    }
+
+    return newMessages;
+  }
+
   public ServerInfo getInfo() {
     try (final Connection connection = this.source.connect()) {
       Serializers.INTEGER.write(connection.out(), NetworkCode.SERVER_INFO_REQUEST);
@@ -146,7 +196,7 @@ final class View implements BasicView {
         final Time startTime = Time.SERIALIZER.read(connection.in());
         return new ServerInfo(version, startTime);
       } else {
-	LOG.error("Response from server failed.");
+	       LOG.error("Response from server failed.");
       }
     } catch (Exception ex) {
       	System.out.println("ERROR: Exception during call on server. Check log for details.");

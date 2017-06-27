@@ -51,4 +51,44 @@ public interface BasicController {
   //  Whether conversations can have the same title is undefined.
   ConversationHeader newConversation(String title, Uuid owner);
 
+  // ADD USER INTEREST
+  //
+  // Adds a user to the interests of the user that is currently signed
+  // in. All parameters must be provided or else the server won't apply
+  // the change. An integer will be returned representing whether or not
+  // the change took place, with "0" meaning that the change occured
+  // and "-1" meaning that the change did not occur. "-2" will be returned
+  // if the specified user does not exist.
+  int addUserInterest(String name, Uuid owner);
+
+  // REMOVE USER INTEREST
+  //
+  // Removes a user from the interests of the user that is currently signed
+  // in. All parameters must be provided or else the server won't apply
+  // the change. An integer will be returned representing whether or not
+  // the change took place, with "0" meaning that the change occured
+  // and "-1" meaning that the change did not occur. "-2" will be returned
+  // if the specified user does not exist.
+  int removeUserInterest(String name, Uuid owner);
+
+  // ADD CONVERSATION INTEREST
+  //
+  // Adds a conversation to the interests of the user that is currently signed
+  // in. All parameters must be provided or else the server won't apply
+  // the change. An integer will be returned representing whether or not
+  // the change took place, with "0" meaning that the change occured
+  // and "-1" meaning that the change did not occur. "-2" will be returned
+  // if the specified conversation does not exist.
+  int addConversationInterest(String title, Uuid owner);
+
+  // REMOVE CONVERSATION INTEREST
+  //
+  // Removes a conversation from the interests of the user that is currently signed
+  // in. All parameters must be provided or else the server won't apply
+  // the change. An integer will be returned representing whether or not
+  // the change took place, with "0" meaning that the change occured
+  // and "-1" meaning that the change did not occur. "-2" will be returned
+  // if the specified conversation does not exist.
+  int removeConversationInterest(String title, Uuid owner);
+
 }
