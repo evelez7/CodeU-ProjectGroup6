@@ -44,6 +44,11 @@ public final class View implements BasicView, SinglesView {
 
   private final Model model;
 
+  private Collection<String> contributions;
+  private Message currentMessage;
+  private boolean foundMessage;
+  private ConversationHeader convoPayloadId;
+
   public View(Model model) {
     this.model = model;
   }
@@ -77,6 +82,142 @@ public final class View implements BasicView, SinglesView {
 
   @Override
   public Message findMessage(Uuid id) { return model.messageById().first(id); }
+
+  @Override
+  public Collection<String> userStatusUpdate(String name, Uuid owner) {
+
+    // Given a specified user's name and the UUID of the user that wants to
+    // request a status update on them, return a collection of conversation
+    // titles of conversations that the specified user has either added messages
+    // to or created since the last time the user requesting a status update has
+    // requested a status update on the specified user.
+
+    Collection<String> contributions = new ArrayList<String>();
+
+    final User foundOwner = model.userById().first(owner);
+    final User foundUser = model.userByText().first(name);
+
+    // check if the specified user can be found in Model
+    if(foundUser != null) {
+      // check if the specified user is in the current user's user interests
+      if(foundOwner.UserSet.contains(foundUser.id)) {
+        // the last time that the current user requested a status update for the specified user
+        final Time lastUserUpdate = foundOwner.UserUpdateMap.get(foundUser.id);
+        // go through all of the conversations stored in Model
+        contributions = searchContributions(lastUserUpdate, foundUser.id);
+        // if after going through everything and no contributions are found, add the note to the collection
+        if(contributions.isEmpty()) {
+          contributions.add("(No recent conversations)");
+        }
+        // finally, update the time that status update was last requested for the specified user to now
+        foundOwner.UserUpdateMap.put(foundUser.id, Time.now());
+      } else {
+        // if foundUser is not in the current user's interests, add the note to the collection
+      }
+    }
+    // if foundUser is null, return completely empty collection
+    return contributions;
+  }
+
+  @Override
+  public int conversationStatusUpdate(String title, Uuid owner) {
+
+    // Given a specified conversation's title and the UUID of the user that wants
+    // to request a status update on it, return a count of messages that where
+    // added to the specified conversation since the last time that the user
+    // requesting a status update has requested a status update on the
+    // specified conversation.
+
+    int newMessages = 0;
+
+    final User foundOwner = model.userById().first(owner);
+    final ConversationHeader foundConversation = model.conversationByText().first(title);
+
+    // check if the specified conversation can be found in Model
+    if(foundConversation != null) {
+      // check if the specified conversation is in the current user's conversation interests
+      if(foundOwner.ConvoSet.contains(foundConversation.id)) {
+        // the last time that the current user requested a status update for the specified user
+        final Time lastConvoUpdate = foundOwner.ConvoUpdateMap.get(foundConversation.id);
+        // go through the entire current conversation and count recent messages.
+        newMessages = countRecentMessages(lastConvoUpdate, foundConversation.id);
+      // finally, update the time that status update was last requested for the specified converation to now
+      foundOwner.ConvoUpdateMap.put(foundConversation.id, Time.now());
+      } else {
+        // return some negative value to specify that conversation is not in interests
+        newMessages = -1;
+      }
+    } else {
+      // return some negative value to specify that conversation doesn't exist
+      newMessages = -2;
+    }
+    return newMessages;
+  }
+
+  private Collection<String> searchContributions(Time lastUpdate, Uuid searchUser) {
+
+    // Given a time value for the last time that a check for contributions was
+    // requested and the UUID of the user to search for recent contributions from,
+    // return a collection of the titles of conversations that the user has created
+    // or added messages to after the specified time.
+
+    contributions = new ArrayList<String>();
+    Collection<ConversationPayload> allConversations = all(model.conversationPayloadById());
+
+    // go through every conversation
+    for(ConversationPayload conversationPayload : allConversations) {
+      currentMessage = model.messageById().first(conversationPayload.firstMessage);
+      foundMessage = false;
+      convoPayloadId = model.conversationById().first(conversationPayload.id);
+
+      addToContributions(currentMessage, foundMessage, lastUpdate, searchUser);
+      
+      // check if the current conversation wasn't added to the collection after the above loop
+      // and if it matches the specified user
+      if(!contributions.contains(convoPayloadId.title) && convoPayloadId.owner.equals(searchUser)) {
+          // check to see if the conversation was created after the last status update
+          if(lastUpdate.compareTo(convoPayloadId.creation) < 0) {
+            // add the conversation to the collection and mark it as recently created
+            contributions.add(convoPayloadId.title + " (Creator)");
+          }
+        }
+    }
+    return contributions;
+  }
+
+  private void addToContributions(Message newCurrentMessage, boolean newFoundMessage, Time lastUpdate, Uuid searchUser) {
+    // go through every message
+    while(currentMessage != null && foundMessage == false) {
+      // check for a matching user UUID and a creation time after the last status update
+      if(lastUpdate.compareTo(currentMessage.creation) < 0 && currentMessage.author.equals(searchUser)) {
+        // add the conversation's title to the collection and break the loop for this conversation
+        contributions.add(convoPayloadId.title);
+        foundMessage = true;
+      }
+      currentMessage = model.messageById().first(currentMessage.next);
+    }
+  }
+
+  private int countRecentMessages(Time lastUpdate, Uuid searchConversation) {
+
+    // Given a time value for the last time that a check for recent messages was
+    // requested and the UUID of the conversation to search through, return a count
+    // of messages in the specified conversation that were created after the
+    // specified time.
+
+    int newMessages = 0;
+
+    final ConversationPayload searchConversationPayload = model.conversationPayloadById().first(searchConversation);
+    Message currentMessage = model.messageById().first(searchConversationPayload.firstMessage);
+
+    while(currentMessage != null) {
+      if(lastUpdate.compareTo(currentMessage.creation) < 0) {
+        newMessages++;
+      }
+      currentMessage = model.messageById().first(currentMessage.next);
+    }
+    return newMessages;
+  }
 
   private static <S,T> Collection<T> all(StoreAccessor<S,T> store) {
 

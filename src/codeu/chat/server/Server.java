@@ -61,6 +61,7 @@ public final class Server {
   private static final int RELAY_REFRESH_MS = 5000;  // 5 seconds
   private static final int SAVE_SERVER_MS = 30000;  // 30 seconds
 
+
   private static final ServerInfo info = new ServerInfo();
 
   private final Timeline timeline = new Timeline();
@@ -216,6 +217,96 @@ public final class Server {
 
         Serializers.INTEGER.write(out, NetworkCode.GET_MESSAGES_BY_ID_RESPONSE);
         Serializers.collection(Message.SERIALIZER).write(out, messages);
+      }
+    });
+
+    // Add User Interest - A client wants to add a user to their interests.
+    this.commands.put (NetworkCode.NEW_USER_INTEREST_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String name = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        final int interestResponse = controller.addUserInterest(name, owner);
+
+        Serializers.INTEGER.write(out, NetworkCode.NEW_USER_INTEREST_RESPONSE);
+        Serializers.INTEGER.write(out, interestResponse);
+      }
+    });
+
+    // Remove User Interest - A client wants to remove a user from their interests.
+    this.commands.put (NetworkCode.REMOVE_USER_INTEREST_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String name = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        final int interestResponse = controller.removeUserInterest(name, owner);
+
+        Serializers.INTEGER.write (out, NetworkCode.REMOVE_USER_INTEREST_RESPONSE);
+        Serializers.INTEGER.write(out, interestResponse);
+      }
+    });
+
+    // Add Conversation Interest - A client wants to add a conversation to their interests.
+    this.commands.put (NetworkCode.NEW_CONVERSATION_INTEREST_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String title = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        final int interestResponse = controller.addConversationInterest(title, owner);
+
+        Serializers.INTEGER.write (out, NetworkCode.NEW_CONVERSATION_INTEREST_RESPONSE);
+        Serializers.INTEGER.write(out, interestResponse);
+      }
+    });
+
+    // Remove Conversation Interest - A client wants to remove a conversation from their interests.
+    this.commands.put (NetworkCode.REMOVE_CONVERSATION_INTEREST_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String title = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        final int interestResponse = controller.removeConversationInterest(title, owner);
+
+        Serializers.INTEGER.write (out, NetworkCode.REMOVE_CONVERSATION_INTEREST_RESPONSE);
+        Serializers.INTEGER.write(out, interestResponse);
+      }
+    });
+
+    // User Status Update - A client wants to get a status update on their user interest.
+    this.commands.put (NetworkCode.USER_STATUS_UPDATE_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String name = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        final Collection<String> conversations = view.userStatusUpdate(name, owner);
+
+        Serializers.INTEGER.write (out, NetworkCode.USER_STATUS_UPDATE_RESPONSE);
+        Serializers.collection(Serializers.STRING).write(out, conversations);
+      }
+    });
+
+    // Conversation Status Update - A client wants to get a status update on their conversation interest.
+    this.commands.put (NetworkCode.CONVERSATION_STATUS_UPDATE_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String title = Serializers.STRING.read(in);
+        final Uuid owner = Uuid.SERIALIZER.read(in);
+
+        final int updateResponse = view.conversationStatusUpdate(title, owner);
+
+        Serializers.INTEGER.write (out, NetworkCode.CONVERSATION_STATUS_UPDATE_RESPONSE);
+        Serializers.INTEGER.write (out, updateResponse);
       }
     });
 

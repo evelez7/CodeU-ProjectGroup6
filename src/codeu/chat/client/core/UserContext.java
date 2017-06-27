@@ -53,4 +53,61 @@ public final class UserContext {
 
     return all;
   }
+
+  public enum response {
+    NO_ERROR, ERROR_ALREADY_CURRENT_SETTING, ERROR_NOT_FOUND
+  }
+
+  public response addUserInterest(String name) {
+    switch(controller.addUserInterest(name, user.id)) {
+      default:
+        return response.ERROR_NOT_FOUND;
+      case 0:
+        return response.NO_ERROR;
+      case -1:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+    }
+  }
+
+  public response removeUserInterest(String name) {
+    switch(controller.removeUserInterest(name, user.id)) {
+      default:
+        return response.ERROR_NOT_FOUND;
+      case 0:
+        return response.NO_ERROR;
+      case -1:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+    }
+  }
+
+  public response addConversationInterest(String title) {
+    switch(controller.addConversationInterest(title, user.id)) {
+      default:
+        return response.ERROR_NOT_FOUND;
+      case 0:
+        return response.NO_ERROR;
+      case -1:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+    }
+  }
+
+  public response removeConversationInterest(String title) {
+    switch(controller.removeConversationInterest(title, user.id)) {
+      default:
+        return response.ERROR_NOT_FOUND;
+      case 0:
+        return response.NO_ERROR;
+      case -1:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+    }
+  }
+
+  public Collection<String> userStatusUpdate(String name) {
+    return view.userStatusUpdate(name, user.id);
+  }
+
+  public int conversationStatusUpdate(String title) {
+    return view.conversationStatusUpdate(title, user.id);
+  }
+
 }

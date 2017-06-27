@@ -14,6 +14,7 @@
 
 package codeu.chat.client.commandline;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -243,6 +244,18 @@ public final class Chat {
         System.out.println("    Add a new conversation with the given title and join it as the current user.");
         System.out.println("  c-join <title>");
         System.out.println("    Join the conversation as the current user.");
+        System.out.println("  i-u-add <name>");
+        System.out.println("    Add a user to the current user's interests.");
+        System.out.println("  i-u-remove <name>");
+        System.out.println("    Remove a user from the current user's interests.");
+        System.out.println("  i-c-add <title>");
+        System.out.println("    Add a conversation to the current user's interests.");
+        System.out.println("  i-c-remove <title>");
+        System.out.println("    Remove a conversation from the current user's interests.");
+        System.out.println("  status-update-u <name>");
+        System.out.println("    Request status update on the specified user interest.");
+        System.out.println("  status-update-c <title>");
+        System.out.println("    Request status update on the specified conversation interest.");
         System.out.println("  info");
         System.out.println("    Display all info for the current user");
         System.out.println("  back");
@@ -325,6 +338,177 @@ public final class Chat {
           }
         }
         return null;
+      }
+    });
+
+    // I-C-ADD (add conversation interest)
+    //
+    // Add a command that will add a conversation to the current user's
+    // interests when the user enters "i-c-add" while on the user panel
+    //
+    panel.register("i-c-add", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          if (token.length() > 0) {
+            switch(user.addConversationInterest(token)) {
+              case NO_ERROR:
+                System.out.println("Conversation \"" + token + "\" added to interests");
+                break;
+              case ERROR_ALREADY_CURRENT_SETTING:
+                System.out.println("ERROR: Conversation \"" + token + "\" already in interests");
+                break;
+              case ERROR_NOT_FOUND:
+                System.out.format("ERROR: No conversation with name '%s'\n", token);
+                break;
+            }
+          } else {
+            System.out.println("ERROR: Missing <title>");
+          }
+        }
+      }
+    });
+
+    // I-C-REMOVE (remove conversation interest)
+    //
+    // Add a command that will remove a conversation to the current user's
+    // interests when the user enters "i-c-remove" while on the user panel
+    //
+    panel.register("i-c-remove", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          if (token.length() > 0) {
+            switch(user.removeConversationInterest(token)) {
+              case NO_ERROR:
+                System.out.println("Conversation \"" + token + "\" removed from interests");
+                break;
+              case ERROR_ALREADY_CURRENT_SETTING:
+                System.out.println("ERROR: Conversation \"" + token + "\" not in interests");
+                break;
+              case ERROR_NOT_FOUND:
+                System.out.format("ERROR: No conversation with name '%s'\n", token);
+                break;
+            }
+          } else {
+            System.out.println("ERROR: Missing <title>");
+          }
+        }
+      }
+    });
+
+    // STATUS-UPDATE-C (conversation status update)
+    //
+    // Add a command that will check for new messages in one of the user's conversation
+    // interests when the user enters "status-update-c" while on the user panel
+    //
+    panel.register("status-update-c", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          if (token.length() > 0) {
+            final int newMessages = user.conversationStatusUpdate(token);
+            switch (newMessages) {
+              default:
+                System.out.println(newMessages + " new messages in conversation \"" + token + "\"");
+                break;
+              case 0:
+                System.out.println("No new messages in conversation \"" + token +"\"");
+                break;
+              case -1:
+                System.out.println("ERROR: Conversation \"" + token + "\" not in interests");
+                break;
+              case -2:
+                System.out.format("ERROR: No conversation with name '%s'\n", token);
+                break;
+              }
+          } else {
+            System.out.println("ERROR: Missing <title>");
+          }
+        }
+      }
+    });
+
+    // I-U-ADD (add user interest)
+    //
+    // Add a command that will add a user to the current user's
+    // interests when the user enters "i-u-add" while on the user panel
+    //
+    panel.register("i-u-add", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          if (token.length() > 0) {
+            switch(user.addUserInterest(token)) {
+              case NO_ERROR:
+                System.out.println("User \"" + token + "\" added to interests");
+                break;
+              case ERROR_ALREADY_CURRENT_SETTING:
+                System.out.println("ERROR: User \"" + token + "\" already in interests");
+                break;
+              case ERROR_NOT_FOUND:
+                System.out.format("ERROR: No user with name '%s'\n", token);
+                break;
+              }
+          } else {
+            System.out.println("ERROR: Missing <username>");
+          }
+        }
+      }
+    });
+
+    // I-U-REMOVE (Remove user interest)
+    //
+    // Add a command that will remove a user to the current user's
+    // interests when the user enters "i-u-remove" while on the user panel
+    //
+    panel.register("i-u-remove", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          if (token.length() > 0) {
+            switch(user.removeUserInterest(token)) {
+              case NO_ERROR:
+                System.out.println("User \"" + token + "\" removed from interests");
+                break;
+              case ERROR_ALREADY_CURRENT_SETTING:
+                System.out.println("ERROR: User \"" + token + "\" not in interests");
+                break;
+              case ERROR_NOT_FOUND:
+                System.out.format("ERROR: No user with name '%s'\n", token);
+                break;
+            }
+          } else {
+            System.out.println("ERROR: Missing <username>");
+          }
+        }
+      }
+    });
+
+    // STATUS-UPDATE-U (user status update)
+    //
+    // Add a command that will add check new conversations created by and
+    // contributed to by one of the current user's user interests when the
+    // user enters "status-update-u" while on the user panel
+    //
+    panel.register("status-update-u", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          if (token.length() > 0) {
+            final Collection<String> contributions = user.userStatusUpdate(token);
+            if (contributions.isEmpty()) {
+              System.out.format("ERROR: No user with name '%s'\n", token);
+            } else {
+              System.out.println("User \"" + token + "\" has contributed to:");
+              for(final String contribution : contributions) {
+                System.out.println(contribution);
+              }
+            }
+          } else {
+            System.out.println("ERROR: Missing <username>");
+          }
+        }
       }
     });
 
