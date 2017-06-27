@@ -15,6 +15,11 @@
 
 package codeu.chat.server;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -24,6 +29,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.LinkedList;
+import java.util.ArrayList;
 
 import codeu.chat.common.ConversationHeader;
 import codeu.chat.common.ConversationPayload;
@@ -41,6 +48,8 @@ import codeu.chat.util.Timeline;
 import codeu.chat.util.Uuid;
 import codeu.chat.util.connections.Connection;
 
+import com.google.gson.Gson;
+
 public final class Server {
 
   private interface Command {
@@ -50,15 +59,32 @@ public final class Server {
   private static final Logger.Log LOG = Logger.newLog(Server.class);
 
   private static final int RELAY_REFRESH_MS = 5000;  // 5 seconds
+  private static final int SAVE_SERVER_MS = 30000;  // 30 seconds
+
 
   private static final ServerInfo info = new ServerInfo();
 
   private final Timeline timeline = new Timeline();
 
+  private final Gson gson = new Gson();
+
+  private final File dataStorage = new File("src\\codeu\\chat\\server\\JsonData.txt");
+
+  private FileWriter fileWriter = null;
+  private BufferedWriter bufferedWriter = null;
+  private FileReader fileReader = null;
+  private BufferedReader bufferedReader = null;
+
+  private LinkedList<String> dataList = new LinkedList<>();
+
   private final Map<Integer, Command> commands = new HashMap<>();
 
   private final Uuid id;
   private final Secret secret;
+
+  private static final String USER_PREFIX = "User;";
+  private static final String MESSAGE_PREFIX = "Message;";
+  private static final String CONVO_PREFIX = "Convo;";
 
   private final Model model = new Model();
   private final View view = new View(model);
@@ -83,7 +109,16 @@ public final class Server {
         final Uuid conversation = Uuid.SERIALIZER.read(in);
         final String content = Serializers.STRING.read(in);
 
+        // Grab the conversation ID that corresponds to the message
+        final String convoID = gson.toJson(conversation);
+
         final Message message = controller.newMessage(author, conversation, content);
+
+        // Append an "identifier" before the object itself so that the reader can
+        // split, identify, and create the proper object later
+        // For a message, it will also append the corresponding conversation ID
+        final String stringMessage = MESSAGE_PREFIX + convoID + ";" + gson.toJson(message);
+        dataList.add(stringMessage);
 
         Serializers.INTEGER.write(out, NetworkCode.NEW_MESSAGE_RESPONSE);
         Serializers.nullable(Message.SERIALIZER).write(out, message);
@@ -103,6 +138,11 @@ public final class Server {
         final String name = Serializers.STRING.read(in);
         final User user = controller.newUser(name);
 
+        // Append an "identifier" before the object itself so that the reader can
+        // split, identify, and create the proper object later
+        final String stringUser = USER_PREFIX + gson.toJson(user);
+        dataList.add(stringUser);
+
         Serializers.INTEGER.write(out, NetworkCode.NEW_USER_RESPONSE);
         Serializers.nullable(User.SERIALIZER).write(out, user);
       }
@@ -116,6 +156,11 @@ public final class Server {
         final String title = Serializers.STRING.read(in);
         final Uuid owner = Uuid.SERIALIZER.read(in);
         final ConversationHeader conversation = controller.newConversation(title, owner);
+
+        // Append an "identifier" before the object itself so that the reader can
+        // split, identify, and create the proper object later
+        final String stringConvo = CONVO_PREFIX + gson.toJson(conversation);
+        dataList.add(stringConvo);
 
         Serializers.INTEGER.write(out, NetworkCode.NEW_CONVERSATION_RESPONSE);
         Serializers.nullable(ConversationHeader.SERIALIZER).write(out, conversation);
@@ -296,7 +341,135 @@ public final class Server {
         timeline.scheduleIn(RELAY_REFRESH_MS, this);
       }
     });
+  }
 
+  // This method will write the contents of dataList to a txt file
+  public void saveServer() {
+    timeline.scheduleIn(SAVE_SERVER_MS, new Runnable() {
+      @Override
+      public void run() {
+        try {
+
+          // Check if the data storage file exists, and if not, create it
+          if (!dataStorage.exists()) {
+            dataStorage.createNewFile();
+            LOG.info("Created data storage file.");
+          }
+
+          fileWriter = new FileWriter(dataStorage, true);
+          bufferedWriter = new BufferedWriter(fileWriter);
+
+          LOG.info("Writing sever content.");
+
+          for (int i = 0; i < dataList.size(); i++) {
+            // Write JSON object with identifier: <identifier>:<JSON Object>
+            bufferedWriter.write(dataList.get(i));
+            bufferedWriter.newLine();
+          }
+
+        } catch (IOException ex) {
+          LOG.error(ex, "There was an exception while writing server content.");
+        } finally {
+          closeWriters();
+        }
+
+        // Clear Linked List in order to avoid rewrites
+        while (!dataList.isEmpty()) {
+          dataList.removeFirst();
+        }
+
+        timeline.scheduleIn(SAVE_SERVER_MS, this);
+      }
+    });
+  }
+
+  // This method will read the JSON from the txt file and restore the server
+  public void restoreServer() {
+    timeline.scheduleNow(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          String currentLine;
+
+          LOG.info("Restoring server content.");
+
+          if (!dataStorage.exists()) {
+            LOG.info("There is no storage file.");
+          }
+
+          fileReader = new FileReader(dataStorage);
+          bufferedReader = new BufferedReader(fileReader);
+
+          while ((currentLine = bufferedReader.readLine()) != null) {
+            // Pass line into method that will restore the JSON objects
+            restoreJsonObjects(currentLine);
+          }
+
+          LOG.info("The server has been restored.");
+        } catch (IOException ex) {
+          LOG.error(ex, "There was an exception while restoring server content.");
+        } finally {
+          closeReaders();
+        }
+      }
+    });
+  }
+
+  // Gets JSON objects and converts them back to original type
+  private void restoreJsonObjects(String lineBeingRead) {
+    // lineElements[0] will contain the proper identifier (Convo, Message, User)
+    // Then, according to the identifier, the proper object will be restored
+    String[] lineElements = lineBeingRead.split(";");
+
+    switch (lineElements[0]) {
+      // Each case will feed the object directly into model except Messages
+      case "User":
+        User loadUser = gson.fromJson(lineElements[1], User.class);
+        model.add(loadUser);
+        break;
+      case "Convo":
+        ConversationHeader loadConvo = gson.fromJson(lineElements[1], ConversationHeader.class);
+        model.add(loadConvo);
+        break;
+      case "Message":
+        // Message object cannot be directly fed into model
+        // Instead, each value, and the original conversation value, is
+        // passed into the Controller method
+        Uuid messageConvo = gson.fromJson(lineElements[1], Uuid.class);
+        Message loadMessage = gson.fromJson(lineElements[2], Message.class);
+        controller.newMessage(loadMessage.id, loadMessage.author, messageConvo, loadMessage.content, loadMessage.creation);
+        break;
+      default:
+        break;
+    }
+  }
+
+  private void closeReaders() {
+    try {
+      if (bufferedReader != null) {
+        bufferedReader.close();
+      }
+
+      if (fileReader != null) {
+        fileReader.close();
+      }
+    } catch (IOException ex) {
+      LOG.error(ex, "There was an exception while closing readers.");
+    }
+  }
+
+  private void closeWriters() {
+    try {
+      if (bufferedWriter != null) {
+        bufferedWriter.close();
+      }
+
+      if (fileReader != null) {
+        fileWriter.close();
+      }
+    } catch (IOException ex) {
+      LOG.error(ex, "There was an exception while closing writers.");
+    }
   }
 
   public void handleConnection(final Connection connection) {
