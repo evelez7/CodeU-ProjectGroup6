@@ -188,6 +188,7 @@ final class View implements BasicView {
     return newMessages;
   }
 
+  @Override
   public ServerInfo getInfo() {
     try (final Connection connection = this.source.connect()) {
       Serializers.INTEGER.write(connection.out(), NetworkCode.SERVER_INFO_REQUEST);

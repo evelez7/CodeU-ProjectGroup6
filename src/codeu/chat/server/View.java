@@ -32,6 +32,7 @@ import codeu.chat.common.ConversationHeader;
 import codeu.chat.common.ConversationPayload;
 import codeu.chat.common.Message;
 import codeu.chat.common.SinglesView;
+import codeu.chat.common.ServerInfo;
 import codeu.chat.common.User;
 import codeu.chat.util.Logger;
 import codeu.chat.util.Time;
@@ -41,6 +42,7 @@ import codeu.chat.util.store.StoreAccessor;
 public final class View implements BasicView, SinglesView {
 
   private final static Logger.Log LOG = Logger.newLog(View.class);
+  private final static ServerInfo info = new ServerInfo();
 
   private final Model model;
 
@@ -82,6 +84,11 @@ public final class View implements BasicView, SinglesView {
 
   @Override
   public Message findMessage(Uuid id) { return model.messageById().first(id); }
+
+  @Override
+  public ServerInfo getInfo() {
+    return info;
+  }
 
   @Override
   public Collection<String> userStatusUpdate(String name, Uuid owner) {
@@ -171,7 +178,7 @@ public final class View implements BasicView, SinglesView {
       convoPayloadId = model.conversationById().first(conversationPayload.id);
 
       addToContributions(currentMessage, foundMessage, lastUpdate, searchUser);
-      
+
       // check if the current conversation wasn't added to the collection after the above loop
       // and if it matches the specified user
       if(!contributions.contains(convoPayloadId.title) && convoPayloadId.owner.equals(searchUser)) {
