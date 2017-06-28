@@ -55,7 +55,7 @@ public interface BasicView {
 
   // GET SERVER INFO
   //
-  //   Return information about the server (uptime and server version)
+  //   Return information about the server (uptime and server version).
   ServerInfo getInfo();
 
   // USER STATUS UPDATE
