@@ -49,9 +49,7 @@ public final class Context {
     return users;
   }
 
-  // view is typecasted in order to access getInfo()
   public ServerInfo getInfo() {
-    View infoView = (View)view;
-    return infoView.getInfo();
+    return view.getInfo();
   }
 }
