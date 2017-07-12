@@ -63,7 +63,7 @@ public final class ConversationHeader {
       return 3;
     }
     else {
-      throw new IOException("Please enter a valid user category");
+      throw new IOException("Please enter a valid user category.");
     }
   } 
 
@@ -79,8 +79,7 @@ public final class ConversationHeader {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-    //this.user_category.put(owner, 3);
-    //System.out.println(this.user_category.get(owner));
+    this.user_category.put(owner, 3);
   }
 
     
