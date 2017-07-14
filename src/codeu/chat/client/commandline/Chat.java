@@ -28,6 +28,7 @@ import codeu.chat.client.core.Context;
 import codeu.chat.client.core.ConversationContext;
 import codeu.chat.client.core.MessageContext;
 import codeu.chat.client.core.UserContext;
+import codeu.chat.common.ConversationHeader;
 
 public final class Chat {
 
@@ -548,6 +549,8 @@ public final class Chat {
         System.out.println("    List all messages in the current conversation.");
         System.out.println("  m-add <message>");
         System.out.println("    Add a new message to the current conversation as the current user.");
+        System.out.println("  a-change <user> <level>");
+        System.out.println("    Change the permission level of the specified user.");
         System.out.println("  info");
         System.out.println("    Display all info about the current conversation.");
         System.out.println("  back");
@@ -596,6 +599,38 @@ public final class Chat {
             System.out.println("ERROR: Messages must contain text");
           }
         }
+      }
+    });
+
+    // A-CHANGE (change user permission level)
+    //
+    // Change the permission level of the specified user in the current
+    // conversation when the user enters "a-change" while on the conversation
+    // panel.
+    //
+    panel.register("a-change", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        String name = args.get(0);
+        String level = args.get(1);
+
+        // check that there are two arguments
+        if (args.size() == 2) {
+          if (name.length > 0 && level.length > 0) {
+            setPermissionLevel(name, level);
+          } else {
+            System.out.println("ERROR: Missing username or permission level.");
+          }
+        } else {
+          System.out.println("ERROR: Invalid number of arguments.");
+        }
+      }
+
+      // switch statement will take a reference to a method in controller as
+      // its condition and responses as cases, similar to the design of
+      // commands i-u-add and i-c-add
+      private void setPermissionLevel(String name, String level) {
+        switch ()
       }
     });
 
