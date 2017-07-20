@@ -88,4 +88,19 @@ public final class ConversationContext {
     final Iterator<Message> messages = view.getMessages(Arrays.asList(id)).iterator();
     return messages.hasNext() ? new MessageContext(messages.next(), view) : null;
   }
+
+  public enum response {
+    NO_ERROR, ERROR_ALREADY_CURRENT_SETTING, ERROR_NOT_FOUND
+  }
+
+  public response changePermissionLevel(String name, int permissionLevel) {
+    switch (controller.changePermissionLevel(name, conversation.title, permissionLevel)) {
+      case 0:
+        return response.ERROR_NOT_FOUND;
+      case -1:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+      default:
+        return response.ERROR_NOT_FOUND;
+    }
+  }
 }

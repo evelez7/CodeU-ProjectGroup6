@@ -612,12 +612,14 @@ public final class Chat {
       @Override
       public void invoke(List<String> args) {
         String name = args.get(0);
-        String level = args.get(1);
+        String stringLevel = args.get(1);
 
         // check that there are two arguments
         if (args.size() == 2) {
-          if (name.length > 0 && level.length > 0) {
-            setPermissionLevel(name, level);
+          if (name.length() > 0 && stringLevel.length() > 0) {
+            // convert to int after verifying argument was not empty
+            int permissionLevel = Integer.parseInt(stringLevel);
+            setPermissionLevel(name, permissionLevel);
           } else {
             System.out.println("ERROR: Missing username or permission level.");
           }
@@ -626,11 +628,22 @@ public final class Chat {
         }
       }
 
-      // switch statement will take a reference to a method in controller as
-      // its condition and responses as cases, similar to the design of
-      // commands i-u-add and i-c-add
-      private void setPermissionLevel(String name, String level) {
-        switch ()
+      // passes arguments to conversation context method.
+      private void setPermissionLevel(String name, int permissionLevel) {
+        switch (conversation.changePermissionLevel(name, permissionLevel)) {
+          case NO_ERROR:
+            System.out.format("Permission level of '%s' changed to '%s'.", name, permissionLevel);
+            break;
+          case ERROR_NOT_FOUND:
+            System.out.format("ERROR: User '%s' is not present in this conversation.", name);
+            break;
+          case ERROR_ALREADY_CURRENT_SETTING:
+            System.out.format("ERROR: User '%s' is already at permission level '%s'.", name, permissionLevel);
+            break;
+          default:
+            System.out.println("ERROR: No proper response returned.");
+            break;
+        }
       }
     });
 

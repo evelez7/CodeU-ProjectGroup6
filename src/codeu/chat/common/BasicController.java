@@ -91,4 +91,8 @@ public interface BasicController {
   // if the specified conversation does not exist.
   int removeConversationInterest(String title, Uuid owner);
 
+  // CHANGE PERMISSION LEVEL
+  //
+  // Filler comment
+  public int changePermissionLevel(String name, String title, int permissionLevel);
 }
