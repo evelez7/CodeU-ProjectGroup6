@@ -28,6 +28,7 @@ import codeu.chat.client.core.Context;
 import codeu.chat.client.core.ConversationContext;
 import codeu.chat.client.core.MessageContext;
 import codeu.chat.client.core.UserContext;
+import codeu.chat.common.ConversationHeader;
 
 public final class Chat {
 
@@ -548,6 +549,8 @@ public final class Chat {
         System.out.println("    List all messages in the current conversation.");
         System.out.println("  m-add <message>");
         System.out.println("    Add a new message to the current conversation as the current user.");
+        System.out.println("  a-change <user> <level>");
+        System.out.println("    Change the permission level of the specified user.");
         System.out.println("  info");
         System.out.println("    Display all info about the current conversation.");
         System.out.println("  back");
@@ -595,6 +598,54 @@ public final class Chat {
           } else {
             System.out.println("ERROR: Messages must contain text");
           }
+        }
+      }
+    });
+
+    // A-CHANGE (change user permission level)
+    //
+    // Change the permission level of the specified user in the current
+    // conversation when the user enters "a-change" while on the conversation
+    // panel.
+    //
+    panel.register("a-change", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+
+        // check that there are two arguments
+        if (args.size() == 2) {
+
+          String name = args.get(0);
+          String stringLevel = args.get(1);
+
+          if (name.length() > 0 && stringLevel.length() > 0) {
+
+            // convert to int after verifying argument was not empty
+            int permissionLevel = Integer.parseInt(stringLevel);
+            setPermissionLevel(name, permissionLevel);
+          } else {
+            System.out.println("ERROR: Missing username or permission level.");
+          }
+        } else {
+          System.out.println("ERROR: Invalid number of arguments.");
+        }
+      }
+
+      // passes arguments to conversation context method.
+      private void setPermissionLevel(String name, int permissionLevel) {
+        switch (conversation.changePermissionLevel(name, permissionLevel)) {
+          case NO_ERROR:
+            System.out.format("Permission level of '%s' changed to '%s'.\n", name, permissionLevel);
+            break;
+          case ERROR_NOT_FOUND:
+            System.out.format("ERROR: User '%s' is not present in this conversation.\n", name);
+            break;
+          case ERROR_ALREADY_CURRENT_SETTING:
+            System.out.format("ERROR: User '%s' is already at permission level '%s'.\n", name, permissionLevel);
+            break;
+          default:
+            System.out.println("ERROR: No proper response returned.");
+            break;
         }
       }
     });

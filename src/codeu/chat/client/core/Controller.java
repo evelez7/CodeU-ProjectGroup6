@@ -213,4 +213,29 @@ final class Controller implements BasicController {
     return response;
   }
 
+  @Override
+  public int changePermissionLevel(String name, String title, int permissionLevel) {
+
+    int response = 0;
+
+    try (final Connection connection = source.connect()) {
+
+      Serializers.INTEGER.write(connection.out(), NetworkCode.CHANGE_USER_PERMISSION_LEVEL_REQUEST);
+      Serializers.STRING.write(connection.out(), name);
+      Serializers.INTEGER.write(connection.out(), permissionLevel);
+      Serializers.STRING.write(connection.out(), title);
+
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.CHANGE_USER_PERMISSION_LEVEL_RESPONSE) {
+        response = Serializers.INTEGER.read(connection.in());
+      } else {
+        LOG.error("Response from server failed.");
+      }
+    } catch (Exception ex) {
+      System.out.println("ERROR: Exception during call  on server. Check log for details.");
+      LOG.error(ex, "Exception during call on server.");
+    }
+
+    return response;
+  }
+
 }
