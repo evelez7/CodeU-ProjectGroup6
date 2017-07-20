@@ -611,12 +611,15 @@ public final class Chat {
     panel.register("a-change", new Panel.Command() {
       @Override
       public void invoke(List<String> args) {
-        String name = args.get(0);
-        String stringLevel = args.get(1);
 
         // check that there are two arguments
         if (args.size() == 2) {
+
+          String name = args.get(0);
+          String stringLevel = args.get(1);
+
           if (name.length() > 0 && stringLevel.length() > 0) {
+
             // convert to int after verifying argument was not empty
             int permissionLevel = Integer.parseInt(stringLevel);
             setPermissionLevel(name, permissionLevel);
@@ -632,13 +635,13 @@ public final class Chat {
       private void setPermissionLevel(String name, int permissionLevel) {
         switch (conversation.changePermissionLevel(name, permissionLevel)) {
           case NO_ERROR:
-            System.out.format("Permission level of '%s' changed to '%s'.", name, permissionLevel);
+            System.out.format("Permission level of '%s' changed to '%s'.\n", name, permissionLevel);
             break;
           case ERROR_NOT_FOUND:
-            System.out.format("ERROR: User '%s' is not present in this conversation.", name);
+            System.out.format("ERROR: User '%s' is not present in this conversation.\n", name);
             break;
           case ERROR_ALREADY_CURRENT_SETTING:
-            System.out.format("ERROR: User '%s' is already at permission level '%s'.", name, permissionLevel);
+            System.out.format("ERROR: User '%s' is already at permission level '%s'.\n", name, permissionLevel);
             break;
           default:
             System.out.println("ERROR: No proper response returned.");

@@ -49,7 +49,7 @@ public final class ConversationHeader {
       );
 
     }
-    //assigning permission levels to users 
+    //assigning permission levels to users
   };
 
   public Integer permissionLevel(String title) throws IOException{
@@ -65,13 +65,13 @@ public final class ConversationHeader {
     else {
       throw new IOException("Please enter a valid user category.");
     }
-  } 
+  }
 
   public final Uuid id;
   public final Uuid owner;
   public final Time creation;
   public final String title;
-  public HashMap<Uuid, Integer> user_category = new HashMap<Uuid, Integer>();
+  public HashMap<Uuid, Integer> userCategory = new HashMap<Uuid, Integer>();
 
   public ConversationHeader(Uuid id, Uuid owner, Time creation, String title) {
 
@@ -79,8 +79,8 @@ public final class ConversationHeader {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-    this.user_category.put(owner, 3);
+    this.userCategory.put(owner, 3);
   }
 
-    
+
 }

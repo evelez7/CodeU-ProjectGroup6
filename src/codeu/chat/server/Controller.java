@@ -231,6 +231,27 @@ public final class Controller implements RawController, BasicController {
     }
   }
 
+  @Override
+  public int changePermissionLevel(String name, String title, int permissionLevel) {
+
+    final User foundUser = model.userByText().first(name);
+    final ConversationHeader foundConversation = model.conversationByText().first(title);
+
+    if (foundUser != null) {
+      if (foundConversation.userCategory.containsKey(foundUser)) {
+        foundConversation.userCategory.put(foundUser.id, permissionLevel);
+        LOG.info("Permission level of user " + name + " changed to " + permissionLevel + ".");
+        return 0;
+      } else {
+        LOG.info("ERROR: User is not part of the conversation.");
+        return -1;
+      }
+    } else {
+      LOG.info("ERROR: User not found.");
+      return -2;
+    }
+  }
+
   private Uuid createId() {
 
     Uuid candidate;
