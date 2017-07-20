@@ -237,8 +237,9 @@ public final class Controller implements RawController, BasicController {
     final User foundUser = model.userByText().first(name);
     final ConversationHeader foundConversation = model.conversationByText().first(title);
 
-    if (foundUser != null) {
+    if (foundUser != null && foundConversation != null) {
       if (foundConversation.userCategory.containsKey(foundUser)) {
+
         foundConversation.userCategory.put(foundUser.id, permissionLevel);
         LOG.info("Permission level of user " + name + " changed to " + permissionLevel + ".");
         return 0;
@@ -247,7 +248,7 @@ public final class Controller implements RawController, BasicController {
         return -1;
       }
     } else {
-      LOG.info("ERROR: User not found.");
+      LOG.info("ERROR: User or conversation not found.");
       return -2;
     }
   }
