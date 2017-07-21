@@ -232,6 +232,16 @@ public final class Controller implements RawController, BasicController {
   }
 
   @Override
+  public int conversationAddUserByName(String name, String title) {
+
+  }
+
+  @Override
+  public int conversationAddUserByUUID(Uuid id, String title) {
+
+  }
+
+  @Override
   public int changePermissionLevel(String name, String title, int permissionLevel) {
 
     final User foundUser = model.userByText().first(name);

@@ -91,6 +91,18 @@ public interface BasicController {
   // if the specified conversation does not exist.
   int removeConversationInterest(String title, Uuid owner);
 
+  // ADD USER TO CONVERSATION (BY NAME)
+  //
+  // Adds the specified user (identified by name) to the current
+  // conversation.
+  int conversationAddUserByName(String name, String title);
+
+  // ADD USER TO CONVERSATION (BY UUID)
+  //
+  // Adds the specified user (identified by UUID) to the current
+  // conversation.
+  int conversationAddUserByUUID(Uuid id, String title);
+
   // CHANGE PERMISSION LEVEL
   //
   // Changes the permission level of the specified user in the specified
@@ -99,6 +111,6 @@ public interface BasicController {
   // the change took place, with "0" meaning that the change occurred and "-1"
   // meaning that the change did not occur. "-2" will be returned if the
   // specified user does not already exist in the permission map of the
-  // conversation. 
+  // conversation.
   public int changePermissionLevel(String name, String title, int permissionLevel);
 }

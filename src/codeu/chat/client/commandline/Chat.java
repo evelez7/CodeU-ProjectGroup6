@@ -549,6 +549,8 @@ public final class Chat {
         System.out.println("    List all messages in the current conversation.");
         System.out.println("  m-add <message>");
         System.out.println("    Add a new message to the current conversation as the current user.");
+        System.out.println("  a-add <user>");
+        System.out.println("    Add a specified user to the current conversation.");
         System.out.println("  a-change <user> <level>");
         System.out.println("    Change the permission level of the specified user.");
         System.out.println("  info");
@@ -601,6 +603,12 @@ public final class Chat {
         }
       }
     });
+
+    // A-ADD (add user to conversation)
+    //
+    // Add a command to add a specified user to the current conversation when
+    // the user enters "a-add" while on the conversation panel.
+    //
 
     // A-CHANGE (change user permission level)
     //

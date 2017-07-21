@@ -93,6 +93,30 @@ public final class ConversationContext {
     NO_ERROR, ERROR_ALREADY_CURRENT_SETTING, ERROR_NOT_FOUND
   }
 
+  // version of a-add used when argument is a user's name
+  public response addUserToConversation(String name) {
+    switch (controller.conversationAddUserByName(name, conversation.title)) {
+      case 0:
+        return response.NO_ERROR;
+      case -1:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+      default:
+        return response.ERROR_NOT_FOUND;
+    }
+  }
+
+  // version of a-add used when argument is a user's UUID
+  public response addUserUUIDToConversation(Uuid id) {
+    switch (controller.conversationAddUserByUUID(id, conversation.title)) {
+      case 0:
+        return response.NO_ERROR;
+      case -1:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+      default:
+        return response.ERROR_NOT_FOUND;
+    }
+  }
+
   public response changePermissionLevel(String name, int permissionLevel) {
     switch (controller.changePermissionLevel(name, conversation.title, permissionLevel)) {
       case 0:
