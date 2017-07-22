@@ -22,7 +22,8 @@ import codeu.chat.util.Serializer;
 import codeu.chat.util.Serializers;
 import codeu.chat.util.Time;
 import codeu.chat.util.Uuid;
-import  java.util.HashMap;
+import java.util.Map;
+import java.util.HashMap;
 
 public final class ConversationHeader {
 
@@ -49,10 +50,10 @@ public final class ConversationHeader {
       );
 
     }
-    //assigning permission levels to users
+
   };
 
-  public Integer permissionLevel(String title) throws IOException{
+  public int permissionLevel(String title) throws IOException{
     if (title.equals("member")){
       return 1;
     }
@@ -71,7 +72,7 @@ public final class ConversationHeader {
   public final Uuid owner;
   public final Time creation;
   public final String title;
-  public HashMap<Uuid, Integer> userCategory = new HashMap<Uuid, Integer>();
+  public Map<Uuid, Integer> userCategory = new HashMap<Uuid, Integer>();
 
   public ConversationHeader(Uuid id, Uuid owner, Time creation, String title) {
 
