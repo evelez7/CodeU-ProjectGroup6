@@ -309,6 +309,36 @@ public final class Server {
       }
     });
 
+    // Add User To Conversation (Name) - A client wants to add a user to a conversation (by name)
+    this.commands.put (NetworkCode.ADD_USER_NAME_TO_CONVERSATION_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String name = Serializers.STRING.read(in);
+        final String title = Serializers.STRING.read(in);
+
+        final int addUserToConversationResponse = controller.conversationAddUserByName(name, title);
+
+        Serializers.INTEGER.write(out, NetworkCode.ADD_USER_NAME_TO_CONVERSATION_RESPONSE);
+        Serializers.INTEGER.write(out, addUserToConversationResponse);
+      }
+    });
+
+    // Add User To Conversation (UUID) - A client wants to add a user to a conversation (by UUID)
+    this.commands.put (NetworkCode.ADD_USER_UUID_TO_CONVERSATION_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final Uuid id = Uuid.SERIALIZER.read(in);
+        final String title = Serializers.STRING.read(in);
+
+        final int addUserToConversationResponse = controller.conversationAddUserByUUID(id, title);
+
+        Serializers.INTEGER.write(out, NetworkCode.ADD_USER_UUID_TO_CONVERSATION_RESPONSE);
+        Serializers.INTEGER.write(out, addUserToConversationResponse);
+      }
+    });
+
     // Change Permission Level - A client wants to change the permission level of a user.
     this.commands.put (NetworkCode.CHANGE_USER_PERMISSION_LEVEL_REQUEST, new Command() {
       @Override

@@ -234,11 +234,43 @@ public final class Controller implements RawController, BasicController {
   @Override
   public int conversationAddUserByName(String name, String title) {
 
+    final User foundUser = model.userByText().first(name);
+    final ConversationHeader foundConversation = model.conversationByText().first(title);
+
+    if (foundUser != null && foundConversation != null) {
+      if (!foundConversation.userCategory.containsKey(foundUser)) {
+        foundConversation.userCategory.put(foundUser.id, 1);
+        LOG.info("User " + name + " was added to the conversation " + title + ".");
+        return 0;
+      } else {
+        LOG.info("ERROR: User is already part of the conversation.");
+        return -1;
+      }
+    } else {
+      LOG.info("ERROR: User or conversation not found.");
+      return -2;
+    }
   }
 
   @Override
   public int conversationAddUserByUUID(Uuid id, String title) {
 
+    final User foundUser = model.userById().first(id);
+    final ConversationHeader foundConversation = model.conversationByText().first(title);
+
+    if (foundUser != null && foundConversation != null) {
+      if (!foundConversation.userCategory.containsKey(foundUser)) {
+        foundConversation.userCategory.put(foundUser.id, 1);
+        LOG.info("User " + foundUser.name + " was added to the conversation " + title + ".");
+        return 0;
+      } else {
+        LOG.info("ERROR: User is already part of the conversation.");
+        return -1;
+      }
+    } else {
+      LOG.info("ERROR: User or conversation not found.");
+      return -2;
+    }
   }
 
   @Override
