@@ -260,6 +260,7 @@ public final class Controller implements RawController, BasicController {
 
     if (foundUser != null && foundConversation != null) {
       if (!foundConversation.userCategory.containsKey(foundUser)) {
+        
         foundConversation.userCategory.put(foundUser.id, 1);
         LOG.info("User " + foundUser.name + " was added to the conversation " + title + ".");
         return 0;

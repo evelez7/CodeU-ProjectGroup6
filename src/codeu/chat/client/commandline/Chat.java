@@ -609,6 +609,29 @@ public final class Chat {
     // Add a command to add a specified user to the current conversation when
     // the user enters "a-add" while on the conversation panel.
     //
+    panel.register("a-add", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        for(String token : args){
+          final String input = token;
+          if (input.length() > 0) {
+            switch(conversation.addUserToConversation(input)) {
+              case NO_ERROR:
+                System.out.println("User \"" + input + "\" was added to the conversation.");
+                break;
+              case ERROR_ALREADY_CURRENT_SETTING:
+                System.out.println("ERROR: User \"" + input + "\" already in conversation.");
+                break;
+              case ERROR_NOT_FOUND:
+                System.out.format("ERROR: No user with name '%s'\n", input);
+                break;
+              }
+          } else {
+            System.out.println("ERROR: Missing username or UUID.");
+          }
+        }
+      }
+    });
 
     // A-CHANGE (change user permission level)
     //

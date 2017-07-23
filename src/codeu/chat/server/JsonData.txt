@@ -1,0 +1,3 @@
+User;{"UserSet":[],"ConvoSet":[],"UserUpdateMap":{},"ConvoUpdateMap":{},"id":{"root":{"id":0},"id":-1534107879},"name":"John","creation":{"date":"Jul 23, 2017 11:37:16 AM"}}
+User;{"UserSet":[],"ConvoSet":[],"UserUpdateMap":{},"ConvoUpdateMap":{},"id":{"root":{"id":0},"id":1516894995},"name":"Steve","creation":{"date":"Jul 23, 2017 11:37:18 AM"}}
+Convo;{"id":{"root":{"id":0},"id":-324798181},"owner":{"root":{"id":0},"id":-1534107879},"creation":{"date":"Jul 23, 2017 11:37:26 AM"},"title":"TestOne","userCategory":{"0.2760859417":3}}
