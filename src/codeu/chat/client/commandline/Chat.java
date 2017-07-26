@@ -28,6 +28,7 @@ import codeu.chat.client.core.Context;
 import codeu.chat.client.core.ConversationContext;
 import codeu.chat.client.core.MessageContext;
 import codeu.chat.client.core.UserContext;
+import codeu.chat.common.ConversationHeader;
 
 public final class Chat {
 
@@ -548,8 +549,12 @@ public final class Chat {
         System.out.println("    List all messages in the current conversation.");
         System.out.println("  m-add <message>");
         System.out.println("    Add a new message to the current conversation as the current user.");
+<<<<<<< HEAD
         System.out.println("  a-add <user>");
         System.out.println("    Add a specified user to the current conversation.");
+        System.out.println("  a-change <user> <level>");
+        System.out.println("    Change the permission level of the specified user.");
+>>>>>>> conversation-access-control
         System.out.println("  info");
         System.out.println("    Display all info about the current conversation.");
         System.out.println("  back");
@@ -601,6 +606,7 @@ public final class Chat {
       }
     });
 
+<<<<<<< HEAD
     // A-ADD (add user to conversation)
     //
     // Adds a specified user to the current conversation when the
@@ -636,6 +642,7 @@ public final class Chat {
           default:
             System.out.format("ERROR: No proper response returned.\n");
             break;
+>>>>>>> conversation-access-control
         }
       }
     });
