@@ -319,7 +319,7 @@ public final class Server {
         final String title = Serializers.STRING.read(in);
         final Uuid currentUser = Uuid.SERIALIZER.read(in);
 
-        final int addUserToConversationResponse = controller.addUserToConversation(name, title);
+        final int addUserToConversationResponse = controller.addUserToConversation(name, title, currentUser);
 
         Serializers.INTEGER.write (out, NetworkCode.ADD_USER_TO_CONVERSATION_RESPONSE);
         Serializers.INTEGER.write (out, addUserToConversationResponse);

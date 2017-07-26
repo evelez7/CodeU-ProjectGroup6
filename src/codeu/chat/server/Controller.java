@@ -264,7 +264,7 @@ public final class Controller implements RawController, BasicController {
   private int verifyAddUserToConversation(User foundUser, ConversationHeader foundConversation, Uuid currentUser) {
     final int currentPermissionLevel = foundConversation.userCategory.get(currentUser);
 
-    if (foundConversation.userCategory.containsKey(foundUser)) {
+    if (foundConversation.userCategory.containsKey(foundUser.id)) {
       return -1;
     } else if (currentPermissionLevel < 2){
       return -2;

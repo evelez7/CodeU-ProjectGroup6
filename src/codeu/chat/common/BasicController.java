@@ -93,6 +93,7 @@ public interface BasicController {
 
   // ADD USER TO CONVERSATION
   //
+  // (WORK IN PROGRESS)
   int addUserToConversation(String name, String title, Uuid currentUser);
 
 }
