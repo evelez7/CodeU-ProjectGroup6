@@ -96,9 +96,10 @@ public interface BasicController {
   // Changes the permission level of the specified user in the specified
   // conversation. All parameters must be provided or else the server won't
   // apply the change. An integer will be returned representing whether or not
-  // the change took place, with "0" meaning that the change occurred and "-1"
-  // meaning that the change did not occur. "-2" will be returned if the
-  // specified user does not already exist in the permission map of the
-  // conversation. 
-  public int changePermissionLevel(String name, String title, int permissionLevel);
+  // the change took place, with "0" meaning that the change occurred, "-1"
+  // meaning that the change did not occur, and "1" will be returned if the
+  // user attempting the change does not have sufficient permission.
+  // "-2" will be returned if the specified user does not already exist in the
+  //permission map of the conversation.
+  public int changePermissionLevel(String name, String title, int permissionLevel, Uuid currentUser);
 }

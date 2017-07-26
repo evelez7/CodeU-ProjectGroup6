@@ -232,25 +232,60 @@ public final class Controller implements RawController, BasicController {
   }
 
   @Override
-  public int changePermissionLevel(String name, String title, int permissionLevel) {
+  public int changePermissionLevel(String name, String title, int permissionLevel, Uuid currentUser) {
 
     final User foundUser = model.userByText().first(name);
     final ConversationHeader foundConversation = model.conversationByText().first(title);
 
-    if (foundUser != null && foundConversation != null) {
-      if (foundConversation.userCategory.containsKey(foundUser)) {
+    if (foundUser != null && foundConversation != null ) {
+      final int verificationResponse = verifyPermissionLevelChange(foundUser, foundConversation, permissionLevel, currentUser);
+
+      if (verificationResponse == 0) {
 
         foundConversation.userCategory.put(foundUser.id, permissionLevel);
         LOG.info("Permission level of user " + name + " changed to " + permissionLevel + ".");
+
         return 0;
-      } else {
+      } else if (verificationResponse == -1) {
         LOG.info("ERROR: User is not part of the conversation.");
         return -1;
+      } else if (verificationResponse == -2) {
+        LOG.info("ERROR: User attempting command does not have permission to change ");
+        return -2;
       }
     } else {
       LOG.info("ERROR: User or conversation not found.");
-      return -2;
+      return -3;
     }
+
+    return -3;
+  }
+
+  private int verifyPermissionLevelChange(User foundUser, ConversationHeader foundConversation, int permissionLevel, Uuid currentUser) {
+    final int currentPermissionLevel = foundConversation.userCategory.get(currentUser);
+
+     if (foundConversation.userCategory.containsKey(foundUser)) {
+       switch (currentPermissionLevel) {
+         case 1:
+          return -2;
+         case 2:
+          if (permissionLevel < currentPermissionLevel) {
+            return 0;
+          } else {
+            return -2;
+          }
+        case 3:
+          if (permissionLevel < currentPermissionLevel) {
+            return 0;
+          } else {
+            return -2;
+          }
+        default:
+          break;
+       }
+     }
+
+     return -3;
   }
 
   private Uuid createId() {

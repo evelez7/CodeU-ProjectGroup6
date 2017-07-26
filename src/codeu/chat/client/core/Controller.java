@@ -214,7 +214,7 @@ final class Controller implements BasicController {
   }
 
   @Override
-  public int changePermissionLevel(String name, String title, int permissionLevel) {
+  public int changePermissionLevel(String name, String title, int permissionLevel, Uuid currentUser) {
 
     int response = 0;
 
@@ -222,8 +222,9 @@ final class Controller implements BasicController {
 
       Serializers.INTEGER.write(connection.out(), NetworkCode.CHANGE_USER_PERMISSION_LEVEL_REQUEST);
       Serializers.STRING.write(connection.out(), name);
-      Serializers.INTEGER.write(connection.out(), permissionLevel);
       Serializers.STRING.write(connection.out(), title);
+      Serializers.INTEGER.write(connection.out(), permissionLevel);
+      Uuid.SERIALIZER.write(connection.out(), currentUser);
 
       if (Serializers.INTEGER.read(connection.in()) == NetworkCode.CHANGE_USER_PERMISSION_LEVEL_RESPONSE) {
         response = Serializers.INTEGER.read(connection.in());

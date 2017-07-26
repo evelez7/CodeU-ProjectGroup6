@@ -90,15 +90,20 @@ public final class ConversationContext {
   }
 
   public enum response {
-    NO_ERROR, ERROR_ALREADY_CURRENT_SETTING, ERROR_NOT_FOUND
+    NO_ERROR, ERROR_ALREADY_CURRENT_SETTING, ERROR_NOT_FOUND, ERROR_NOT_ALLOWED
   }
 
   public response changePermissionLevel(String name, int permissionLevel) {
-    switch (controller.changePermissionLevel(name, conversation.title, permissionLevel)) {
+    final String title = conversation.title;
+    final Uuid currentUser = user.id;
+
+    switch (controller.changePermissionLevel(name, title, permissionLevel, currentUser)) {
       case 0:
-        return response.ERROR_NOT_FOUND;
+        return response.NO_ERROR;
       case -1:
         return response.ERROR_ALREADY_CURRENT_SETTING;
+      case -2:
+        return response.ERROR_NOT_ALLOWED;
       default:
         return response.ERROR_NOT_FOUND;
     }

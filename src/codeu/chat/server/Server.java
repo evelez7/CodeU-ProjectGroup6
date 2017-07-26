@@ -317,8 +317,9 @@ public final class Server {
         final String name = Serializers.STRING.read(in);
         final String title = Serializers.STRING.read(in);
         final int permissionLevel = Serializers.INTEGER.read(in);
+        final Uuid currentUser = Uuid.SERIALIZER.read(in);
 
-        final int changePermissionLevelResponse = controller.changePermissionLevel(name, title, permissionLevel);
+        final int changePermissionLevelResponse = controller.changePermissionLevel(userToChange, conversationTitle, permissionLevel, currentUser);
 
         Serializers.INTEGER.write(out, NetworkCode.CHANGE_USER_PERMISSION_LEVEL_RESPONSE);
         Serializers.INTEGER.write(out, changePermissionLevelResponse);
