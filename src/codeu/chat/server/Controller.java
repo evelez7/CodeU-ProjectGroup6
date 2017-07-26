@@ -240,18 +240,19 @@ public final class Controller implements RawController, BasicController {
     if (foundUser != null && foundConversation != null ) {
       final int verificationResponse = verifyPermissionLevelChange(foundUser, foundConversation, permissionLevel, currentUser);
 
-      if (verificationResponse == 0) {
-
-        foundConversation.userCategory.put(foundUser.id, permissionLevel);
-        LOG.info("Permission level of user " + name + " changed to " + permissionLevel + ".");
-
-        return 0;
-      } else if (verificationResponse == -1) {
-        LOG.info("ERROR: User is not part of the conversation.");
-        return -1;
-      } else if (verificationResponse == -2) {
-        LOG.info("ERROR: User attempting command does not have permission to change ");
-        return -2;
+      switch (verificationResponse) {
+        case 0:
+          foundConversation.userCategory.put(foundUser.id, permissionLevel);
+          LOG.info("Permission level of user " + name + " changed to " + permissionLevel +".");
+          return 0;
+        case -1:
+          LOG.info("ERROR: User is not part of he conversation.");
+          return -1;
+        case -2:
+          LOG.info("ERROR: User attempting command does not have permission to change.");
+          return -2;
+        default:
+          break;
       }
     } else {
       LOG.info("ERROR: User or conversation not found.");
