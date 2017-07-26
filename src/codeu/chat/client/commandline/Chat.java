@@ -616,21 +616,14 @@ public final class Chat {
 
         // check that there are two arguments
         if (args.size() == 2) {
-          if (name.length > 0 && level.length > 0) {
-            setPermissionLevel(name, level);
+          if (name.length() > 0 && level.length() > 0) {
+            System.out.println("Placeholder for changePermissionLevel method.");
           } else {
             System.out.println("ERROR: Missing username or permission level.");
           }
         } else {
           System.out.println("ERROR: Invalid number of arguments.");
         }
-      }
-
-      // switch statement will take a reference to a method in controller as
-      // its condition and responses as cases, similar to the design of
-      // commands i-u-add and i-c-add
-      private void setPermissionLevel(String name, String level) {
-        switch ()
       }
     });
 
