@@ -319,7 +319,7 @@ public final class Server {
         final int permissionLevel = Serializers.INTEGER.read(in);
         final Uuid currentUser = Uuid.SERIALIZER.read(in);
 
-        final int changePermissionLevelResponse = controller.changePermissionLevel(userToChange, conversationTitle, permissionLevel, currentUser);
+        final int changePermissionLevelResponse = controller.changePermissionLevel(name, title, permissionLevel, currentUser);
 
         Serializers.INTEGER.write(out, NetworkCode.CHANGE_USER_PERMISSION_LEVEL_RESPONSE);
         Serializers.INTEGER.write(out, changePermissionLevelResponse);
