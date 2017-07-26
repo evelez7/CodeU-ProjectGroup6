@@ -91,4 +91,9 @@ public interface BasicController {
   // if the specified conversation does not exist.
   int removeConversationInterest(String title, Uuid owner);
 
+  // ADD USER TO CONVERSATION
+  //
+  // (WORK IN PROGRESS)
+  int addUserToConversation(String name, String title, Uuid currentUser);
+
 }

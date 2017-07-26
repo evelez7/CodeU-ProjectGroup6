@@ -213,4 +213,30 @@ final class Controller implements BasicController {
     return response;
   }
 
+  @Override
+  public int addUserToConversation(String name, String title, Uuid currentUser) {
+
+    int response = 0;
+
+    try (final Connection connection = source.connect()) {
+
+      Serializers.INTEGER.write(connection.out(), NetworkCode.ADD_USER_TO_CONVERSATION_REQUEST);
+      Serializers.STRING.write(connection.out(), name);
+      Serializers.STRING.write(connection.out(), title);
+      Uuid.SERIALIZER.write(connection.out(), currentUser);
+
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.ADD_USER_TO_CONVERSATION_RESPONSE) {
+            response = Serializers.INTEGER.read(connection.in());
+      } else {
+        LOG.error("Response from server failed.");
+      }
+    }
+      catch (Exception ex) {
+      System.out.println("ERROR: Exception during call on server. Check log for details.");
+      LOG.error(ex, "Exception during call on server.");
+    }
+
+    return response;
+  }
+
 }

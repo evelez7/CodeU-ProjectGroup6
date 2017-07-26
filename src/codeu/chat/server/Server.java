@@ -310,6 +310,22 @@ public final class Server {
       }
     });
 
+    // Add User to Conversation - A client wants to add a user to a Conversation
+    this.commands.put (NetworkCode.ADD_USER_TO_CONVERSATION_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String name = Serializers.STRING.read(in);
+        final String title = Serializers.STRING.read(in);
+        final Uuid currentUser = Uuid.SERIALIZER.read(in);
+
+        final int addUserToConversationResponse = controller.addUserToConversation(name, title, currentUser);
+
+        Serializers.INTEGER.write (out, NetworkCode.ADD_USER_TO_CONVERSATION_RESPONSE);
+        Serializers.INTEGER.write (out, addUserToConversationResponse);
+      }
+    });
+
     // Get Server Info - A client wants to get server info from the back end
     this.commands.put (NetworkCode.SERVER_INFO_REQUEST, new Command() {
       @Override

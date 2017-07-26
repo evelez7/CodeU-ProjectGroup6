@@ -88,4 +88,24 @@ public final class ConversationContext {
     final Iterator<Message> messages = view.getMessages(Arrays.asList(id)).iterator();
     return messages.hasNext() ? new MessageContext(messages.next(), view) : null;
   }
+
+  public enum response {
+    NO_ERROR, ERROR_ALREADY_CURRENT_SETTING, ERROR_NOT_FOUND, ERROR_NOT_ALLOWED
+  }
+
+  public response addUserToConversation(String name) {
+    final String title = conversation.title;
+    final Uuid currentUser = user.id;
+
+    switch (controller.addUserToConversation(name, title, currentUser)) {
+      case 0:
+        return response.NO_ERROR;
+      case -1:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+      case -2:
+        return response.ERROR_NOT_ALLOWED;
+      default:
+        return response.ERROR_NOT_FOUND;
+    }
+  }
 }
