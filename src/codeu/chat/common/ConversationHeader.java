@@ -72,9 +72,7 @@ public final class ConversationHeader {
   public final Uuid owner;
   public final Time creation;
   public final String title;
-  public final Map<Uuid, Integer> userCategory = new HashMap<Uuid, Integer>();
-
-  //Assign category to user
+  public Map<Uuid, Integer> userCategory = new HashMap<Uuid, Integer>();
 
   public ConversationHeader(Uuid id, Uuid owner, Time creation, String title) {
 
