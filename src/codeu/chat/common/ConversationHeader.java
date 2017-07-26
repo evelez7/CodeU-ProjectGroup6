@@ -55,26 +55,14 @@ public final class ConversationHeader {
 
   };
 
-<<<<<<< HEAD
-  public int permissionLevel(String title) throws IOException{
-    if (title.equals("member")){
-      return 1;
-    }
-    else if (title.equals("owner")){
-      return 2;
-    }
-    else if (title.equals("creator")){
-      return 3;
-=======
   public enum PermissionLevel{
-    member(1), 
-    owner(2), 
+    member(1),
+    owner(2),
     creator(3);
 
     private int level;
     PermissionLevel(int level){
       this.level = level;
->>>>>>> 2da7e48f4ea2b559405d3443f820d3e012aaaf42
     }
 
     public int getLevel(){
@@ -95,11 +83,7 @@ public final class ConversationHeader {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-<<<<<<< HEAD
-    this.userCategory.put(owner, 3);
-=======
     this.userCategory.put(owner, permissionLevel.getLevel());
->>>>>>> 2da7e48f4ea2b559405d3443f820d3e012aaaf42
   }
 
 
