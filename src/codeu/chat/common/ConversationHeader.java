@@ -17,6 +17,8 @@ package codeu.chat.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
+import java.util.HashMap;
 
 import codeu.chat.util.Serializer;
 import codeu.chat.util.Serializers;
@@ -53,6 +55,7 @@ public final class ConversationHeader {
 
   };
 
+<<<<<<< HEAD
   public int permissionLevel(String title) throws IOException{
     if (title.equals("member")){
       return 1;
@@ -62,9 +65,20 @@ public final class ConversationHeader {
     }
     else if (title.equals("creator")){
       return 3;
+=======
+  public enum PermissionLevel{
+    member(1), 
+    owner(2), 
+    creator(3);
+
+    private int level;
+    PermissionLevel(int level){
+      this.level = level;
+>>>>>>> 2da7e48f4ea2b559405d3443f820d3e012aaaf42
     }
-    else {
-      throw new IOException("Please enter a valid user category.");
+
+    public int getLevel(){
+      return this.level;
     }
   }
 
@@ -76,11 +90,16 @@ public final class ConversationHeader {
 
   public ConversationHeader(Uuid id, Uuid owner, Time creation, String title) {
 
+    PermissionLevel permissionLevel = PermissionLevel.creator;
     this.id = id;
     this.owner = owner;
     this.creation = creation;
     this.title = title;
+<<<<<<< HEAD
     this.userCategory.put(owner, 3);
+=======
+    this.userCategory.put(owner, permissionLevel.getLevel());
+>>>>>>> 2da7e48f4ea2b559405d3443f820d3e012aaaf42
   }
 
 
