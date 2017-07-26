@@ -55,7 +55,6 @@ public final class ConversationHeader {
 
   };
 
-<<<<<<< HEAD
   public enum PermissionLevel{
     member(1), 
     owner(2), 
@@ -68,7 +67,6 @@ public final class ConversationHeader {
 
     public int getLevel(){
       return this.level;
->>>>>>> conversation-access-control
     }
   }
 
@@ -85,9 +83,7 @@ public final class ConversationHeader {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-<<<<<<< HEAD
     this.userCategory.put(owner, permissionLevel.getLevel());
->>>>>>> conversation-access-control
   }
 
 
