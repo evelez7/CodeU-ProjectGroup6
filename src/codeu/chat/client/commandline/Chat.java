@@ -548,6 +548,8 @@ public final class Chat {
         System.out.println("    List all messages in the current conversation.");
         System.out.println("  m-add <message>");
         System.out.println("    Add a new message to the current conversation as the current user.");
+        System.out.println("  a-add <user>");
+        System.out.println("    Add a specified user to the current conversation.");
         System.out.println("  info");
         System.out.println("    Display all info about the current conversation.");
         System.out.println("  back");
@@ -595,6 +597,45 @@ public final class Chat {
           } else {
             System.out.println("ERROR: Messages must contain text");
           }
+        }
+      }
+    });
+
+    // A-ADD (add user to conversation)
+    //
+    // Adds a specified user to the current conversation when the
+    // user enters "a-add" while on the conversation panel.
+    //
+    panel.register("a-add", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        if(args.size() == 1) {
+          final String name = args.get(0);
+
+          if(name.length() > 0) {
+            addUserToConversation(name);
+          }
+        }
+      }
+
+      // passes arguments to conversation context method.
+      private void addUserToConversation(String name) {
+        switch (conversation.addUserToConversation(name)) {
+          case NO_ERROR:
+            System.out.format("User '%s' was added to the conversation.\n", name);
+            break;
+          case ERROR_NOT_FOUND:
+            System.out.format("ERROR: User '%s' could not be found.\n", name);
+            break;
+          case ERROR_ALREADY_CURRENT_SETTING:
+            System.out.format("ERROR: User '%s' is already in the conversation.\n", name);
+            break;
+          case ERROR_NOT_ALLOWED:
+            System.out.format("ERROR: You do not have sufficient permission to add users to this conversation.\n");
+            break;
+          default:
+            System.out.format("ERROR: No proper response returned.\n");
+            break;
         }
       }
     });
