@@ -53,22 +53,26 @@ public final class ConversationHeader {
 
   };
 
-  private final int memberLevel = 1;
-  private final int ownerLevel = 2;
-  private final int creatorLevel = 3;
-
-  //assigning permission levels to users
-  public Integer member(){
-      return memberLevel;
+  enum permissionLevel{
+    member(1), owner(2), creator(3);
   }
+
+  // private final int memberLevel = 1;
+  // private final int ownerLevel = 2;
+  // private final int creatorLevel = 3;
+
+  // //assigning permission levels to users
+  // public Integer member(){
+  //     return memberLevel;
+  // }
   
-  public Integer owner(){
-     return ownerLevel;
-  } 
+  // public Integer owner(){
+  //    return ownerLevel;
+  // } 
   
-  public Integer creator(){
-    return creatorLevel;
-  } 
+  // public Integer creator(){
+  //   return creatorLevel;
+  // } 
 
   public final Uuid id;
   public final Uuid owner;
@@ -84,6 +88,6 @@ public final class ConversationHeader {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-    this.userCategory.put(owner, this.creator());
+    this.userCategory.put(owner, permissionLevel.valueOf("creator"));
   }
 }
