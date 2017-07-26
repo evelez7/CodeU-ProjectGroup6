@@ -231,6 +231,49 @@ public final class Controller implements RawController, BasicController {
     }
   }
 
+  @Override
+  public int addUserToConversation(String name, String title, Uuid currentUser) {
+
+    final User foundUser = model.userByText().first(name);
+    final ConversationHeader foundConversation = model.conversationByText().first(title);
+
+    if (foundUser != null && foundConversation != null) {
+       final int verificationResponse = verifyAddUserToConversation(foundUser, foundConversation, currentUser);
+
+       if (verificationResponse == 0) {
+
+         foundConversation.userCategory.put(foundUser.id, 1);
+         LOG.info("User " + name + " added to the conversation.");
+
+         return 0;
+      } else if (verificationResponse == -1) {
+        LOG.info("ERROR: User is already in the conversation.");
+        return -1;
+      } else if (verificationResponse == -2) {
+        LOG.info("ERROR: User attempting command does not have permission to change.");
+        return -2;
+      }
+    } else {
+      LOG.info("ERROR: User or conversation not found.");
+      return -3;
+    }
+
+    return -3;
+  }
+
+  private int verifyAddUserToConversation(User foundUser, ConversationHeader foundConversation, Uuid currentUser) {
+    final int currentPermissionLevel = foundConversation.userCategory.get(currentUser);
+
+    if (foundConversation.userCategory.containsKey(foundUser)) {
+      return -1;
+    } else if (currentPermissionLevel < 2){
+      return -2;
+    } else {
+      return 0;
+    }
+
+  }
+
   private Uuid createId() {
 
     Uuid candidate;
