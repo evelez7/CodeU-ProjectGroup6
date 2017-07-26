@@ -240,18 +240,20 @@ public final class Controller implements RawController, BasicController {
     if (foundUser != null && foundConversation != null) {
        final int verificationResponse = verifyAddUserToConversation(foundUser, foundConversation, currentUser);
 
-       if (verificationResponse == 0) {
-
-         foundConversation.userCategory.put(foundUser.id, 1);
-         LOG.info("User " + name + " added to the conversation.");
-
-         return 0;
-      } else if (verificationResponse == -1) {
-        LOG.info("ERROR: User is already in the conversation.");
-        return -1;
-      } else if (verificationResponse == -2) {
-        LOG.info("ERROR: User attempting command does not have permission to change.");
-        return -2;
+      switch(verificationResponse) {
+        case 0:
+          foundConversation.userCategory.put(foundUser.id, 1);
+          LOG.info("User " + name + " added to the conversation.");
+          return 0;
+          break;
+        case -1:
+          LOG.info("ERROR: User is already in the conversation.");
+          return -1;
+          break;
+        case -2:
+          LOG.info("ERROR: User attempting command does not have permission to change.");
+          return -2;
+          break;
       }
     } else {
       LOG.info("ERROR: User or conversation not found.");
