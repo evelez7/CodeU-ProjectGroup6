@@ -550,6 +550,8 @@ public final class Chat {
         System.out.println("    Add a new message to the current conversation as the current user.");
         System.out.println("  a-add <user>");
         System.out.println("    Add a specified user to the current conversation.");
+        System.out.println("  a-change <user> <level>");
+        System.out.println("    Change the permission level of the specified user.");
         System.out.println("  info");
         System.out.println("    Display all info about the current conversation.");
         System.out.println("  back");
@@ -635,7 +637,55 @@ public final class Chat {
             break;
           default:
             System.out.format("ERROR: No proper response returned.\n");
-            break;
+          }
+        }
+      });
+
+  // A-CHANGE (change user permission level)
+  //
+  // Change the permission level of the specified user in the current
+  // conversation when the user enters "a-change" while on the conversation
+  // panel.
+  //
+  panel.register("a-change", new Panel.Command() {
+    @Override
+    public void invoke(List<String> args) {
+      // check that there are two arguments
+      if (args.size() == 2) {
+
+        final String name = args.get(0);
+        final String stringLevel = args.get(1);
+
+        if (name.length() > 0 && stringLevel.length() > 0) {
+
+          // convert to int after verifying argument was not empty
+          final int permissionLevel = Integer.parseInt(stringLevel);
+          changePermissionLevel(name, permissionLevel);
+        } else {
+          System.out.println("ERROR: Missing username or permission level.");
+        }
+      } else {
+        System.out.println("ERROR: Invalid number of arguments.");
+      }
+    }
+
+    private void changePermissionLevel(String name, int permissionLevel) {
+      switch (conversation.changePermissionLevel(name, permissionLevel)) {
+        case NO_ERROR:
+          System.out.format("Permission level of '%s' changed to '%s'.\n", name, permissionLevel);
+          break;
+        case ERROR_NOT_FOUND:
+          System.out.format("ERROR: User '%s' is not present in this conversation.\n", name);
+          break;
+        case ERROR_ALREADY_CURRENT_SETTING:
+          System.out.format("ERROR: User '%s' is already at permission level '%s'.\n", name, permissionLevel);
+          break;
+        case ERROR_NOT_ALLOWED:
+          System.out.println("ERROR: You do not have sufficient permission to change this user's permission level.");
+          break;
+        default:
+          System.out.println("ERROR: No proper response returned.");
+          break;
         }
       }
     });

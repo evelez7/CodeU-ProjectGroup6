@@ -251,27 +251,83 @@ public final class Controller implements RawController, BasicController {
         case -2:
           LOG.info("ERROR: User attempting command does not have permission to change.");
           return -2;
+        }
+      } else {
+        LOG.info("ERROR: User or conversation not found.");
+        return -3;
       }
-    } else {
-      LOG.info("ERROR: User or conversation not found.");
+
       return -3;
     }
 
-    return -3;
-  }
+    private int verifyAddUserToConversation(User foundUser, ConversationHeader foundConversation, Uuid currentUser) {
+      final int currentPermissionLevel = foundConversation.userCategory.get(currentUser);
 
-  private int verifyAddUserToConversation(User foundUser, ConversationHeader foundConversation, Uuid currentUser) {
-    final int currentPermissionLevel = foundConversation.userCategory.get(currentUser);
-
-    if (foundConversation.userCategory.containsKey(foundUser.id)) {
-      return -1;
-    } else if (currentPermissionLevel < 2){
-      return -2;
-    } else {
-      return 0;
+      if (foundConversation.userCategory.containsKey(foundUser.id)) {
+        return -1;
+      } else if (currentPermissionLevel < 2){
+        return -2;
+      } else {
+        return 0;
+      }
     }
 
-  }
+    public int changePermissionLevel(String name, String title, int permissionLevel, Uuid currentUser) {
+
+      final User foundUser = model.userByText().first(name);
+      final ConversationHeader foundConversation = model.conversationByText().first(title);
+
+      if (foundUser != null && foundConversation != null ) {
+        final int verificationResponse = verifyPermissionLevelChange(foundUser, foundConversation, permissionLevel, currentUser);
+
+        switch (verificationResponse) {
+          case 0:
+            foundConversation.userCategory.put(foundUser.id, permissionLevel);
+            LOG.info("Permission level of user " + name + " changed to " + permissionLevel +".");
+            return 0;
+          case -1:
+            LOG.info("ERROR: User is not part of he conversation.");
+            return -1;
+          case -2:
+            LOG.info("ERROR: User attempting command does not have permission to change.");
+            return -2;
+          default:
+            break;
+          }
+        } else {
+          LOG.info("ERROR: User or conversation not found.");
+          return -3;
+        }
+
+        return -3;
+      }
+
+    private int verifyPermissionLevelChange(User foundUser, ConversationHeader foundConversation, int permissionLevel, Uuid currentUser) {
+      final int currentPermissionLevel = foundConversation.userCategory.get(currentUser);
+
+      if (foundConversation.userCategory.containsKey(foundUser)) {
+        switch (currentPermissionLevel) {
+          case 1:
+            return -2;
+          case 2:
+            if (permissionLevel < currentPermissionLevel) {
+              return 0;
+            } else {
+              return -2;
+            }
+          case 3:
+            if (permissionLevel < currentPermissionLevel) {
+              return 0;
+            } else {
+              return -2;
+            }
+          default:
+            break;
+          }
+        }
+
+        return -3;
+      }
 
   private Uuid createId() {
 

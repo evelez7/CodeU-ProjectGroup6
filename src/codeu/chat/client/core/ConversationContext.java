@@ -108,4 +108,20 @@ public final class ConversationContext {
         return response.ERROR_NOT_FOUND;
     }
   }
+
+  public response changePermissionLevel(String name, int permissionLevel) {
+    final String title = conversation.title;
+    final Uuid currentUser = user.id;
+
+    switch (controller.changePermissionLevel(name, title, permissionLevel, currentUser)) {
+      case 0:
+        return response.NO_ERROR;
+      case -1:
+        return response.ERROR_ALREADY_CURRENT_SETTING;
+      case -2:
+        return response.ERROR_NOT_ALLOWED;
+      default:
+        return response.ERROR_NOT_FOUND;
+    }
+  }
 }

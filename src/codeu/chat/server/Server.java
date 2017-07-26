@@ -30,7 +30,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.LinkedList;
-import java.util.ArrayList;
 
 import codeu.chat.common.ConversationHeader;
 import codeu.chat.common.ConversationPayload;
@@ -323,6 +322,23 @@ public final class Server {
 
         Serializers.INTEGER.write (out, NetworkCode.ADD_USER_TO_CONVERSATION_RESPONSE);
         Serializers.INTEGER.write (out, addUserToConversationResponse);
+      }
+    });
+
+    // Change Permission Level - A client wants to change the permission level of a user.
+    this.commands.put (NetworkCode.CHANGE_USER_PERMISSION_LEVEL_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String name = Serializers.STRING.read(in);
+        final String title = Serializers.STRING.read(in);
+        final int permissionLevel = Serializers.INTEGER.read(in);
+        final Uuid currentUser = Uuid.SERIALIZER.read(in);
+
+        final int changePermissionLevelResponse = controller.changePermissionLevel(name, title, permissionLevel, currentUser);
+
+        Serializers.INTEGER.write(out, NetworkCode.CHANGE_USER_PERMISSION_LEVEL_RESPONSE);
+        Serializers.INTEGER.write(out, changePermissionLevelResponse);
       }
     });
 
