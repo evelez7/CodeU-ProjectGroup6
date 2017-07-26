@@ -84,6 +84,5 @@ public final class ConversationHeader {
     this.creation = creation;
     this.title = title;
     this.userCategory.put(owner, permissionLevel.getLevel());
-    System.out.println(userCategory.get(owner));
   }
 }
