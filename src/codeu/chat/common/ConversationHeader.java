@@ -17,12 +17,13 @@ package codeu.chat.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Map;
+import java.util.HashMap;
 
 import codeu.chat.util.Serializer;
 import codeu.chat.util.Serializers;
 import codeu.chat.util.Time;
 import codeu.chat.util.Uuid;
-import  java.util.HashMap;
 
 public final class ConversationHeader {
 
@@ -49,29 +50,33 @@ public final class ConversationHeader {
       );
 
     }
-    //assigning permission levels to users 
+
   };
 
-  public Integer permissionLevel(String title) throws IOException{
-    if (title.equals("member")){
-      return 1;
-    }
-    else if (title.equals("owner")){
-      return 2;
-    }
-    else if (title.equals("creator")){
-      return 3;
-    }
-    else {
-      throw new IOException("Please enter a valid user category.");
-    }
+  private final int memberLevel = 1;
+  private final int ownerLevel = 2;
+  private final int creatorLevel = 3;
+
+  //assigning permission levels to users
+  public Integer member(){
+      return memberLevel;
+  }
+  
+  public Integer owner(){
+     return ownerLevel;
+  } 
+  
+  public Integer creator(){
+    return creatorLevel;
   } 
 
   public final Uuid id;
   public final Uuid owner;
   public final Time creation;
   public final String title;
-  public HashMap<Uuid, Integer> user_category = new HashMap<Uuid, Integer>();
+  public final Map<Uuid, Integer> userCategory = new HashMap<Uuid, Integer>();
+
+  //Assign category to user
 
   public ConversationHeader(Uuid id, Uuid owner, Time creation, String title) {
 
@@ -79,8 +84,6 @@ public final class ConversationHeader {
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-    this.user_category.put(owner, 3);
+    this.userCategory.put(owner, this.creator());
   }
-
-    
 }
