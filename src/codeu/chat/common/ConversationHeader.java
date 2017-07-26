@@ -53,8 +53,19 @@ public final class ConversationHeader {
 
   };
 
-  enum permissionLevel{
-    member(1), owner(2), creator(3);
+  public enum PermissionLevel{
+    member(1), 
+    owner(2), 
+    creator(3);
+
+    private int level;
+    PermissionLevel(int level){
+      this.level = level;
+    }
+
+    public int getLevel(){
+      return this.level;
+    }
   }
 
   public final Uuid id;
@@ -67,10 +78,12 @@ public final class ConversationHeader {
 
   public ConversationHeader(Uuid id, Uuid owner, Time creation, String title) {
 
+    PermissionLevel permissionLevel = PermissionLevel.creator;
     this.id = id;
     this.owner = owner;
     this.creation = creation;
     this.title = title;
-    this.userCategory.put(owner, permissionLevel.valueOf("creator"));
+    this.userCategory.put(owner, permissionLevel.getLevel());
+    System.out.println(userCategory.get(owner));
   }
 }
