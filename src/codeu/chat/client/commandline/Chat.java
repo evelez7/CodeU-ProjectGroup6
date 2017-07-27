@@ -321,7 +321,14 @@ public final class Chat {
             if (conversation == null) {
               System.out.format("ERROR: No conversation with name '%s'\n", name);
             } else {
-              panels.push(createConversationPanel(conversation));
+              switch(user.attemptJoinConversation(name)) {
+                case NO_ERROR:
+                  panels.push(createConversationPanel(conversation));
+                  break;
+                case ERROR_NOT_ALLOWED:
+                  System.out.format("ERROR: User not allowed to join conversation.\n");
+                  break;
+              }
             }
           } else {
             System.out.println("ERROR: Missing <title>");

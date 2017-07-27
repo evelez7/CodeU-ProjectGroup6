@@ -342,6 +342,21 @@ public final class Server {
       }
     });
 
+    // Attempt Join Conversation - A client wants to join a conversation.
+    this.commands.put (NetworkCode.ATTEMPT_JOIN_CONVERSATION_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final String title = Serializers.STRING.read(in);
+        final Uuid currentUser = Uuid.SERIALIZER.read(in);
+
+        final int attemptJoinConversationResponse = view.attemptJoinConversation(title, currentUser);
+
+        Serializers.INTEGER.write (out, NetworkCode.ATTEMPT_JOIN_CONVERSATION_RESPONSE);
+        Serializers.INTEGER.write (out, attemptJoinConversationResponse);
+      }
+    });
+
     // Get Server Info - A client wants to get server info from the back end
     this.commands.put (NetworkCode.SERVER_INFO_REQUEST, new Command() {
       @Override

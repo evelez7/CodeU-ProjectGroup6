@@ -102,6 +102,21 @@ public final class UserContext {
     }
   }
 
+  public enum permissionResponse {
+    NO_ERROR, ERROR_NOT_ALLOWED
+  }
+
+  public permissionResponse attemptJoinConversation(String title) {
+    switch(view.attemptJoinConversation(title, user.id)) {
+      default:
+        return permissionResponse.ERROR_NOT_ALLOWED;
+      case 0:
+        return permissionResponse.NO_ERROR;
+      case -1:
+        return permissionResponse.ERROR_NOT_ALLOWED;
+    }
+  }
+
   public Collection<String> userStatusUpdate(String name) {
     return view.userStatusUpdate(name, user.id);
   }

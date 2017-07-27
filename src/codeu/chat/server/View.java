@@ -161,6 +161,26 @@ public final class View implements BasicView, SinglesView {
     return newMessages;
   }
 
+  @Override
+  public int attemptJoinConversation(String title, Uuid currentUser) {
+
+    // Given a specified conversation's title and the UUID of the user that wants
+    // to join it, return whether or not the user's UUID appears in the permissions
+    // map of the specified conversation. If the UUID appears, the user will join
+    // the conversation. If not, the user will be notified that they are not
+    // allowed to join.
+
+    int attemptJoinConversationResponse = -1;
+
+    ConversationHeader foundConversation = model.conversationByText().first(title);
+    if(foundConversation.userCategory.containsKey(currentUser)) {
+      attemptJoinConversationResponse = 0;
+    } else {
+      attemptJoinConversationResponse = -1;
+    }
+    return attemptJoinConversationResponse;
+  }
+
   private Collection<String> searchContributions(Time lastUpdate, Uuid searchUser) {
 
     // Given a time value for the last time that a check for contributions was
