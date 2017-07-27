@@ -170,7 +170,7 @@ public final class View implements BasicView, SinglesView {
     // the conversation. If not, the user will be notified that they are not
     // allowed to join.
 
-    int attemptJoinConversationResponse = -1;
+    int attemptJoinConversationResponse = -2;
 
     ConversationHeader foundConversation = model.conversationByText().first(title);
     if(foundConversation.userCategory.containsKey(currentUser)) {

@@ -103,13 +103,13 @@ public final class UserContext {
   }
 
   public enum permissionResponse {
-    NO_ERROR, ERROR_NOT_ALLOWED
+    NO_ERROR, ERROR_NOT_ALLOWED, ERROR_UNEXPECTED_RESPONSE
   }
 
   public permissionResponse attemptJoinConversation(String title) {
     switch(view.attemptJoinConversation(title, user.id)) {
       default:
-        return permissionResponse.ERROR_NOT_ALLOWED;
+        return permissionResponse.ERROR_UNEXPECTED_RESPONSE;
       case 0:
         return permissionResponse.NO_ERROR;
       case -1:

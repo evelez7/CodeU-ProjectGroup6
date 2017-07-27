@@ -322,6 +322,9 @@ public final class Chat {
               System.out.format("ERROR: No conversation with name '%s'\n", name);
             } else {
               switch(user.attemptJoinConversation(name)) {
+                default:
+                  System.out.format("ERROR: No proper response returned. \n");
+                  break;
                 case NO_ERROR:
                   panels.push(createConversationPanel(conversation));
                   break;
