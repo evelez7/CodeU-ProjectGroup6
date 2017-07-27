@@ -174,9 +174,11 @@ public final class View implements BasicView, SinglesView {
 
     ConversationHeader foundConversation = model.conversationByText().first(title);
     if(foundConversation.userCategory.containsKey(currentUser)) {
+      LOG.info("User " + currentUser.toString() + " successfully joined " + title + ".");
       attemptJoinConversationResponse = 0;
     } else {
       attemptJoinConversationResponse = -1;
+      LOG.info("User " + currentUser.toString() + " is not allowed to join " + title + ".");
     }
     return attemptJoinConversationResponse;
   }
