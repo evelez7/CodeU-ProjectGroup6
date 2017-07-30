@@ -226,6 +226,18 @@ public final class View implements BasicView, SinglesView {
     return newMessages;
   }
 
+  public Collection<String> listUsers(Uuid currentConversation) {
+    final ConversationHeader foundConversation = model.conversationById().first(currentConversation);
+    Collection<String> userCategorySet = new HashSet<>();
+
+    for (Map.Entry<Uuid, Integer> entry : foundConversation.userCategory.entrySet()) {
+       String stringEntry = entry.toString();
+       userCategorySet.add(stringEntry);
+    }
+
+    return userCategorySet;
+  }
+
   private static <S,T> Collection<T> all(StoreAccessor<S,T> store) {
 
     final Collection<T> all = new ArrayList<>();

@@ -124,4 +124,10 @@ public final class ConversationContext {
         return response.ERROR_NOT_FOUND;
     }
   }
+
+  public Collection<String> listUsers() {
+    final Uuid currentConversation = conversation.id;
+
+    return view.listUsers(currentConversation);
+  }
 }

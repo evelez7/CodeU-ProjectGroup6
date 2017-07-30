@@ -68,4 +68,9 @@ public interface BasicView {
   //   Return how many messages have been added to the specified conversation since the last update.
   int conversationStatusUpdate(String title, Uuid owner);
 
+  // LIST USERS
+  //
+  //  Returns a collection (specifically, a HashSet) which contains the users present
+  // in the current conversation and their respective permission levels.
+  Collection<String> listUsers(Uuid currentConversation);
 }

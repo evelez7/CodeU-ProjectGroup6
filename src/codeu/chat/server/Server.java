@@ -342,6 +342,20 @@ public final class Server {
       }
     });
 
+    // List Users - A client wants to see a list of users in the current conversation
+    this.commands.put (NetworkCode.LIST_USERS_REQUEST, new Command() {
+      @Override
+      public void onMessage (InputStream in, OutputStream out) throws IOException {
+
+        final Uuid currentConversation = Uuid.SERIALIZER.read(in);
+
+        final Collection<String> userCategorySet = view.listUsers(currentConversation);
+
+        Serializers.INTEGER.write(out, NetworkCode.LIST_USERS_RESPONSE);
+        Serializers.collection(Serializers.STRING).write(out, userCategorySet);
+      }
+    });
+
     // Get Server Info - A client wants to get server info from the back end
     this.commands.put (NetworkCode.SERVER_INFO_REQUEST, new Command() {
       @Override
