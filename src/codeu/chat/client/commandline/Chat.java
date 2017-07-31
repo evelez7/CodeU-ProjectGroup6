@@ -614,6 +614,7 @@ public final class Chat {
         System.out.println("--- start of list ---");
 
         for (String entry : conversation.listUsers()) {
+          // entrySet() puts equal signs between the key-value pairs
           final String[] entries = entry.split("=");
           System.out.println(entries[0] + " " + entries[1]);
         }

@@ -70,7 +70,7 @@ public interface BasicView {
 
   // LIST USERS
   //
-  //  Returns a collection (specifically, a HashSet) which contains the users present
-  // in the current conversation and their respective permission levels.
+  //  Return the users present in the conversation with their permission levels
+  //  in a set
   Collection<String> listUsers(Uuid currentConversation);
 }

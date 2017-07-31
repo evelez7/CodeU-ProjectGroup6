@@ -231,6 +231,7 @@ public final class View implements BasicView, SinglesView {
     Collection<String> userCategorySet = new HashSet<>();
 
     for (Map.Entry<Uuid, Integer> entry : foundConversation.userCategory.entrySet()) {
+      // Convert the key-value pairs to Strings to allow them to be serialized
        String stringEntry = entry.toString();
        userCategorySet.add(stringEntry);
     }
