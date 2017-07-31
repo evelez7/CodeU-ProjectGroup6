@@ -68,4 +68,9 @@ public interface BasicView {
   //   Return how many messages have been added to the specified conversation since the last update.
   int conversationStatusUpdate(String title, Uuid owner);
 
+  // ATTEMPT JOIN CONVERSATION
+  //
+  //   Return whether or not the current user is in the permissions for a specified conversation.
+  int attemptJoinConversation(String title, Uuid currentUser);
+
 }
