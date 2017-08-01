@@ -693,6 +693,9 @@ public final class Chat {
         case ERROR_NOT_ALLOWED:
           System.out.println("ERROR: You do not have sufficient permission to change this user's permission level.");
           break;
+        case ERROR_OWN_PERMISSIONS:
+          System.out.println("ERROR: You are not allowed to modify your own permission level.");
+          break;
         default:
           System.out.println("ERROR: No proper response returned.");
           break;
