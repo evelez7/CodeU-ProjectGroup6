@@ -14,6 +14,7 @@
 
 package codeu.chat.client.core;
 
+import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -204,12 +205,34 @@ final class View implements BasicView {
       } else {
         LOG.error("Response from server failed.");
       }
-
     } catch (Exception ex) {
       System.out.println("ERROR: Exception during call on server. Check log for details.");
       LOG.error(ex, "Exception during call on server.");
     }
+
     return response;
+  }
+
+  public Collection<String> listUsers(Uuid currentConversation) {
+
+    final Collection<String> userCategorySet = new HashSet<>();
+
+    try (final Connection connection = source.connect()) {
+
+      Serializers.INTEGER.write(connection.out(), NetworkCode.LIST_USERS_REQUEST);
+      Uuid.SERIALIZER.write(connection.out(), currentConversation);
+
+      if (Serializers.INTEGER.read(connection.in()) == NetworkCode.LIST_USERS_RESPONSE) {
+        userCategorySet.addAll(Serializers.collection(Serializers.STRING).read(connection.in()));
+      } else {
+        LOG.error("Response from server failed.");
+      }
+    } catch (Exception ex) {
+      System.out.println("ERROR: Exception during call on server. Check log for details.");
+      LOG.error(ex, "Exception during call on server.");
+    }
+
+    return userCategorySet;
   }
 
   @Override
