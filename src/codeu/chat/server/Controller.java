@@ -14,6 +14,8 @@
 
 package codeu.chat.server;
 
+import java.io.IOException;
+
 import java.util.Collection;
 
 import codeu.chat.common.BasicController;
@@ -234,7 +236,9 @@ public final class Controller implements RawController, BasicController {
   @Override
   public int addUserToConversation(String name, String title, Uuid currentUser) {
 
-    final User foundUser = model.userByText().first(name);
+
+
+    final User foundUser = verifyUser(name);
     final ConversationHeader foundConversation = model.conversationByText().first(title);
 
     if (foundUser != null && foundConversation != null) {
@@ -274,7 +278,7 @@ public final class Controller implements RawController, BasicController {
 
     public int changePermissionLevel(String name, String title, int permissionLevel, Uuid currentUser) {
 
-      final User foundUser = model.userByText().first(name);
+      final User foundUser = verifyUser(name);
       final ConversationHeader foundConversation = model.conversationByText().first(title);
 
       if (foundUser != null && foundConversation != null ) {
@@ -343,6 +347,18 @@ public final class Controller implements RawController, BasicController {
 
         return -4;
       }
+
+  private User verifyUser(String inputText) {
+    if(inputText.length() == 11 && inputText.charAt(1) == '.') {
+      try {
+        return model.userById().first(Uuid.parse(inputText));
+      } catch (IOException e) {
+        return model.userByText().first(inputText);
+      }
+    } else {
+      return model.userByText().first(inputText);
+    }
+  }
 
   private Uuid createId() {
 
