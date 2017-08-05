@@ -1,9 +1,7 @@
 package codeu.chat.server;
-
 import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.Before;
-
 import codeu.chat.common.ConversationHeader;
 import codeu.chat.common.User;
 import codeu.chat.server.Controller;
@@ -60,6 +58,7 @@ public final class ControllerTest {
 	    	conversation.userCategory.get(userId).equals(2));
 	}
 
+	//Test case that the user cannot change its own permission level
 	@Test 
 	public void currentPermissionLevel(){
 		final Uuid user1Uuid = new Uuid(1);
