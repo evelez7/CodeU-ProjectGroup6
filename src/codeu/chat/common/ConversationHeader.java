@@ -19,6 +19,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import codeu.chat.util.Serializer;
 import codeu.chat.util.Serializers;
@@ -86,5 +87,17 @@ public final class ConversationHeader {
     this.userCategory.put(owner, permissionLevel.getLevel());
   }
 
-
+  public int userCounter(){
+    int count = 1;
+    ArrayList<Uuid> users = new ArrayList<Uuid>();
+    for(Uuid i: userCategory.keySet()){
+      if (!users.contains(i)){
+        users.add(i);
+      }
+      else{
+        count += 1;
+      }
+    }
+    return count;
+  }
 }

@@ -29,7 +29,8 @@ public final class TestRunner {
              codeu.chat.util.TimeTest.class,
              codeu.chat.util.UuidTest.class,
              codeu.chat.util.store.StoreTest.class,
-             codeu.chat.util.TokenizerTest.class
+             codeu.chat.util.TokenizerTest.class,
+             codeu.chat.server.ControllerTest.class
          );
 
       System.out.println("\n===================== Test Status ====================");
