@@ -90,7 +90,7 @@ public final class ConversationContext {
   }
 
   public enum response {
-    NO_ERROR, ERROR_ALREADY_CURRENT_SETTING, ERROR_NOT_FOUND, ERROR_NOT_ALLOWED
+    NO_ERROR, ERROR_ALREADY_CURRENT_SETTING, ERROR_NOT_FOUND, ERROR_NOT_ALLOWED, ERROR_OWN_PERMISSIONS
   }
 
   public response addUserToConversation(String name) {
@@ -120,8 +120,16 @@ public final class ConversationContext {
         return response.ERROR_ALREADY_CURRENT_SETTING;
       case -2:
         return response.ERROR_NOT_ALLOWED;
+      case -3:
+        return response.ERROR_OWN_PERMISSIONS;
       default:
         return response.ERROR_NOT_FOUND;
     }
+  }
+
+  public Collection<String> listUsers() {
+    final Uuid currentConversation = conversation.id;
+
+    return view.listUsers(currentConversation);
   }
 }

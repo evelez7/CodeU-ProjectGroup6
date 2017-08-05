@@ -73,4 +73,9 @@ public interface BasicView {
   //   Return whether or not the current user is in the permissions for a specified conversation.
   int attemptJoinConversation(String title, Uuid currentUser);
 
+  // LIST USERS
+  //
+  //  Return the users present in the conversation with their permission levels
+  //  in a set
+  Collection<String> listUsers(Uuid currentConversation);
 }

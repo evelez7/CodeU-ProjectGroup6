@@ -15,12 +15,9 @@
 package codeu.chat.client.commandline;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
-import codeu.chat.util.Tokenizer;
 import java.io.IOException;
 
 import codeu.chat.common.ServerInfo;
@@ -28,6 +25,7 @@ import codeu.chat.client.core.Context;
 import codeu.chat.client.core.ConversationContext;
 import codeu.chat.client.core.MessageContext;
 import codeu.chat.client.core.UserContext;
+import codeu.chat.util.Tokenizer;
 
 public final class Chat {
 
@@ -558,6 +556,8 @@ public final class Chat {
         System.out.println("    List all messages in the current conversation.");
         System.out.println("  m-add <message>");
         System.out.println("    Add a new message to the current conversation as the current user.");
+        System.out.println("  a-list");
+        System.out.println("    List all users in the current conversation.");
         System.out.println("  a-add <user>");
         System.out.println("    Add a specified user to the current conversation.");
         System.out.println("  a-change <user> <level>");
@@ -610,6 +610,26 @@ public final class Chat {
             System.out.println("ERROR: Messages must contain text");
           }
         }
+      }
+    });
+
+    // A-LIST (list users)
+    //
+    // Add a command to list all users within the current conversation when the
+    // user enters "a-list" while on the conversation panel.
+    //
+    panel.register("a-list", new Panel.Command() {
+      @Override
+      public void invoke(List<String> args) {
+        System.out.println("--- start of list ---");
+
+        for (String entry : conversation.listUsers()) {
+          // entrySet() puts equal signs between the key-value pairs
+          final String[] entries = entry.split("=");
+          System.out.println(entries[0] + " " + entries[1]);
+        }
+
+        System.out.println("--- end of list ---");
       }
     });
 
@@ -692,6 +712,9 @@ public final class Chat {
           break;
         case ERROR_NOT_ALLOWED:
           System.out.println("ERROR: You do not have sufficient permission to change this user's permission level.");
+          break;
+        case ERROR_OWN_PERMISSIONS:
+          System.out.println("ERROR: You are not allowed to modify your own permission level.");
           break;
         default:
           System.out.println("ERROR: No proper response returned.");
