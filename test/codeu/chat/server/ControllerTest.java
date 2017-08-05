@@ -13,7 +13,6 @@ import codeu.chat.util.Uuid;
 public final class ControllerTest {
 	private Controller controller;
 	private Model model;
-
 	private Uuid userId;
 	private Uuid conversationId;
 
@@ -138,6 +137,7 @@ public final class ControllerTest {
 
 	}
 	//Test case for permission level change from owner to creator
+	@Test
 	public void testFromOwnerToCreator(){
 		final User user = controller.newUser(userId, "creator", Time.now());
 		final Uuid user1Uuid = new Uuid(2);
@@ -160,6 +160,7 @@ public final class ControllerTest {
 
 	}
 	//Test case for permission level change from user to creator
+	@Test
 	public void testFromUserToCreator(){
 		final User user = controller.newUser(userId, "user", Time.now());
 
