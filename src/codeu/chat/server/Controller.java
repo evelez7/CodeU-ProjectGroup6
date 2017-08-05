@@ -286,7 +286,7 @@ public final class Controller implements RawController, BasicController {
             LOG.info("Permission level of user " + name + " changed to " + permissionLevel +".");
             return 0;
           case -1:
-            LOG.info("ERROR: User is not part of he conversation.");
+            LOG.info("ERROR: User is not part of the conversation.");
             return -1;
           case -2:
             LOG.info("ERROR: User attempting command does not have permission to change.");
@@ -305,7 +305,7 @@ public final class Controller implements RawController, BasicController {
     private int verifyPermissionLevelChange(User foundUser, ConversationHeader foundConversation, int permissionLevel, Uuid currentUser) {
       final int currentPermissionLevel = foundConversation.userCategory.get(currentUser);
 
-      if (foundConversation.userCategory.containsKey(foundUser)) {
+      if (foundConversation.userCategory.containsKey(foundUser.id)) {
         switch (currentPermissionLevel) {
           case 1:
             return -2;

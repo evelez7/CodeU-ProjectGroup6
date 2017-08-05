@@ -1,0 +1,11 @@
+User;{"UserSet":[],"ConvoSet":[],"UserUpdateMap":{},"ConvoUpdateMap":{},"id":{"root":{"id":0},"id":886617343},"name":"Test","creation":{"date":"Jul 31, 2017 9:33:34 PM"}}
+User;{"UserSet":[],"ConvoSet":[],"UserUpdateMap":{},"ConvoUpdateMap":{},"id":{"root":{"id":0},"id":1483743715},"name":"Test1","creation":{"date":"Jul 31, 2017 9:33:48 PM"}}
+Convo;{"id":{"root":{"id":0},"id":2018533612},"owner":{"root":{"id":0},"id":886617343},"creation":{"date":"Jul 31, 2017 9:34:19 PM"},"title":"c1","userCategory":{"0.886617343":3}}
+Convo;{"id":{"root":{"id":0},"id":-79030407},"owner":{"root":{"id":0},"id":886617343},"creation":{"date":"Aug 1, 2017 1:49:40 PM"},"title":"c1","userCategory":{"0.886617343":3}}
+Convo;{"id":{"root":{"id":0},"id":2104477201},"owner":{"root":{"id":0},"id":886617343},"creation":{"date":"Aug 1, 2017 1:51:05 PM"},"title":"Test1","userCategory":{"0.886617343":3}}
+Convo;{"id":{"root":{"id":0},"id":2120234896},"owner":{"root":{"id":0},"id":886617343},"creation":{"date":"Aug 1, 2017 1:53:57 PM"},"title":"c","userCategory":{"0.886617343":3}}
+Convo;{"id":{"root":{"id":0},"id":-1493323035},"owner":{"root":{"id":0},"id":886617343},"creation":{"date":"Aug 1, 2017 2:28:52 PM"},"title":"c1","userCategory":{"0.886617343":3}}
+Convo;{"id":{"root":{"id":0},"id":571625209},"owner":{"root":{"id":0},"id":886617343},"creation":{"date":"Aug 1, 2017 5:30:54 PM"},"title":"c1","userCategory":{"0.886617343":3}}
+User;{"UserSet":[],"ConvoSet":[],"UserUpdateMap":{},"ConvoUpdateMap":{},"id":{"root":{"id":0},"id":530451129},"name":"Bob","creation":{"date":"Aug 4, 2017 5:01:06 PM"}}
+User;{"UserSet":[],"ConvoSet":[],"UserUpdateMap":{},"ConvoUpdateMap":{},"id":{"root":{"id":0},"id":810294952},"name":"Bob","creation":{"date":"Aug 4, 2017 5:01:13 PM"}}
+Convo;{"id":{"root":{"id":0},"id":940435339},"owner":{"root":{"id":0},"id":530451129},"creation":{"date":"Aug 4, 2017 5:02:15 PM"},"title":"c","userCategory":{"0.530451129":3}}
